@@ -1,0 +1,42 @@
+---
+import { Image } from 'astro:assets';
+import ExternalLink from './icons/ExternalLink.astro';
+
+type Props = {
+  title: string;
+  excerpt: string;
+  stack: string[];
+  role: string;
+  liveUrl?: string;
+  repoUrl?: string;
+  image: ImageMetadata;
+};
+
+const { title, excerpt, stack, role, liveUrl, repoUrl, image } = Astro.props;
+---
+
+<article class="batch-reveal group flex h-full flex-col overflow-hidden rounded-2xl border border-border bg-surface shadow-line">
+  <Image
+    src={image}
+    alt={`Imagen editorial del proyecto ${title}.`}
+    width={640}
+    height={426}
+    format="webp"
+    loading="lazy"
+    decoding="async"
+    class="parallax-media aspect-[3/2] w-full object-cover transition duration-500 group-hover:scale-[1.03]"
+  />
+  <div class="flex flex-1 flex-col p-6">
+    <p class="text-sm font-semibold text-accent-strong">{role}</p>
+    <h3 class="mt-3 font-serif text-3xl leading-tight text-text">{title}</h3>
+    <p class="mt-4 text-sm leading-7 text-text-soft">{excerpt}</p>
+    <div class="mt-5 flex flex-wrap gap-2">
+      {stack.slice(0, 5).map((item) => <span class="rounded-full bg-bg px-3 py-1 text-xs font-medium text-text-soft">{item}</span>)}
+    </div>
+    <div class="mt-6 flex flex-wrap gap-3 pt-2">
+      {liveUrl && <a href={liveUrl} class="button-secondary">Ver sitio <ExternalLink /></a>}
+      {repoUrl && <a href={repoUrl} class="button-secondary">Código <ExternalLink /></a>}
+      {!liveUrl && !repoUrl && <p class="text-sm text-text-soft">TODO: agregar link real del proyecto.</p>}
+    </div>
+  </div>
+</article>

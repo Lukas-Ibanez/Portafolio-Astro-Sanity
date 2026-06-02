@@ -1,0 +1,45 @@
+---
+import Code from './icons/Code.astro';
+import Search from './icons/Search.astro';
+import Server from './icons/Server.astro';
+import Shield from './icons/Shield.astro';
+---
+
+<section class="bg-bg py-24">
+  <div class="container-site grid gap-12 lg:grid-cols-[0.85fr_1.15fr]">
+    <div class="reveal">
+      <p class="eyebrow">Sobre mí</p>
+      <h2 class="section-title mt-4">Un perfil técnico que entiende el proyecto completo.</h2>
+    </div>
+    <div class="space-y-8">
+      <p class="reveal section-copy">
+        Me interesa construir productos web que funcionen bien de punta a punta. No separo el código de la operación: una buena interfaz también necesita una API clara, una base de datos ordenada, un servidor bien configurado y páginas rápidas para buscadores y personas.
+      </p>
+      <p class="reveal section-copy">
+        Mi formación como Analista Programador en Duoc UC me dio base técnica; la práctica me llevó a cerrar el ciclo completo: levantar entornos, asegurar accesos, desarrollar funcionalidades, medir rendimiento y documentar lo suficiente para que el proyecto pueda seguir creciendo.
+      </p>
+      <div class="grid gap-4 sm:grid-cols-2">
+        <div class="batch-reveal rounded-2xl border border-border bg-surface p-5">
+          <Server />
+          <h3 class="mt-4 font-semibold">Servidor y despliegue</h3>
+          <p class="mt-2 text-sm leading-6 text-text-soft">Linux, dominios, SSL, variables de entorno y procesos de deploy.</p>
+        </div>
+        <div class="batch-reveal rounded-2xl border border-border bg-surface p-5">
+          <Shield />
+          <h3 class="mt-4 font-semibold">Seguridad práctica</h3>
+          <p class="mt-2 text-sm leading-6 text-text-soft">higiene de credenciales, headers, permisos y superficies de exposición.</p>
+        </div>
+        <div class="batch-reveal rounded-2xl border border-border bg-surface p-5">
+          <Code />
+          <h3 class="mt-4 font-semibold">Producto web</h3>
+          <p class="mt-2 text-sm leading-6 text-text-soft">interfaces claras, APIs mantenibles y datos pensados para el uso real.</p>
+        </div>
+        <div class="batch-reveal rounded-2xl border border-border bg-surface p-5">
+          <Search />
+          <h3 class="mt-4 font-semibold">SEO y performance</h3>
+          <p class="mt-2 text-sm leading-6 text-text-soft">HTML estático, metadatos, imágenes optimizadas y carga mínima de JS.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

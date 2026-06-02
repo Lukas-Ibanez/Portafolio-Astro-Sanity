@@ -1,0 +1,79 @@
+---
+import interFont from '@fontsource-variable/inter/files/inter-latin-wght-normal.woff2?url';
+import frauncesFont from '@fontsource-variable/fraunces/files/fraunces-latin-standard-normal.woff2?url';
+import Nav from '../components/Nav.astro';
+import Footer from '../components/Footer.astro';
+import { buildSeo } from '../lib/seo';
+import '../styles/global.css';
+
+type Props = {
+  title?: string;
+  description?: string;
+  path?: string;
+  image?: string;
+  type?: 'website' | 'article';
+  jsonLd?: Record<string, unknown> | Record<string, unknown>[];
+};
+
+const seo = buildSeo({
+  title: Astro.props.title || 'Lukas Ibáñez | Desarrollador Full-Stack',
+  description:
+    Astro.props.description ||
+    'Desarrollador Full-Stack chileno enfocado en proyectos web completos: Linux, seguridad, frontend, backend, SEO y performance.',
+  path: Astro.props.path || Astro.url.pathname,
+  image: Astro.props.image,
+  type: Astro.props.type || 'website',
+});
+
+const jsonLd = Astro.props.jsonLd;
+---
+
+<!doctype html>
+<html lang="es-CL" class="scroll-smooth">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#F7F4EE" />
+    <title>{seo.title}</title>
+    <meta name="description" content={seo.description} />
+    <link rel="canonical" href={seo.canonical} />
+    <link rel="preload" href={interFont} as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href={frauncesFont} as="font" type="font/woff2" crossorigin />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+
+    <meta property="og:locale" content="es_CL" />
+    <meta property="og:type" content={seo.type} />
+    <meta property="og:title" content={seo.title} />
+    <meta property="og:description" content={seo.description} />
+    <meta property="og:url" content={seo.canonical} />
+    <meta property="og:image" content={seo.image} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={seo.title} />
+    <meta name="twitter:description" content={seo.description} />
+    <meta name="twitter:image" content={seo.image} />
+
+    {
+      jsonLd && (
+        <script is:inline type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+      )
+    }
+  </head>
+  <body class="min-h-screen bg-bg font-sans text-text antialiased selection:bg-accent-soft selection:text-text">
+    <a
+      href="#contenido"
+      class="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-50 focus:rounded-full focus:bg-surface focus:px-4 focus:py-2 focus:text-text focus:shadow-soft"
+    >
+      Saltar al contenido
+    </a>
+
+    <Nav />
+    <main id="contenido">
+      <slot />
+    </main>
+    <Footer />
+
+    <script>
+      import '../scripts/animations';
+    </script>
+  </body>
+</html>

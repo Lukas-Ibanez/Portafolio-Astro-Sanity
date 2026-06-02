@@ -1,0 +1,46 @@
+---
+import type { SanityPost } from '../lib/sanity';
+import ArrowRight from './icons/ArrowRight.astro';
+
+type Props = {
+  post: SanityPost | null;
+};
+
+const { post } = Astro.props;
+---
+
+<section class="bg-bg-alt py-24">
+  <div class="container-site grid gap-8 lg:grid-cols-[0.8fr_1.2fr] lg:items-center">
+    <div class="reveal">
+      <p class="eyebrow">Blog</p>
+      <h2 class="section-title mt-4">Notas técnicas, sin humo.</h2>
+      <p class="section-copy mt-5">
+        Espacio para documentar decisiones, aprendizajes y casos prácticos de desarrollo web.
+      </p>
+    </div>
+    <article class="batch-reveal rounded-2xl border border-border bg-surface p-7 shadow-line">
+      {
+        post ? (
+          <>
+            <div class="flex flex-wrap gap-2">
+              {post.tags.map((tag) => <span class="rounded-full bg-accent-soft px-3 py-1 text-xs font-semibold text-text">{tag}</span>)}
+            </div>
+            <h3 class="mt-5 font-serif text-3xl">{post.title}</h3>
+            <p class="mt-4 leading-7 text-text-soft">{post.excerpt}</p>
+            <p class="mt-4 text-sm text-text-soft">{post.readingTime} min de lectura</p>
+            <a href={`/blog/${post.slug}/`} class="button-primary mt-6">Leer nota <ArrowRight /></a>
+          </>
+        ) : (
+          <>
+            <p class="eyebrow">Pendiente Sanity</p>
+            <h3 class="mt-5 font-serif text-3xl">TODO: publicar el primer post técnico.</h3>
+            <p class="mt-4 leading-7 text-text-soft">
+              Cuando Sanity tenga `SANITY_PROJECT_ID` y posts publicados, este bloque mostrará automáticamente el último artículo durante el build.
+            </p>
+            <a href="/blog/" class="button-secondary mt-6">Ver blog</a>
+          </>
+        )
+      }
+    </article>
+  </div>
+</section>

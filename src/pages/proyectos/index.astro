@@ -1,0 +1,28 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Projects from '../../components/Projects.astro';
+import GithubRepos from '../../components/GithubRepos.astro';
+import { getFeaturedRepos } from '../../lib/github';
+
+const projects = await getCollection('projects');
+const repos = await getFeaturedRepos();
+---
+
+<BaseLayout
+  title="Proyectos | Lukas Ibáñez"
+  description="Proyectos de Lukas Ibáñez: desarrollo full-stack, despliegue Linux, SEO técnico, APIs y optimización web."
+  path="/proyectos/"
+>
+  <section class="bg-bg py-20">
+    <div class="container-site max-w-4xl">
+      <p class="eyebrow">Proyectos</p>
+      <h1 class="mt-4 font-serif text-5xl leading-tight sm:text-7xl">Casos donde importa cerrar bien el ciclo.</h1>
+      <p class="section-copy mt-6">
+        Cada proyecto debe reemplazarse con datos reales de Lukas: problema, solución, rol, stack, links y evidencia. La estructura ya está lista para mostrar trabajo concreto sin inflar el relato.
+      </p>
+    </div>
+  </section>
+  <Projects projects={projects} />
+  <GithubRepos repos={repos} />
+</BaseLayout>

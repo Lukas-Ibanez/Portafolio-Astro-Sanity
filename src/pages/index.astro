@@ -1,0 +1,31 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Hero from '../components/Hero.astro';
+import Stats from '../components/Stats.astro';
+import About from '../components/About.astro';
+import Skills from '../components/Skills.astro';
+import Projects from '../components/Projects.astro';
+import BlogTeaser from '../components/BlogTeaser.astro';
+import Contact from '../components/Contact.astro';
+import { getLatestPost } from '../lib/sanity';
+import { personJsonLd } from '../lib/seo';
+
+const projects = await getCollection('projects');
+const latestPost = await getLatestPost();
+---
+
+<BaseLayout
+  title="Lukas Ibáñez | Desarrollador Full-Stack en Chile"
+  description="Portafolio de Lukas Ibáñez, desarrollador full-stack chileno que cubre servidor Linux, seguridad, frontend, backend, SEO y optimización."
+  path="/"
+  jsonLd={personJsonLd()}
+>
+  <Hero />
+  <Stats />
+  <About />
+  <Skills />
+  <Projects projects={projects} featuredOnly />
+  <BlogTeaser post={latestPost} />
+  <Contact />
+</BaseLayout>

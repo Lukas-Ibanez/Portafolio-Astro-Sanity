@@ -1,0 +1,104 @@
+---
+const links = [
+  { href: '/', label: 'Inicio' },
+  { href: '/proyectos/', label: 'Proyectos' },
+  { href: '/blog/', label: 'Blog' },
+  { href: '/contacto/', label: 'Contacto' },
+];
+const currentPath = Astro.url.pathname;
+---
+
+<header class="sticky top-0 z-40 border-b border-border/80 bg-bg/90 backdrop-blur" data-site-header>
+  <nav class="container-site flex min-h-16 items-center justify-between gap-6" aria-label="Principal">
+    <a href="/" class="font-serif text-xl text-text no-underline" aria-label="Ir al inicio">
+      Lukas Ibáñez
+    </a>
+
+    <div class="hidden items-center gap-1 rounded-full border border-border bg-surface p-1 text-sm shadow-line md:flex">
+      {
+        links.map((link) => {
+          const isActive = link.href === '/' ? currentPath === '/' : currentPath.startsWith(link.href);
+          return (
+            <a
+              href={link.href}
+              aria-current={isActive ? 'page' : undefined}
+              class:list={[
+                'rounded-full px-4 py-2 font-medium no-underline transition',
+                isActive ? 'bg-accent-soft text-text' : 'text-text-soft hover:text-text',
+              ]}
+            >
+              {link.label}
+            </a>
+          );
+        })
+      }
+    </div>
+
+    <button
+      type="button"
+      class="hamburger-button inline-flex size-11 items-center justify-center rounded-full border border-border bg-surface text-text shadow-line md:hidden"
+      aria-label="Abrir menú"
+      aria-expanded="false"
+      aria-controls="mobile-menu"
+      data-menu-button
+    >
+      <span class="sr-only">Abrir menú</span>
+      <span class="hamburger-lines" aria-hidden="true">
+        <span></span>
+        <span></span>
+        <span></span>
+      </span>
+    </button>
+  </nav>
+
+  <div id="mobile-menu" class="mobile-menu border-t border-border bg-bg/95 px-5 py-4 shadow-soft backdrop-blur md:hidden" data-mobile-menu hidden>
+    <div class="grid gap-2">
+      {
+        links.map((link) => {
+          const isActive = link.href === '/' ? currentPath === '/' : currentPath.startsWith(link.href);
+          return (
+            <a
+              href={link.href}
+              aria-current={isActive ? 'page' : undefined}
+              class:list={[
+                'rounded-xl border px-4 py-3 text-sm font-semibold no-underline transition',
+                isActive ? 'border-accent-soft bg-accent-soft text-text' : 'border-border bg-surface text-text-soft hover:text-text',
+              ]}
+              data-mobile-link
+            >
+              {link.label}
+            </a>
+          );
+        })
+      }
+    </div>
+  </div>
+</header>
+
+<script>
+  const header = document.querySelector('[data-site-header]');
+  const button = header?.querySelector<HTMLButtonElement>('[data-menu-button]');
+  const menu = header?.querySelector<HTMLElement>('[data-mobile-menu]');
+  const links = header?.querySelectorAll('[data-mobile-link]');
+
+  function setOpen(isOpen: boolean) {
+    if (!button || !menu) return;
+    button.setAttribute('aria-expanded', String(isOpen));
+    button.setAttribute('aria-label', isOpen ? 'Cerrar menú' : 'Abrir menú');
+    button.classList.toggle('is-open', isOpen);
+    menu.hidden = !isOpen;
+    menu.classList.toggle('is-open', isOpen);
+  }
+
+  button?.addEventListener('click', () => {
+    setOpen(button.getAttribute('aria-expanded') !== 'true');
+  });
+
+  links?.forEach((link) => {
+    link.addEventListener('click', () => setOpen(false));
+  });
+
+  window.addEventListener('resize', () => {
+    if (window.innerWidth >= 768) setOpen(false);
+  });
+</script>

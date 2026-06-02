@@ -1,0 +1,23 @@
+---
+import Github from './icons/Github.astro';
+import Linkedin from './icons/Linkedin.astro';
+import Mail from './icons/Mail.astro';
+
+const email = 'TODO@lukasibanez.cl';
+---
+
+<footer class="border-t border-border bg-bg-alt">
+  <div class="container-site flex flex-col gap-8 py-10 sm:flex-row sm:items-center sm:justify-between">
+    <div>
+      <p class="font-serif text-2xl text-text">Lukas Ibáñez</p>
+      <p class="mt-2 max-w-xl text-sm leading-6 text-text-soft">
+        Desarrollador Full-Stack. Proyectos web completos, desde Linux y seguridad hasta producto, SEO y performance.
+      </p>
+    </div>
+    <div class="flex flex-wrap items-center gap-3">
+      <a class="button-secondary" href={`mailto:${email}`}><Mail /> Email</a>
+      <a class="button-secondary" href="https://www.linkedin.com/in/TODO-lukas-ibanez" rel="noreferrer"><Linkedin /> LinkedIn</a>
+      <a class="button-secondary" href="https://github.com/TODO-lukas" rel="noreferrer"><Github /> GitHub</a>
+    </div>
+  </div>
+</footer>

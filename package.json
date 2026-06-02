@@ -1,0 +1,32 @@
+{
+  "name": "lukas-ibanez-portfolio",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=22.12.0"
+  },
+  "scripts": {
+    "dev": "set ASTRO_TELEMETRY_DISABLED=1&& .\\.local-node\\node.exe node_modules\\astro\\bin\\astro.mjs dev",
+    "build": "set ASTRO_TELEMETRY_DISABLED=1&& .\\.local-node\\node.exe node_modules\\@astrojs\\check\\bin\\astro-check.js && .\\.local-node\\node.exe node_modules\\astro\\bin\\astro.mjs build",
+    "preview": "set ASTRO_TELEMETRY_DISABLED=1&& .\\.local-node\\node.exe node_modules\\astro\\bin\\astro.mjs preview",
+    "astro": "set ASTRO_TELEMETRY_DISABLED=1&& .\\.local-node\\node.exe node_modules\\astro\\bin\\astro.mjs"
+  },
+  "dependencies": {
+    "@astrojs/sitemap": "^3.7.3",
+    "@fontsource-variable/fraunces": "^5.2.9",
+    "@fontsource-variable/inter": "^5.2.8",
+    "@portabletext/to-html": "^5.0.2",
+    "@sanity/client": "^7.22.1",
+    "astro": "^6.4.3",
+    "gsap": "^3.15.0",
+    "sanity": "^5.29.0",
+    "tailwindcss": "^3.4.19"
+  },
+  "devDependencies": {
+    "@astrojs/check": "^0.9.9",
+    "autoprefixer": "^10.4.22",
+    "postcss": "^8.5.6",
+    "typescript": "^6.0.3"
+  }
+}

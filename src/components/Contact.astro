@@ -1,0 +1,30 @@
+---
+import Github from './icons/Github.astro';
+import Linkedin from './icons/Linkedin.astro';
+import Mail from './icons/Mail.astro';
+
+const email = 'TODO@lukasibanez.cl';
+---
+
+<section class="bg-bg py-24">
+  <div class="container-site grid gap-12 lg:grid-cols-[0.9fr_1.1fr]">
+    <div class="reveal">
+      <p class="eyebrow">Contacto</p>
+      <h1 class="section-title mt-4">Conversemos sobre el próximo desafío.</h1>
+      <p class="section-copy mt-6">
+        Busco oportunidades donde pueda aportar como desarrollador full-stack, especialmente en equipos que valoren performance, orden técnico y responsabilidad sobre el despliegue.
+      </p>
+    </div>
+    <div class="batch-reveal rounded-2xl border border-border bg-surface p-7 shadow-line">
+      <p class="text-sm font-semibold text-accent-strong">TODO: reemplazar datos por enlaces reales de Lukas.</p>
+      <div class="mt-6 grid gap-3">
+        <a class="button-primary justify-start" href={`mailto:${email}`}><Mail /> {email}</a>
+        <a class="button-secondary justify-start" href="https://www.linkedin.com/in/TODO-lukas-ibanez" rel="noreferrer"><Linkedin /> LinkedIn</a>
+        <a class="button-secondary justify-start" href="https://github.com/TODO-lukas" rel="noreferrer"><Github /> GitHub</a>
+      </div>
+      <p class="mt-6 text-sm leading-6 text-text-soft">
+        No hay formulario por defecto para evitar JavaScript y servicios de terceros en runtime. Si se agrega uno, debe apuntar a un endpoint propio o a un servicio compatible sin scripts embebidos.
+      </p>
+    </div>
+  </div>
+</section>
