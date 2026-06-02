@@ -254,7 +254,7 @@
     }
 
     .hero-system-wrap {
-      min-height: 38rem;
+      min-height: 37rem;
       margin-inline: -0.25rem;
       overflow: hidden;
     }
@@ -265,7 +265,7 @@
 
     .hero-system-lines {
       inset: 2rem 0 auto;
-      height: 25rem;
+      height: 29rem;
       opacity: 0.68;
     }
 
@@ -275,13 +275,13 @@
     }
 
     .hero-core {
-      top: 43%;
-      width: min(14rem, calc(100vw - 4rem));
-      padding: 1rem;
+      top: 39%;
+      width: min(15rem, calc(100vw - 4rem));
+      padding: 1.1rem 1rem;
     }
 
     .hero-core p:nth-child(2) {
-      font-size: 2rem;
+      font-size: 2.1rem;
       white-space: nowrap;
     }
 
@@ -300,26 +300,7 @@
     }
 
     .hero-stack {
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-    }
-
-    .hero-capability {
-      padding-block: 0.74rem;
-      border-right: 1px solid var(--color-border);
-    }
-
-    .hero-capability:nth-child(2n) {
-      border-right: 0;
-    }
-
-    .hero-capability:last-child {
-      grid-column: 1 / -1;
-      border-right: 0;
-    }
-
-    .hero-capability span {
-      font-size: 0.62rem;
-      letter-spacing: 0.16em;
+      display: none;
     }
   }
 

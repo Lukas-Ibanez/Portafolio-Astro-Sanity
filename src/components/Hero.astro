@@ -3,15 +3,15 @@ import ArrowRight from './icons/ArrowRight.astro';
 
 const capabilities = ['Frontend', 'Backend', 'Servidores', 'Seguridad', 'SEO'];
 const chips = [
-  { label: 'PHP', x: '7%', y: '16%', mx: '6%', my: '16%', tone: 'accent' },
-  { label: 'JavaScript', x: '58%', y: '7%', mx: '54%', my: '10%', tone: 'sage' },
-  { label: 'TypeScript', x: '73%', y: '26%', mx: '60%', my: '31%', tone: 'accent' },
-  { label: 'React', x: '12%', y: '44%', mx: '7%', my: '42%', tone: 'sage' },
-  { label: 'Next.js', x: '66%', y: '52%', mx: '76%', my: '45%', tone: 'text' },
-  { label: 'Node.js', x: '24%', y: '70%', mx: '21%', my: '66%', tone: 'accent' },
-  { label: 'WordPress', x: '56%', y: '78%', mx: '58%', my: '68%', tone: 'sage' },
-  { label: 'Linux', x: '38%', y: '30%', mx: '39%', my: '29%', tone: 'text' },
-  { label: 'MySQL', x: '4%', y: '78%', mx: '5%', my: '70%', tone: 'sage' },
+  { label: 'PHP', x: '7%', y: '16%', mx: '8%', my: '13%', tone: 'accent' },
+  { label: 'JavaScript', x: '58%', y: '7%', mx: '57%', my: '8%', tone: 'sage' },
+  { label: 'TypeScript', x: '73%', y: '26%', mx: '69%', my: '31%', tone: 'accent' },
+  { label: 'React', x: '12%', y: '44%', mx: '5%', my: '58%', tone: 'sage' },
+  { label: 'Next.js', x: '78%', y: '55%', mx: '76%', my: '58%', tone: 'text' },
+  { label: 'Node.js', x: '24%', y: '70%', mx: '29%', my: '75%', tone: 'accent' },
+  { label: 'WordPress', x: '56%', y: '78%', mx: '58%', my: '76%', tone: 'sage' },
+  { label: 'Linux', x: '38%', y: '30%', mx: '39%', my: '30%', tone: 'text' },
+  { label: 'MySQL', x: '4%', y: '78%', mx: '5%', my: '76%', tone: 'sage' },
 ];
 
 const workSignals = ['Agrosuper', 'SEDUC', 'Fundación Luksic'];
@@ -82,7 +82,7 @@ const workSignals = ['Agrosuper', 'SEDUC', 'Fundación Luksic'];
         ))
       }
 
-      <div class="hero-stack absolute bottom-0 left-0 right-0 z-20 grid border-t border-border bg-bg/92 backdrop-blur sm:grid-cols-5">
+      <div class="hero-stack absolute bottom-0 left-0 right-0 z-20 hidden border-t border-border bg-bg/92 backdrop-blur sm:grid sm:grid-cols-5">
         {
           capabilities.map((item) => (
             <div class="hero-capability border-b border-border px-4 py-4 text-center sm:border-b-0 sm:border-r last:sm:border-r-0" data-hero-capability>

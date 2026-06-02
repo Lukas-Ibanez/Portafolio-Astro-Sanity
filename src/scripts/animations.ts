@@ -15,6 +15,7 @@ function setFinalState() {
 function initHero() {
   const scene = document.querySelector('[data-hero-scene]');
   if (!scene) return;
+  const system = document.querySelector('[data-hero-system]');
 
   const lines = gsap.utils.toArray<HTMLElement>('[data-hero-line] span');
   const kickers = gsap.utils.toArray<HTMLElement>('[data-hero-kicker]');
@@ -35,22 +36,37 @@ function initHero() {
     gsap.set(path, { strokeDasharray: length, strokeDashoffset: length });
   });
 
-  const timeline = gsap.timeline({ defaults: { ease: 'power4.out' } });
+  const introTimeline = gsap.timeline({ defaults: { ease: 'power4.out' } });
+  const systemTimeline = gsap.timeline({
+    paused: isSmallViewport,
+    defaults: { ease: 'power4.out' },
+  });
 
-  timeline
+  introTimeline
     .to(kickers, { opacity: 1, y: 0, duration: 0.45, stagger: 0.08 })
     .to(lines, { yPercent: 0, rotateX: 0, duration: 0.86, stagger: 0.1 }, '-=0.12')
+    .to('[data-hero-copy]', { opacity: 1, y: 0, duration: 0.62 }, '-=0.4')
+    .to(signals, { opacity: 1, y: 0, duration: 0.42, stagger: 0.055 }, '-=0.34')
+    .to('[data-hero-cta]', { opacity: 1, y: 0, duration: 0.44, stagger: 0.06 }, '-=0.22');
+
+  systemTimeline
     .to(paths, { strokeDashoffset: 0, duration: 1.05, stagger: 0.08, ease: 'power2.inOut' }, '-=0.62')
     .to('[data-hero-core]', { opacity: 1, scale: 1, rotate: 0, duration: 0.72, ease: 'back.out(1.25)' }, '-=0.72')
     .to(chips, { opacity: 1, scale: 1, y: 0, duration: 0.5, stagger: 0.045, ease: 'back.out(1.55)' }, '-=0.42')
-    .to('[data-hero-copy]', { opacity: 1, y: 0, duration: 0.62 }, '-=0.4')
-    .to(signals, { opacity: 1, y: 0, duration: 0.42, stagger: 0.055 }, '-=0.34')
-    .to('[data-hero-cta]', { opacity: 1, y: 0, duration: 0.44, stagger: 0.06 }, '-=0.22')
     .to(capabilities, { opacity: 1, y: 0, duration: 0.38, stagger: 0.045 }, '-=0.35');
 
+  if (isSmallViewport && system) {
+    ScrollTrigger.create({
+      trigger: system,
+      start: 'top 78%',
+      once: true,
+      onEnter: () => systemTimeline.play(0),
+    });
+  }
+
   chips.forEach((chip, index) => {
-    const driftY = isSmallViewport ? 4 : 10;
-    const driftX = isSmallViewport ? 3 : 8;
+    const driftY = isSmallViewport ? 2 : 10;
+    const driftX = isSmallViewport ? 2 : 8;
     gsap.to(chip, {
       y: index % 2 === 0 ? -driftY : driftY,
       x: index % 3 === 0 ? driftX : -driftX,
