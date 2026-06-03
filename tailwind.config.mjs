@@ -17,7 +17,7 @@ export default {
       },
       fontFamily: {
         sans: ['Inter Variable', 'Inter', 'system-ui', 'sans-serif'],
-        serif: ['Fraunces Variable', 'Fraunces', 'Georgia', 'serif'],
+        serif: ['Plus Jakarta Sans Variable', 'Plus Jakarta Sans', 'Inter Variable', 'system-ui', 'sans-serif'],
       },
       boxShadow: {
         soft: '0 18px 50px rgba(43, 42, 39, 0.08)',

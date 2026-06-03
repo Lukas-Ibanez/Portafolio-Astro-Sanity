@@ -10,7 +10,7 @@
 | Animaciones | GSAP `^3.15.0` + ScrollTrigger, importados como módulos |
 | CMS blog | Sanity build-time con `@sanity/client ^7.22.1` |
 | Portable Text | `@portabletext/to-html ^5.0.2` |
-| Fuentes | `@fontsource-variable/inter` y `@fontsource-variable/fraunces` |
+| Fuentes | `@fontsource-variable/inter` y `@fontsource-variable/plus-jakarta-sans` |
 
 Regla principal: cero requests externos en runtime. Sanity y GitHub se resuelven en build-time y quedan horneados en HTML estático. Fuentes, imágenes, CSS y JS salen del propio dominio.
 
@@ -31,7 +31,7 @@ Nota de compatibilidad: `@astrojs/tailwind@6.0.2` declara peer dependency hasta 
 | `--color-text-soft` | `#6B6862` | texto secundario |
 | `--color-border` | `#E3DDD1` | bordes |
 
-Tipografías: Fraunces Variable para títulos, Inter Variable para cuerpo/UI. Se importan desde npm y se precargan en `BaseLayout`.
+Tipografías: Plus Jakarta Sans Variable para títulos/display, Inter Variable para cuerpo/UI. Se importan desde npm y se precargan en `BaseLayout`.
 
 ## Mapa de archivos
 

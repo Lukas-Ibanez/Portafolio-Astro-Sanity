@@ -1,6 +1,6 @@
 ---
 import interFont from '@fontsource-variable/inter/files/inter-latin-wght-normal.woff2?url';
-import frauncesFont from '@fontsource-variable/fraunces/files/fraunces-latin-standard-normal.woff2?url';
+import plusJakartaFont from '@fontsource-variable/plus-jakarta-sans/files/plus-jakarta-sans-latin-wght-normal.woff2?url';
 import Nav from '../components/Nav.astro';
 import Footer from '../components/Footer.astro';
 import { buildSeo } from '../lib/seo';
@@ -38,7 +38,7 @@ const jsonLd = Astro.props.jsonLd;
     <meta name="description" content={seo.description} />
     <link rel="canonical" href={seo.canonical} />
     <link rel="preload" href={interFont} as="font" type="font/woff2" crossorigin />
-    <link rel="preload" href={frauncesFont} as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href={plusJakartaFont} as="font" type="font/woff2" crossorigin />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
 
     <meta property="og:locale" content="es_CL" />
