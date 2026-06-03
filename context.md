@@ -5,7 +5,7 @@
 | Área | Elección |
 |---|---|
 | Framework | Astro `^6.4.3`, `output: 'static'` |
-| Node | `>=22.12.0` requerido por Astro 6 |
+| Node | `>=22.13.0` para Astro 6 y dependencias actuales |
 | Estilos | Tailwind CSS `^3.4.19` vía PostCSS local |
 | Animaciones | GSAP `^3.15.0` + ScrollTrigger, importados como módulos |
 | CMS blog | Sanity build-time con `@sanity/client ^7.22.1` |
@@ -74,7 +74,7 @@ npm run build
 npm run preview
 ```
 
-Astro 6 no corre con Node 20. Usar Node `>=22.12.0`; el repo incluye `.nvmrc`, `.node-version` y `package.json#engines`.
+Astro 6 no corre con Node 20. Usar Node `>=22.13.0`; el repo incluye `.nvmrc`, `.node-version` y `package.json#engines`.
 
 Los scripts de `package.json` usan comandos estándar (`astro dev`, `astro check && astro build`, `astro preview`) para funcionar en Cloudflare Pages. En esta máquina hay un Node global `20.20.0`; para correr localmente sin instalar Node global, usar el Node portable ignorado por git:
 
@@ -85,7 +85,7 @@ $env:ASTRO_TELEMETRY_DISABLED='1'; .\.local-node\node.exe node_modules\@astrojs\
 
 `.local-node/` está ignorado por git y no se usa en deploy.
 
-Deploy sugerido: Cloudflare Pages con `npm run build`, salida `dist/` y variable `NODE_VERSION=22.12.0`.
+Deploy sugerido: Cloudflare Pages con `npm run build`, salida `dist/` y variable `NODE_VERSION=22.13.0`.
 
 ## Variables de entorno
 
