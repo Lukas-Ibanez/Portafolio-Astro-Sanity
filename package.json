@@ -27,6 +27,6 @@
     "@astrojs/check": "^0.9.9",
     "autoprefixer": "^10.4.22",
     "postcss": "^8.5.6",
-    "typescript": "^6.0.3"
+    "typescript": "^5.9.3"
   }
 }
