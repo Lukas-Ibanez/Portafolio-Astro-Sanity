@@ -20,17 +20,18 @@ const imageMap = {
 };
 
 const { projects, featuredOnly = false } = Astro.props;
+const sectionId = featuredOnly ? 'featured-projects' : 'projects';
 const visibleProjects = projects
   .filter((project) => (featuredOnly ? project.data.featured : true))
   .sort((a, b) => a.data.order - b.data.order);
 ---
 
-<section class="bg-bg py-24">
-  <div class="container-site">
-    <div class="reveal flex flex-col gap-6 sm:flex-row sm:items-end sm:justify-between">
+<section id={sectionId} class="projects-section">
+  <div class="projects-container">
+    <div id={`${sectionId}-intro`} class="projects-intro reveal">
       <div>
         <p class="eyebrow">Proyectos</p>
-        <h2 class="section-title mt-4">{featuredOnly ? 'Trabajo destacado' : 'Proyectos seleccionados'}</h2>
+        <h2 class="projects-title section-title">{featuredOnly ? 'Trabajo destacado' : 'Proyectos seleccionados'}</h2>
       </div>
       {
         featuredOnly && (
@@ -40,7 +41,7 @@ const visibleProjects = projects
         )
       }
     </div>
-    <div class="mt-12 grid gap-6 md:grid-cols-2">
+    <div id={`${sectionId}-grid`} class="projects-grid">
       {
         visibleProjects.map((project) => (
           <ProjectCard
@@ -57,3 +58,25 @@ const visibleProjects = projects
     </div>
   </div>
 </section>
+
+<style>
+  .projects-section {
+    @apply bg-bg py-24;
+  }
+
+  .projects-container {
+    @apply mx-auto w-full max-w-site px-5 sm:px-8;
+  }
+
+  .projects-intro {
+    @apply flex flex-col gap-6 sm:flex-row sm:items-end sm:justify-between;
+  }
+
+  .projects-title {
+    @apply mt-4;
+  }
+
+  .projects-grid {
+    @apply mt-12 grid gap-6 md:grid-cols-2;
+  }
+</style>

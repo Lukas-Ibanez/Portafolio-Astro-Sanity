@@ -29,7 +29,7 @@ const jsonLd = Astro.props.jsonLd;
 ---
 
 <!doctype html>
-<html lang="es-CL" class="scroll-smooth">
+<html lang="es-CL">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -58,10 +58,10 @@ const jsonLd = Astro.props.jsonLd;
       )
     }
   </head>
-  <body class="min-h-screen bg-bg font-sans text-text antialiased selection:bg-accent-soft selection:text-text">
+  <body id="site-body" class="site-body">
     <a
       href="#contenido"
-      class="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-50 focus:rounded-full focus:bg-surface focus:px-4 focus:py-2 focus:text-text focus:shadow-soft"
+      class="skip-link"
     >
       Saltar al contenido
     </a>
@@ -77,3 +77,13 @@ const jsonLd = Astro.props.jsonLd;
     </script>
   </body>
 </html>
+
+<style>
+  .site-body {
+    @apply min-h-screen bg-bg font-sans text-text antialiased selection:bg-accent-soft selection:text-text;
+  }
+
+  .skip-link {
+    @apply sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-50 focus:rounded-full focus:bg-surface focus:px-4 focus:py-2 focus:text-text focus:shadow-soft;
+  }
+</style>

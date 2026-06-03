@@ -15,7 +15,7 @@ type Props = {
 const { title, excerpt, stack, role, liveUrl, repoUrl, image } = Astro.props;
 ---
 
-<article class="batch-reveal group flex h-full flex-col overflow-hidden rounded-2xl border border-border bg-surface shadow-line">
+<article class="project-card batch-reveal group">
   <Image
     src={image}
     alt={`Imagen editorial del proyecto ${title}.`}
@@ -24,19 +24,61 @@ const { title, excerpt, stack, role, liveUrl, repoUrl, image } = Astro.props;
     format="webp"
     loading="lazy"
     decoding="async"
-    class="parallax-media aspect-[3/2] w-full object-cover transition duration-500 group-hover:scale-[1.03]"
+    class="project-image parallax-media"
   />
-  <div class="flex flex-1 flex-col p-6">
-    <p class="text-sm font-semibold text-accent-strong">{role}</p>
-    <h3 class="mt-3 font-serif text-3xl leading-tight text-text">{title}</h3>
-    <p class="mt-4 text-sm leading-7 text-text-soft">{excerpt}</p>
-    <div class="mt-5 flex flex-wrap gap-2">
-      {stack.slice(0, 5).map((item) => <span class="rounded-full bg-bg px-3 py-1 text-xs font-medium text-text-soft">{item}</span>)}
+  <div class="project-content">
+    <p class="project-role">{role}</p>
+    <h3 class="project-title">{title}</h3>
+    <p class="project-excerpt">{excerpt}</p>
+    <div class="project-stack">
+      {stack.slice(0, 5).map((item) => <span>{item}</span>)}
     </div>
-    <div class="mt-6 flex flex-wrap gap-3 pt-2">
+    <div class="project-actions">
       {liveUrl && <a href={liveUrl} class="button-secondary">Ver sitio <ExternalLink /></a>}
       {repoUrl && <a href={repoUrl} class="button-secondary">Código <ExternalLink /></a>}
-      {!liveUrl && !repoUrl && <p class="text-sm text-text-soft">TODO: agregar link real del proyecto.</p>}
+      {!liveUrl && !repoUrl && <p class="project-todo">TODO: agregar link real del proyecto.</p>}
     </div>
   </div>
 </article>
+
+<style>
+  .project-card {
+    @apply flex h-full flex-col overflow-hidden rounded-2xl border border-border bg-surface shadow-line;
+  }
+
+  .project-image {
+    @apply aspect-[3/2] w-full object-cover transition duration-500 group-hover:scale-[1.03];
+  }
+
+  .project-content {
+    @apply flex flex-1 flex-col p-6;
+  }
+
+  .project-role {
+    @apply text-sm font-semibold text-accent-strong;
+  }
+
+  .project-title {
+    @apply mt-3 font-serif text-3xl leading-tight text-text;
+  }
+
+  .project-excerpt {
+    @apply mt-4 text-sm leading-7 text-text-soft;
+  }
+
+  .project-stack {
+    @apply mt-5 flex flex-wrap gap-2;
+  }
+
+  .project-stack span {
+    @apply rounded-full bg-bg px-3 py-1 text-xs font-medium text-text-soft;
+  }
+
+  .project-actions {
+    @apply mt-6 flex flex-wrap gap-3 pt-2;
+  }
+
+  .project-todo {
+    @apply text-sm text-text-soft;
+  }
+</style>

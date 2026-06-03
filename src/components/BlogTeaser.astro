@@ -9,38 +9,84 @@ type Props = {
 const { post } = Astro.props;
 ---
 
-<section class="bg-bg-alt py-24">
-  <div class="container-site grid gap-8 lg:grid-cols-[0.8fr_1.2fr] lg:items-center">
-    <div class="reveal">
+<section id="blog-teaser" class="blog-teaser-section">
+  <div class="blog-teaser-layout">
+    <div id="blog-teaser-intro" class="reveal">
       <p class="eyebrow">Blog</p>
-      <h2 class="section-title mt-4">Notas técnicas, sin humo.</h2>
-      <p class="section-copy mt-5">
+      <h2 class="blog-teaser-title section-title">Notas técnicas, sin humo.</h2>
+      <p class="blog-teaser-copy section-copy">
         Espacio para documentar decisiones, aprendizajes y casos prácticos de desarrollo web.
       </p>
     </div>
-    <article class="batch-reveal rounded-2xl border border-border bg-surface p-7 shadow-line">
+    <article id="latest-post-preview" class="blog-teaser-card batch-reveal">
       {
         post ? (
           <>
-            <div class="flex flex-wrap gap-2">
-              {post.tags.map((tag) => <span class="rounded-full bg-accent-soft px-3 py-1 text-xs font-semibold text-text">{tag}</span>)}
+            <div class="blog-tags">
+              {post.tags.map((tag) => <span>{tag}</span>)}
             </div>
-            <h3 class="mt-5 font-serif text-3xl">{post.title}</h3>
-            <p class="mt-4 leading-7 text-text-soft">{post.excerpt}</p>
-            <p class="mt-4 text-sm text-text-soft">{post.readingTime} min de lectura</p>
-            <a href={`/blog/${post.slug}/`} class="button-primary mt-6">Leer nota <ArrowRight /></a>
+            <h3>{post.title}</h3>
+            <p class="blog-excerpt">{post.excerpt}</p>
+            <p class="blog-reading-time">{post.readingTime} min de lectura</p>
+            <a href={`/blog/${post.slug}/`} class="blog-teaser-action button-primary">Leer nota <ArrowRight /></a>
           </>
         ) : (
           <>
             <p class="eyebrow">Pendiente Sanity</p>
-            <h3 class="mt-5 font-serif text-3xl">TODO: publicar el primer post técnico.</h3>
-            <p class="mt-4 leading-7 text-text-soft">
+            <h3>TODO: publicar el primer post técnico.</h3>
+            <p class="blog-excerpt">
               Cuando Sanity tenga `SANITY_PROJECT_ID` y posts publicados, este bloque mostrará automáticamente el último artículo durante el build.
             </p>
-            <a href="/blog/" class="button-secondary mt-6">Ver blog</a>
+            <a href="/blog/" class="blog-teaser-action button-secondary">Ver blog</a>
           </>
         )
       }
     </article>
   </div>
 </section>
+
+<style>
+  .blog-teaser-section {
+    @apply bg-bg-alt py-24;
+  }
+
+  .blog-teaser-layout {
+    @apply mx-auto grid w-full max-w-site gap-8 px-5 sm:px-8 lg:grid-cols-[0.8fr_1.2fr] lg:items-center;
+  }
+
+  .blog-teaser-card {
+    @apply rounded-2xl border border-border bg-surface p-7 shadow-line;
+  }
+
+  .blog-teaser-title {
+    @apply mt-4;
+  }
+
+  .blog-teaser-copy {
+    @apply mt-5;
+  }
+
+  .blog-teaser-card h3 {
+    @apply mt-5 font-serif text-3xl;
+  }
+
+  .blog-tags {
+    @apply flex flex-wrap gap-2;
+  }
+
+  .blog-tags span {
+    @apply rounded-full bg-accent-soft px-3 py-1 text-xs font-semibold text-text;
+  }
+
+  .blog-excerpt {
+    @apply mt-4 leading-7 text-text-soft;
+  }
+
+  .blog-reading-time {
+    @apply mt-4 text-sm text-text-soft;
+  }
+
+  .blog-teaser-action {
+    @apply mt-6;
+  }
+</style>

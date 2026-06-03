@@ -1,16 +1,38 @@
-<section class="bg-bg-alt py-8">
-  <div class="container-site grid gap-4 sm:grid-cols-3">
-    <div class="batch-reveal rounded-2xl border border-border bg-surface p-6">
-      <p class="font-serif text-4xl">3+</p>
-      <p class="mt-2 text-sm leading-6 text-text-soft">años construyendo proyectos web y afinando despliegues reales.</p>
+<section id="stats" class="stats-section">
+  <div class="stats-grid">
+    <div class="stat-card batch-reveal">
+      <p class="stat-value">3+</p>
+      <p class="stat-copy">años construyendo proyectos web y afinando despliegues reales.</p>
     </div>
-    <div class="batch-reveal rounded-2xl border border-border bg-surface p-6">
-      <p class="font-serif text-4xl">Full-stack</p>
-      <p class="mt-2 text-sm leading-6 text-text-soft">frontend, backend, bases de datos, SEO técnico y operación.</p>
+    <div class="stat-card batch-reveal">
+      <p class="stat-value">Full-stack</p>
+      <p class="stat-copy">frontend, backend, bases de datos, SEO técnico y operación.</p>
     </div>
-    <div class="batch-reveal rounded-2xl border border-border bg-surface p-6">
-      <p class="font-serif text-4xl">Linux</p>
-      <p class="mt-2 text-sm leading-6 text-text-soft">servidores, hardening básico, despliegue y monitoreo inicial.</p>
+    <div class="stat-card batch-reveal">
+      <p class="stat-value">Linux</p>
+      <p class="stat-copy">servidores, hardening básico, despliegue y monitoreo inicial.</p>
     </div>
   </div>
 </section>
+
+<style>
+  .stats-section {
+    @apply bg-bg-alt py-8;
+  }
+
+  .stats-grid {
+    @apply mx-auto grid w-full max-w-site gap-4 px-5 sm:grid-cols-3 sm:px-8;
+  }
+
+  .stat-card {
+    @apply rounded-2xl border border-border bg-surface p-6;
+  }
+
+  .stat-value {
+    @apply font-serif text-4xl;
+  }
+
+  .stat-copy {
+    @apply mt-2 text-sm leading-6 text-text-soft;
+  }
+</style>

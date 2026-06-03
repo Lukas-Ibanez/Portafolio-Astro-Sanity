@@ -28,7 +28,7 @@ export default {
         '2xl': '1.25rem',
       },
       maxWidth: {
-        site: '75rem',
+        site: '90rem',
       },
     },
   },

@@ -11,31 +11,31 @@ const { repos } = Astro.props;
 
 {
   repos.length > 0 && (
-    <section class="bg-bg-alt py-20">
-      <div class="container-site">
-        <div class="reveal max-w-3xl">
+    <section id="github-repos" class="github-repos-section">
+      <div class="github-repos-container">
+        <div id="github-repos-intro" class="github-repos-intro reveal">
           <p class="eyebrow">GitHub</p>
-          <h2 class="section-title mt-4">Repos actualizados recientemente</h2>
-          <p class="section-copy mt-5">
+          <h2 class="github-repos-title section-title">Repos actualizados recientemente</h2>
+          <p class="github-repos-copy section-copy">
             Estos datos se consultan durante el build y quedan horneados en el HTML. El navegador no llama a GitHub.
           </p>
         </div>
-        <div class="mt-10 grid gap-4 md:grid-cols-2">
+        <div id="github-repos-grid" class="github-repos-grid">
           {repos.map((repo) => (
-            <article class="batch-reveal rounded-2xl border border-border bg-surface p-6">
-              <div class="flex items-start justify-between gap-4">
+            <article class="github-repo-card batch-reveal">
+              <div class="github-repo-header">
                 <div>
-                  <h3 class="font-serif text-2xl">{repo.name}</h3>
-                  <p class="mt-3 text-sm leading-6 text-text-soft">{repo.description || 'Repositorio sin descripción pública.'}</p>
+                  <h3>{repo.name}</h3>
+                  <p>{repo.description || 'Repositorio sin descripción pública.'}</p>
                 </div>
-                <a href={repo.url} class="rounded-full border border-border p-3 text-text-soft transition hover:text-accent-strong" aria-label={`Abrir ${repo.name}`}>
+                <a href={repo.url} class="github-repo-link" aria-label={`Abrir ${repo.name}`}>
                   <ExternalLink />
                 </a>
               </div>
-              <div class="mt-5 flex flex-wrap gap-2 text-xs text-text-soft">
-                {repo.language && <span class="rounded-full bg-bg px-3 py-1">{repo.language}</span>}
-                <span class="rounded-full bg-bg px-3 py-1">{repo.stars} estrellas</span>
-                <span class="rounded-full bg-bg px-3 py-1">Último push: {new Date(repo.pushedAt).toLocaleDateString('es-CL')}</span>
+              <div class="github-repo-meta">
+                {repo.language && <span>{repo.language}</span>}
+                <span>{repo.stars} estrellas</span>
+                <span>Último push: {new Date(repo.pushedAt).toLocaleDateString('es-CL')}</span>
               </div>
             </article>
           ))}
@@ -44,3 +44,57 @@ const { repos } = Astro.props;
     </section>
   )
 }
+
+<style>
+  .github-repos-section {
+    @apply bg-bg-alt py-20;
+  }
+
+  .github-repos-container {
+    @apply mx-auto w-full max-w-site px-5 sm:px-8;
+  }
+
+  .github-repos-intro {
+    @apply max-w-3xl;
+  }
+
+  .github-repos-title {
+    @apply mt-4;
+  }
+
+  .github-repos-copy {
+    @apply mt-5;
+  }
+
+  .github-repos-grid {
+    @apply mt-10 grid gap-4 md:grid-cols-2;
+  }
+
+  .github-repo-card {
+    @apply rounded-2xl border border-border bg-surface p-6;
+  }
+
+  .github-repo-header {
+    @apply flex items-start justify-between gap-4;
+  }
+
+  .github-repo-header h3 {
+    @apply font-serif text-2xl;
+  }
+
+  .github-repo-header p {
+    @apply mt-3 text-sm leading-6 text-text-soft;
+  }
+
+  .github-repo-link {
+    @apply rounded-full border border-border p-3 text-text-soft transition hover:text-accent-strong;
+  }
+
+  .github-repo-meta {
+    @apply mt-5 flex flex-wrap gap-2 text-xs text-text-soft;
+  }
+
+  .github-repo-meta span {
+    @apply rounded-full bg-bg px-3 py-1;
+  }
+</style>

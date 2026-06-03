@@ -6,7 +6,7 @@ const isSmallViewport = window.matchMedia('(max-width: 767px)').matches;
 
 function setFinalState() {
   gsap.set(
-    '.reveal, .batch-reveal, [data-hero-line] span, [data-hero-kicker], [data-hero-copy], [data-hero-cta], [data-hero-signal], [data-hero-core], [data-hero-chip], [data-hero-capability]',
+    '.reveal, .batch-reveal, [data-hero-line-text], [data-hero-kicker], [data-hero-copy], [data-hero-cta], [data-hero-signal], [data-hero-core], [data-hero-chip], [data-hero-capability]',
     { opacity: 1, y: 0, x: 0, scale: 1, clearProps: 'transform' },
   );
   gsap.set('[data-hero-path], [data-hero-ring]', { strokeDashoffset: 0 });
@@ -17,7 +17,7 @@ function initHero() {
   if (!scene) return;
   const system = document.querySelector('[data-hero-system]');
 
-  const lines = gsap.utils.toArray<HTMLElement>('[data-hero-line] span');
+  const lines = gsap.utils.toArray<HTMLElement>('[data-hero-line-text]');
   const kickers = gsap.utils.toArray<HTMLElement>('[data-hero-kicker]');
   const chips = gsap.utils.toArray<HTMLElement>('[data-hero-chip]');
   const paths = gsap.utils.toArray<SVGPathElement>('[data-hero-path], [data-hero-ring]');

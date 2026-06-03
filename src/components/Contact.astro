@@ -6,25 +6,63 @@ import Mail from './icons/Mail.astro';
 const email = 'TODO@lukasibanez.cl';
 ---
 
-<section class="bg-bg py-24">
-  <div class="container-site grid gap-12 lg:grid-cols-[0.9fr_1.1fr]">
-    <div class="reveal">
+<section id="contact" class="contact-section">
+  <div class="contact-layout">
+    <div id="contact-intro" class="reveal">
       <p class="eyebrow">Contacto</p>
-      <h1 class="section-title mt-4">Conversemos sobre el próximo desafío.</h1>
-      <p class="section-copy mt-6">
+      <h1 class="contact-title section-title">Conversemos sobre el próximo desafío.</h1>
+      <p class="contact-copy section-copy">
         Busco oportunidades donde pueda aportar como desarrollador full-stack, especialmente en equipos que valoren performance, orden técnico y responsabilidad sobre el despliegue.
       </p>
     </div>
-    <div class="batch-reveal rounded-2xl border border-border bg-surface p-7 shadow-line">
-      <p class="text-sm font-semibold text-accent-strong">TODO: reemplazar datos por enlaces reales de Lukas.</p>
-      <div class="mt-6 grid gap-3">
-        <a class="button-primary justify-start" href={`mailto:${email}`}><Mail /> {email}</a>
-        <a class="button-secondary justify-start" href="https://www.linkedin.com/in/TODO-lukas-ibanez" rel="noreferrer"><Linkedin /> LinkedIn</a>
-        <a class="button-secondary justify-start" href="https://github.com/TODO-lukas" rel="noreferrer"><Github /> GitHub</a>
+    <div id="contact-panel" class="contact-panel batch-reveal">
+      <p class="contact-todo">TODO: reemplazar datos por enlaces reales de Lukas.</p>
+      <div class="contact-links">
+        <a class="contact-link button-primary" href={`mailto:${email}`}><Mail /> {email}</a>
+        <a class="contact-link button-secondary" href="https://www.linkedin.com/in/TODO-lukas-ibanez" rel="noreferrer"><Linkedin /> LinkedIn</a>
+        <a class="contact-link button-secondary" href="https://github.com/TODO-lukas" rel="noreferrer"><Github /> GitHub</a>
       </div>
-      <p class="mt-6 text-sm leading-6 text-text-soft">
+      <p class="contact-note">
         No hay formulario por defecto para evitar JavaScript y servicios de terceros en runtime. Si se agrega uno, debe apuntar a un endpoint propio o a un servicio compatible sin scripts embebidos.
       </p>
     </div>
   </div>
 </section>
+
+<style>
+  .contact-section {
+    @apply bg-bg py-24;
+  }
+
+  .contact-layout {
+    @apply mx-auto grid w-full max-w-site gap-12 px-5 sm:px-8 lg:grid-cols-[0.9fr_1.1fr];
+  }
+
+  .contact-panel {
+    @apply rounded-2xl border border-border bg-surface p-7 shadow-line;
+  }
+
+  .contact-title {
+    @apply mt-4;
+  }
+
+  .contact-copy {
+    @apply mt-6;
+  }
+
+  .contact-todo {
+    @apply text-sm font-semibold text-accent-strong;
+  }
+
+  .contact-links {
+    @apply mt-6 grid gap-3;
+  }
+
+  .contact-link {
+    @apply justify-start;
+  }
+
+  .contact-note {
+    @apply mt-6 text-sm leading-6 text-text-soft;
+  }
+</style>

@@ -50,6 +50,22 @@ Tipografías: Plus Jakarta Sans Variable para títulos/display, Inter Variable p
 | `src/pages/` | rutas Astro estáticas |
 | `sanity/` | Studio y schema `post`, documentado como opción embebida/local |
 
+## Patrón de CSS e inspector
+
+Regla de mantenibilidad: evitar cadenas largas de utilidades Tailwind en el markup. Los componentes Astro principales usan clases semánticas y un bloque `<style>` local con `@apply`. `src/styles/global.css` queda para tokens, base, helpers compartidos (`container-site`, `section-title`, botones, reveals) y estilos del cuerpo de artículos. El ancho general del sitio usa `max-w-site: 90rem` (1440px); los textos largos conservan límites más bajos para lectura.
+
+IDs por zona para inspeccionar fácil:
+
+| Zona | ID principal |
+|---|---|
+| Header | `site-header`, `main-navigation`, `mobile-menu` |
+| Home hero | `hero`, `hero-content`, `hero-system` |
+| Secciones home | `stats`, `about`, `skills`, `featured-projects`, `blog-teaser`, `contact` |
+| Páginas internas | `projects-page-hero`, `projects`, `github-repos`, `blog-page`, `blog-post` |
+| Footer | `site-footer` |
+
+Al usar `@apply` scoped, evitar aplicar clases custom compuestas como `container-site`; usar las utilidades reales (`mx-auto`, `max-w-site`, `px-5`, `sm:px-8`). Para opacidades de colores custom (`bg-bg/90`, `bg-surface/70`), preferir CSS normal con `rgba(...)`, porque `@apply` puede fallar en build.
+
 ## Comandos
 
 ```bash

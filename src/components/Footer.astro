@@ -6,18 +6,40 @@ import Mail from './icons/Mail.astro';
 const email = 'TODO@lukasibanez.cl';
 ---
 
-<footer class="border-t border-border bg-bg-alt">
-  <div class="container-site flex flex-col gap-8 py-10 sm:flex-row sm:items-center sm:justify-between">
-    <div>
-      <p class="font-serif text-2xl text-text">Lukas Ibáñez</p>
-      <p class="mt-2 max-w-xl text-sm leading-6 text-text-soft">
+<footer id="site-footer" class="site-footer">
+  <div class="footer-layout">
+    <div id="footer-brand">
+      <p class="footer-name">Lukas Ibáñez</p>
+      <p class="footer-copy">
         Desarrollador Full-Stack. Proyectos web completos, desde Linux y seguridad hasta producto, SEO y performance.
       </p>
     </div>
-    <div class="flex flex-wrap items-center gap-3">
+    <div id="footer-links" class="footer-links">
       <a class="button-secondary" href={`mailto:${email}`}><Mail /> Email</a>
       <a class="button-secondary" href="https://www.linkedin.com/in/TODO-lukas-ibanez" rel="noreferrer"><Linkedin /> LinkedIn</a>
       <a class="button-secondary" href="https://github.com/TODO-lukas" rel="noreferrer"><Github /> GitHub</a>
     </div>
   </div>
 </footer>
+
+<style>
+  .site-footer {
+    @apply border-t border-border bg-bg-alt;
+  }
+
+  .footer-layout {
+    @apply mx-auto flex w-full max-w-site flex-col gap-8 px-5 py-10 sm:flex-row sm:items-center sm:justify-between sm:px-8;
+  }
+
+  .footer-name {
+    @apply font-serif text-2xl text-text;
+  }
+
+  .footer-copy {
+    @apply mt-2 max-w-xl text-sm leading-6 text-text-soft;
+  }
+
+  .footer-links {
+    @apply flex flex-wrap items-center gap-3;
+  }
+</style>

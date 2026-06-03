@@ -37,6 +37,7 @@
   html {
     background: var(--color-bg);
     color: var(--color-text);
+    scroll-behavior: smooth;
     text-rendering: optimizeLegibility;
   }
 
@@ -87,136 +88,6 @@
     transform: translateY(24px);
   }
 
-  .motion-ready .hero-word {
-    display: inline-block;
-    opacity: 0;
-    transform: translateY(34px);
-  }
-
-  .hamburger-lines {
-    display: grid;
-    gap: 4px;
-    width: 18px;
-  }
-
-  .hamburger-lines span {
-    display: block;
-    height: 2px;
-    border-radius: 999px;
-    background: var(--color-text);
-    transform-origin: center;
-    transition: transform 180ms ease, opacity 180ms ease;
-  }
-
-  .hamburger-button.is-open .hamburger-lines span:nth-child(1) {
-    transform: translateY(6px) rotate(45deg);
-  }
-
-  .hamburger-button.is-open .hamburger-lines span:nth-child(2) {
-    opacity: 0;
-  }
-
-  .hamburger-button.is-open .hamburger-lines span:nth-child(3) {
-    transform: translateY(-6px) rotate(-45deg);
-  }
-
-  .mobile-menu {
-    animation: mobile-menu-in 180ms ease both;
-  }
-
-  @keyframes mobile-menu-in {
-    from {
-      opacity: 0;
-      transform: translateY(-8px);
-    }
-
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  }
-
-  .hero-stage {
-    background:
-      linear-gradient(90deg, rgba(227, 221, 209, 0.5) 1px, transparent 1px),
-      linear-gradient(180deg, rgba(227, 221, 209, 0.42) 1px, transparent 1px),
-      var(--color-bg);
-    background-size: 4rem 4rem;
-  }
-
-  .hero-line {
-    display: block;
-    overflow: hidden;
-    padding-bottom: 0.08em;
-    perspective: 900px;
-  }
-
-  .hero-line > span {
-    display: block;
-    will-change: transform;
-  }
-
-  .hero-line-accent {
-    color: var(--color-accent-strong);
-  }
-
-  .hero-system-wrap {
-    isolation: isolate;
-  }
-
-  .hero-system-bg {
-    background:
-      radial-gradient(circle at 50% 50%, rgba(204, 120, 92, 0.16), transparent 0.5rem),
-      linear-gradient(90deg, rgba(227, 221, 209, 0.55) 1px, transparent 1px),
-      linear-gradient(180deg, rgba(227, 221, 209, 0.55) 1px, transparent 1px),
-      var(--color-surface);
-    background-size: 1rem 1rem, 3rem 3rem, 3rem 3rem;
-  }
-
-  .hero-system-lines {
-    overflow: visible;
-  }
-
-  .hero-system-lines path,
-  .hero-system-lines circle {
-    fill: none;
-    stroke: var(--color-accent);
-    stroke-width: 1.5;
-    vector-effect: non-scaling-stroke;
-  }
-
-  .hero-system-lines circle {
-    stroke: var(--color-border);
-    stroke-dasharray: 6 10;
-  }
-
-  .hero-core,
-  .hero-chip {
-    border-radius: 0.9rem;
-  }
-
-  .hero-chip {
-    left: var(--chip-x);
-    top: var(--chip-y);
-    transform-origin: center;
-    will-change: transform, opacity;
-  }
-
-  .hero-chip-accent {
-    border-color: var(--color-accent-soft);
-    color: var(--color-accent-strong);
-  }
-
-  .hero-chip-sage {
-    border-color: rgba(156, 170, 139, 0.55);
-    color: #667356;
-  }
-
-  .hero-chip-text {
-    border-color: var(--color-border);
-    color: var(--color-text);
-  }
-
   .article-body {
     @apply text-lg leading-8 text-text;
   }
@@ -248,62 +119,6 @@
     @apply mt-8 rounded-2xl border border-border;
   }
 
-  @media (max-width: 767px) {
-    .hero-stage {
-      background-size: 3.25rem 3.25rem;
-    }
-
-    .hero-system-wrap {
-      min-height: 37rem;
-      margin-inline: -0.25rem;
-      overflow: hidden;
-    }
-
-    .hero-system-bg {
-      background-size: 0.85rem 0.85rem, 3rem 3rem, 3rem 3rem;
-    }
-
-    .hero-system-lines {
-      inset: 2rem 0 auto;
-      height: 29rem;
-      opacity: 0.68;
-    }
-
-    .hero-system-lines path,
-    .hero-system-lines circle {
-      stroke-width: 1.15;
-    }
-
-    .hero-core {
-      top: 39%;
-      width: min(15rem, calc(100vw - 4rem));
-      padding: 1.1rem 1rem;
-    }
-
-    .hero-core p:nth-child(2) {
-      font-size: 2.1rem;
-      white-space: nowrap;
-    }
-
-    .hero-core p:nth-child(3) {
-      display: none;
-    }
-
-    .hero-chip {
-      left: var(--chip-mobile-x);
-      top: var(--chip-mobile-y);
-      max-width: 7.4rem;
-      padding: 0.52rem 0.68rem;
-      font-size: 0.78rem;
-      line-height: 1;
-      white-space: nowrap;
-    }
-
-    .hero-stack {
-      display: none;
-    }
-  }
-
   @media (prefers-reduced-motion: reduce) {
     *,
     *::before,
@@ -317,7 +132,7 @@
     .reveal,
     .batch-reveal,
     .motion-ready .hero-word,
-    [data-hero-line] span,
+    [data-hero-line-text],
     [data-hero-kicker],
     [data-hero-copy],
     [data-hero-cta],

@@ -17,44 +17,50 @@ const chips = [
 const workSignals = ['Agrosuper', 'SEDUC', 'Fundación Luksic'];
 ---
 
-<section class="hero-stage relative isolate overflow-hidden bg-bg" data-hero-scene>
-  <div class="container-site grid min-h-[calc(100vh-4rem)] gap-10 py-10 lg:grid-cols-[0.92fr_1.08fr] lg:items-center lg:py-14">
-    <div class="relative z-10">
-      <div class="hero-kicker mb-7 inline-flex items-center gap-3 border border-border bg-surface px-4 py-2 text-xs font-bold uppercase tracking-[0.2em] text-text-soft shadow-line" data-hero-kicker>
-        <span class="h-2 w-2 rounded-full bg-accent"></span>
+<section id="hero" class="hero-section" data-hero-scene>
+  <div class="hero-layout">
+    <div id="hero-content" class="hero-content">
+      <div class="hero-kicker" data-hero-kicker>
+        <span class="hero-kicker-dot"></span>
         Disponible para nuevos desafíos
       </div>
 
-      <h1 class="max-w-4xl font-serif text-[clamp(3.35rem,8.2vw,7.7rem)] leading-[0.87] text-text" aria-label="Construyo y despliego web completa.">
-        <span class="hero-line" data-hero-line><span>Construyo</span></span>
-        <span class="hero-line" data-hero-line><span>y despliego</span></span>
-        <span class="hero-line hero-line-accent" data-hero-line><span>web completa.</span></span>
+      <h1 class="hero-title" aria-label="Construyo y despliego proyectos web completos.">
+        <span class="hero-line" data-hero-line>
+          <span class="hero-line-text" data-hero-line-text>Construyo y</span>
+        </span>
+        <span class="hero-line" data-hero-line>
+          <span class="hero-line-text" data-hero-line-text>despliego proyectos</span>
+        </span>
+        <span class="hero-line hero-line-accent" data-hero-line>
+          <span class="hero-line-text" data-hero-line-text>web completos.</span>
+        </span>
       </h1>
 
-      <p class="hero-copy mt-8 max-w-2xl text-lg leading-8 text-text-soft sm:text-xl" data-hero-copy>
+      <p class="hero-copy" data-hero-copy>
         Soy Lukas Ibáñez, desarrollador Full-Stack. Trabajo desde la lógica y la interfaz hasta el servidor Linux, seguridad, SEO y optimización. Un solo responsable técnico desde el deploy hasta el usuario final.
       </p>
 
-      <div class="mt-8 flex flex-wrap gap-2" aria-label="Experiencia destacada">
+      <div class="hero-signals" aria-label="Experiencia destacada">
         {
           workSignals.map((signal) => (
-            <span class="hero-signal border border-border bg-surface px-3 py-2 text-xs font-semibold uppercase tracking-[0.14em] text-text-soft" data-hero-signal>
+            <span class="hero-signal" data-hero-signal>
               {signal}
             </span>
           ))
         }
       </div>
 
-      <div class="mt-10 flex flex-col gap-3 sm:flex-row">
+      <div class="hero-actions">
         <a href="/proyectos/" class="hero-cta button-primary" data-hero-cta>Ver proyectos <ArrowRight /></a>
         <a href="/contacto/" class="hero-cta button-secondary" data-hero-cta>Hablemos</a>
       </div>
     </div>
 
-    <div class="hero-system-wrap relative min-h-[34rem] lg:min-h-[42rem]" data-hero-system>
-      <div class="hero-system-bg absolute inset-0 border border-border bg-surface/70"></div>
+    <div id="hero-system" class="hero-system-wrap" data-hero-system>
+      <div class="hero-system-bg"></div>
 
-      <svg class="hero-system-lines absolute inset-0 h-full w-full" viewBox="0 0 640 640" aria-hidden="true">
+      <svg class="hero-system-lines" viewBox="0 0 640 640" aria-hidden="true">
         <path data-hero-path d="M320 320 C190 250 130 120 70 96" />
         <path data-hero-path d="M320 320 C430 190 500 130 570 88" />
         <path data-hero-path d="M320 320 C500 350 548 430 602 506" />
@@ -64,16 +70,16 @@ const workSignals = ['Agrosuper', 'SEDUC', 'Fundación Luksic'];
         <circle data-hero-ring cx="320" cy="320" r="220" />
       </svg>
 
-      <div class="hero-core absolute left-1/2 top-1/2 z-20 w-[15rem] -translate-x-1/2 -translate-y-1/2 border border-text bg-bg p-5 shadow-soft sm:w-[17rem]" data-hero-core>
-        <p class="text-xs font-bold uppercase tracking-[0.2em] text-accent-strong">Full-stack</p>
-        <p class="mt-3 font-serif text-4xl leading-none text-text">Lukas Ibáñez</p>
-        <p class="mt-4 text-sm leading-6 text-text-soft">código, operación y rendimiento conectados.</p>
+      <div class="hero-core" data-hero-core>
+        <p class="hero-core-label">Full-stack</p>
+        <p class="hero-core-title">Lukas Ibáñez</p>
+        <p class="hero-core-copy">código, operación y rendimiento conectados.</p>
       </div>
 
       {
         chips.map((chip, index) => (
           <div
-            class:list={['hero-chip absolute z-30 border bg-bg px-3 py-2 text-sm font-bold shadow-line', `hero-chip-${chip.tone}`]}
+            class:list={['hero-chip', `hero-chip-${chip.tone}`]}
             style={`--chip-x:${chip.x}; --chip-y:${chip.y}; --chip-mobile-x:${chip.mx}; --chip-mobile-y:${chip.my}; --chip-index:${index};`}
             data-hero-chip
           >
@@ -82,11 +88,11 @@ const workSignals = ['Agrosuper', 'SEDUC', 'Fundación Luksic'];
         ))
       }
 
-      <div class="hero-stack absolute bottom-0 left-0 right-0 z-20 hidden border-t border-border bg-bg/92 backdrop-blur sm:grid sm:grid-cols-5">
+      <div class="hero-stack">
         {
           capabilities.map((item) => (
-            <div class="hero-capability border-b border-border px-4 py-4 text-center sm:border-b-0 sm:border-r last:sm:border-r-0" data-hero-capability>
-              <span class="block text-[0.68rem] font-bold uppercase tracking-[0.18em] text-text-soft">{item}</span>
+            <div class="hero-capability" data-hero-capability>
+              <span>{item}</span>
             </div>
           ))
         }
@@ -94,3 +100,215 @@ const workSignals = ['Agrosuper', 'SEDUC', 'Fundación Luksic'];
     </div>
   </div>
 </section>
+
+<style>
+  .hero-section {
+    @apply relative isolate overflow-hidden bg-bg;
+    background:
+      linear-gradient(90deg, rgba(227, 221, 209, 0.5) 1px, transparent 1px),
+      linear-gradient(180deg, rgba(227, 221, 209, 0.42) 1px, transparent 1px),
+      var(--color-bg);
+    background-size: 4rem 4rem;
+  }
+
+  .hero-layout {
+    @apply mx-auto grid min-h-[calc(100vh-4rem)] w-full max-w-site gap-10 px-5 py-10 sm:px-8 lg:grid-cols-[0.86fr_1.14fr] lg:items-center lg:py-14;
+  }
+
+  .hero-content {
+    @apply relative z-10;
+  }
+
+  .hero-kicker {
+    @apply mb-7 inline-flex items-center gap-3 border border-border bg-surface px-4 py-2 text-xs font-bold uppercase tracking-[0.2em] text-text-soft shadow-line;
+  }
+
+  .hero-kicker-dot {
+    @apply h-2 w-2 rounded-full bg-accent;
+  }
+
+  .hero-title {
+    @apply max-w-[46rem] font-serif text-[clamp(3.25rem,6.2vw,6.45rem)] font-bold leading-[1.02] text-text;
+  }
+
+  .hero-line {
+    display: block;
+    overflow: hidden;
+    padding-bottom: 0.16em;
+    perspective: 900px;
+  }
+
+  .hero-line-text {
+    display: block;
+    will-change: transform;
+  }
+
+  @media (min-width: 1024px) {
+    .hero-line-text {
+      white-space: nowrap;
+    }
+  }
+
+  .hero-line-accent {
+    color: var(--color-accent-strong);
+  }
+
+  .hero-copy {
+    @apply mt-8 max-w-2xl text-lg leading-8 text-text-soft sm:text-xl;
+  }
+
+  .hero-signals {
+    @apply mt-8 flex flex-wrap gap-2;
+  }
+
+  .hero-signal {
+    @apply border border-border bg-surface px-3 py-2 text-xs font-semibold uppercase tracking-[0.14em] text-text-soft;
+  }
+
+  .hero-actions {
+    @apply mt-10 flex flex-col gap-3 sm:flex-row;
+  }
+
+  .hero-system-wrap {
+    @apply relative min-h-[34rem] lg:min-h-[42rem];
+    isolation: isolate;
+  }
+
+  .hero-system-bg {
+    @apply absolute inset-0 border border-border;
+    background:
+      radial-gradient(circle at 50% 50%, rgba(204, 120, 92, 0.16), transparent 0.5rem),
+      linear-gradient(90deg, rgba(227, 221, 209, 0.55) 1px, transparent 1px),
+      linear-gradient(180deg, rgba(227, 221, 209, 0.55) 1px, transparent 1px),
+      var(--color-surface);
+    background-size: 1rem 1rem, 3rem 3rem, 3rem 3rem;
+  }
+
+  .hero-system-lines {
+    @apply absolute inset-0 h-full w-full;
+    overflow: visible;
+  }
+
+  .hero-system-lines path,
+  .hero-system-lines circle {
+    fill: none;
+    stroke: var(--color-accent);
+    stroke-width: 1.5;
+    vector-effect: non-scaling-stroke;
+  }
+
+  .hero-system-lines circle {
+    stroke: var(--color-border);
+    stroke-dasharray: 6 10;
+  }
+
+  .hero-core {
+    @apply absolute left-1/2 top-1/2 z-20 w-[15rem] -translate-x-1/2 -translate-y-1/2 border border-text bg-bg p-5 shadow-soft sm:w-[17rem];
+    border-radius: 0.9rem;
+  }
+
+  .hero-core-label {
+    @apply text-xs font-bold uppercase tracking-[0.2em] text-accent-strong;
+  }
+
+  .hero-core-title {
+    @apply mt-3 font-serif text-4xl leading-none text-text;
+  }
+
+  .hero-core-copy {
+    @apply mt-4 text-sm leading-6 text-text-soft;
+  }
+
+  .hero-chip {
+    @apply absolute z-30 border bg-bg px-3 py-2 text-sm font-bold shadow-line;
+    border-radius: 0.9rem;
+    left: var(--chip-x);
+    top: var(--chip-y);
+    transform-origin: center;
+    will-change: transform, opacity;
+  }
+
+  .hero-chip-accent {
+    border-color: var(--color-accent-soft);
+    color: var(--color-accent-strong);
+  }
+
+  .hero-chip-sage {
+    border-color: rgba(156, 170, 139, 0.55);
+    color: #667356;
+  }
+
+  .hero-chip-text {
+    border-color: var(--color-border);
+    color: var(--color-text);
+  }
+
+  .hero-stack {
+    @apply absolute bottom-0 left-0 right-0 z-20 hidden border-t border-border backdrop-blur sm:grid sm:grid-cols-5;
+    background: rgba(247, 244, 238, 0.92);
+  }
+
+  .hero-capability {
+    @apply border-b border-border px-4 py-4 text-center sm:border-b-0 sm:border-r last:sm:border-r-0;
+  }
+
+  .hero-capability span {
+    @apply block text-[0.68rem] font-bold uppercase tracking-[0.18em] text-text-soft;
+  }
+
+  @media (max-width: 767px) {
+    .hero-section {
+      background-size: 3.25rem 3.25rem;
+    }
+
+    .hero-system-wrap {
+      min-height: 37rem;
+      margin-inline: -0.25rem;
+      overflow: hidden;
+    }
+
+    .hero-system-bg {
+      background-size: 0.85rem 0.85rem, 3rem 3rem, 3rem 3rem;
+    }
+
+    .hero-system-lines {
+      inset: 2rem 0 auto;
+      height: 29rem;
+      opacity: 0.68;
+    }
+
+    .hero-system-lines path,
+    .hero-system-lines circle {
+      stroke-width: 1.15;
+    }
+
+    .hero-core {
+      top: 39%;
+      width: min(15rem, calc(100vw - 4rem));
+      padding: 1.1rem 1rem;
+    }
+
+    .hero-core-title {
+      font-size: 2.1rem;
+      white-space: nowrap;
+    }
+
+    .hero-core-copy {
+      display: none;
+    }
+
+    .hero-chip {
+      left: var(--chip-mobile-x);
+      top: var(--chip-mobile-y);
+      max-width: 7.4rem;
+      padding: 0.52rem 0.68rem;
+      font-size: 0.78rem;
+      line-height: 1;
+      white-space: nowrap;
+    }
+
+    .hero-stack {
+      display: none;
+    }
+  }
+</style>

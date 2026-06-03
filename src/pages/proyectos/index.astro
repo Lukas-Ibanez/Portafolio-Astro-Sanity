@@ -14,11 +14,11 @@ const repos = await getFeaturedRepos();
   description="Proyectos de Lukas Ibáñez: desarrollo full-stack, despliegue Linux, SEO técnico, APIs y optimización web."
   path="/proyectos/"
 >
-  <section class="bg-bg py-20">
-    <div class="container-site max-w-4xl">
+  <section id="projects-page-hero" class="projects-page-hero">
+    <div class="projects-page-intro">
       <p class="eyebrow">Proyectos</p>
-      <h1 class="mt-4 font-serif text-5xl leading-tight sm:text-7xl">Casos donde importa cerrar bien el ciclo.</h1>
-      <p class="section-copy mt-6">
+      <h1>Casos donde importa cerrar bien el ciclo.</h1>
+      <p class="projects-page-copy section-copy">
         Cada proyecto debe reemplazarse con datos reales de Lukas: problema, solución, rol, stack, links y evidencia. La estructura ya está lista para mostrar trabajo concreto sin inflar el relato.
       </p>
     </div>
@@ -26,3 +26,21 @@ const repos = await getFeaturedRepos();
   <Projects projects={projects} />
   <GithubRepos repos={repos} />
 </BaseLayout>
+
+<style>
+  .projects-page-hero {
+    @apply bg-bg py-20;
+  }
+
+  .projects-page-intro {
+    @apply mx-auto w-full max-w-4xl px-5 sm:px-8;
+  }
+
+  .projects-page-intro h1 {
+    @apply mt-4 font-serif text-5xl leading-tight sm:text-7xl;
+  }
+
+  .projects-page-copy {
+    @apply mt-6;
+  }
+</style>
