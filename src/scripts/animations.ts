@@ -6,10 +6,10 @@ const isSmallViewport = window.matchMedia('(max-width: 767px)').matches;
 
 function setFinalState() {
   gsap.set(
-    '.reveal, .batch-reveal, [data-hero-line-text], [data-hero-kicker], [data-hero-copy], [data-hero-cta], [data-hero-signal], [data-hero-core], [data-hero-chip], [data-hero-capability], [data-stats-intro], [data-stat-card], [data-workflow-step]',
+    '.reveal, .batch-reveal, [data-hero-line-text], [data-hero-kicker], [data-hero-copy], [data-hero-cta], [data-hero-signal], [data-hero-core], [data-hero-chip], [data-hero-capability], [data-stats-intro], [data-stat-card], [data-workflow-step], [data-about-title-line], [data-about-copy], [data-about-layer]',
     { opacity: 1, y: 0, x: 0, scale: 1, clearProps: 'transform' },
   );
-  gsap.set('[data-hero-path], [data-hero-ring], [data-stats-path], [data-stats-ring]', { strokeDashoffset: 0 });
+  gsap.set('[data-hero-path], [data-hero-ring], [data-stats-path], [data-stats-ring], [data-about-step-path]', { strokeDashoffset: 0 });
 }
 
 function initHero() {
@@ -168,6 +168,101 @@ function initStats() {
   }
 }
 
+function initAbout() {
+  const section = document.querySelector('[data-about-section]');
+  if (!section) return;
+
+  const titleLines = gsap.utils.toArray<HTMLElement>('[data-about-title-line]');
+  const copy = section.querySelector<HTMLElement>('[data-about-copy]');
+  const layers = gsap.utils.toArray<HTMLElement>('[data-about-layer]');
+  const stepPath = section.querySelector<SVGGeometryElement>('[data-about-step-path]');
+  const scan = section.querySelector<HTMLElement>('[data-about-scan]');
+
+  if (!copy || layers.length === 0) return;
+
+  let stepPathLength = 0;
+  gsap.set(titleLines, { opacity: 0, yPercent: 92, rotateX: -16, transformOrigin: 'left bottom' });
+  gsap.set(copy, { opacity: 0, y: 24 });
+  if (stepPath) {
+    stepPathLength = stepPath.getTotalLength();
+    gsap.set(stepPath, { opacity: 1, strokeDasharray: stepPathLength, strokeDashoffset: stepPathLength });
+  }
+
+  gsap.set(layers, (index: number) => ({
+    opacity: 0,
+    x: -88 - index * 10,
+    y: 10,
+    rotate: -1.8,
+    scale: 0.96,
+  }));
+
+  const timeline = gsap.timeline({
+    defaults: { ease: 'power4.out' },
+    scrollTrigger: {
+      trigger: section,
+      start: 'top 76%',
+      once: true,
+    },
+  });
+
+  timeline
+    .to(titleLines, { opacity: 1, yPercent: 0, rotateX: 0, duration: 0.72, stagger: 0.08 })
+    .to(copy, { opacity: 1, y: 0, duration: 0.54 }, '-=0.36')
+    .to(layers, { opacity: 1, x: 0, y: 0, rotate: 0, scale: 1, duration: 0.62, stagger: 0.095, ease: 'back.out(1.18)' }, '-=0.34');
+
+  if (stepPath) {
+    timeline.add(() => {
+      gsap.timeline({
+        repeat: -1,
+        defaults: { ease: 'power2.inOut' },
+        scrollTrigger: {
+          trigger: section,
+          start: 'top 76%',
+          end: 'bottom top',
+          toggleActions: 'play pause resume pause',
+        },
+      })
+        .to(stepPath, { strokeDashoffset: 0, duration: 0.9 })
+        .to(stepPath, { strokeDashoffset: 0, duration: 1.5, ease: 'none' })
+        .to(stepPath, { strokeDashoffset: -stepPathLength, duration: 0.75 })
+        .set(stepPath, { strokeDashoffset: stepPathLength });
+    }, '-=0.05');
+  }
+
+  layers.forEach((layer, index) => {
+    gsap.to(layer, {
+      y: index % 2 === 0 ? -8 : 8,
+      rotate: index % 2 === 0 ? -0.45 : 0.45,
+      duration: 3.2 + index * 0.28,
+      repeat: -1,
+      yoyo: true,
+      ease: 'sine.inOut',
+      delay: 1.45 + index * 0.14,
+      scrollTrigger: {
+        trigger: section,
+        start: 'top 76%',
+        end: 'bottom top',
+        toggleActions: 'play pause resume pause',
+      },
+    });
+  });
+
+  if (scan) {
+    gsap.to(scan, {
+      xPercent: 850,
+      duration: 5.4,
+      repeat: -1,
+      ease: 'none',
+      scrollTrigger: {
+        trigger: section,
+        start: 'top 76%',
+        end: 'bottom top',
+        toggleActions: 'play pause resume pause',
+      },
+    });
+  }
+}
+
 function initAnimations() {
   gsap.registerPlugin(ScrollTrigger);
 
@@ -180,6 +275,7 @@ function initAnimations() {
 
   initHero();
   initStats();
+  initAbout();
 
   const heroWords = gsap.utils.toArray<HTMLElement>('[data-hero-title] span');
   heroWords.forEach((word) => word.classList.add('hero-word'));

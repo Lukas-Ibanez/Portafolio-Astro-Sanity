@@ -3,42 +3,72 @@ import Code from './icons/Code.astro';
 import Search from './icons/Search.astro';
 import Server from './icons/Server.astro';
 import Shield from './icons/Shield.astro';
+
+const layers = [
+  {
+    label: '01',
+    title: 'Producto web',
+    text: 'interfaces claras, flujos entendibles y decisiones pensadas para uso real.',
+    icon: Code,
+  },
+  {
+    label: '02',
+    title: 'Backend y datos',
+    text: 'APIs, autenticación, modelos y consultas que sostienen la operación.',
+    icon: Shield,
+  },
+  {
+    label: '03',
+    title: 'Servidor Linux',
+    text: 'deploy, SSL, dominios, variables de entorno y permisos sin improvisar.',
+    icon: Server,
+  },
+  {
+    label: '04',
+    title: 'SEO y performance',
+    text: 'HTML estático, metadatos, imágenes optimizadas y carga mínima de JS.',
+    icon: Search,
+  },
+];
 ---
 
-<section id="about" class="about-section">
-  <div class="about-layout">
-    <div id="about-intro" class="reveal">
-      <p class="eyebrow">Sobre mí</p>
-      <h2 class="about-title section-title">Un perfil técnico que entiende el proyecto completo.</h2>
-    </div>
-    <div id="about-detail" class="about-detail">
-      <p class="reveal section-copy">
-        Me interesa construir productos web que funcionen bien de punta a punta. No separo el código de la operación: una buena interfaz también necesita una API clara, una base de datos ordenada, un servidor bien configurado y páginas rápidas para buscadores y personas.
-      </p>
-      <p class="reveal section-copy">
-        Mi formación como Analista Programador en Duoc UC me dio base técnica; la práctica me llevó a cerrar el ciclo completo: levantar entornos, asegurar accesos, desarrollar funcionalidades, medir rendimiento y documentar lo suficiente para que el proyecto pueda seguir creciendo.
-      </p>
-      <div class="about-cards">
-        <div class="about-card batch-reveal">
-          <Server />
-          <h3>Servidor y despliegue</h3>
-          <p>Linux, dominios, SSL, variables de entorno y procesos de deploy.</p>
-        </div>
-        <div class="about-card batch-reveal">
-          <Shield />
-          <h3>Seguridad práctica</h3>
-          <p>higiene de credenciales, headers, permisos y superficies de exposición.</p>
-        </div>
-        <div class="about-card batch-reveal">
-          <Code />
-          <h3>Producto web</h3>
-          <p>interfaces claras, APIs mantenibles y datos pensados para el uso real.</p>
-        </div>
-        <div class="about-card batch-reveal">
-          <Search />
-          <h3>SEO y performance</h3>
-          <p>HTML estático, metadatos, imágenes optimizadas y carga mínima de JS.</p>
-        </div>
+<section id="about" class="about-section" data-about-section>
+  <div class="about-container">
+    <div class="about-layout">
+      <div id="about-copy" class="about-copy" data-about-copy>
+        <p class="about-eyebrow">Sobre mí</p>
+        <h2>
+          <span data-about-title-line>Un perfil técnico</span>
+          <span data-about-title-line>para llevar proyectos web</span>
+          <span data-about-title-line>hasta producción.</span>
+        </h2>
+        <p>
+          Me interesa construir productos web que funcionen bien de punta a punta. No separo el código de la operación: una buena interfaz también necesita una API clara, una base de datos ordenada, un servidor bien configurado y páginas rápidas para buscadores y personas.
+        </p>
+        <p>
+          Mi formación como Analista Programador en Duoc UC me dio base técnica; la práctica me llevó a cerrar el ciclo completo: levantar entornos, asegurar accesos, desarrollar funcionalidades, medir rendimiento y documentar lo suficiente para que el proyecto pueda seguir creciendo.
+        </p>
+      </div>
+
+      <div id="about-layers" class="about-layers" data-about-layers>
+        <div class="about-scan" data-about-scan aria-hidden="true"></div>
+        <svg class="about-step-line" viewBox="0 0 340 600" aria-hidden="true">
+          <path data-about-step-path d="M70 26 V132 C70 146 78 156 92 156 H110 C124 156 134 166 134 180 V270 C134 284 142 294 156 294 H174 C188 294 198 304 198 318 V408 C198 422 206 432 220 432 H238 C252 432 262 442 262 456 V574" />
+        </svg>
+        {
+          layers.map(({ label, title, text, icon: Icon }) => (
+            <article class="about-layer" data-about-layer>
+              <div class="about-layer-index">{label}</div>
+              <div class="about-layer-icon">
+                <Icon />
+              </div>
+              <div>
+                <h3>{title}</h3>
+                <p>{text}</p>
+              </div>
+            </article>
+          ))
+        }
       </div>
     </div>
   </div>
@@ -46,34 +76,148 @@ import Shield from './icons/Shield.astro';
 
 <style>
   .about-section {
-    @apply bg-bg py-24;
+    @apply relative isolate overflow-hidden bg-bg py-28;
+    background:
+      linear-gradient(90deg, rgba(227, 221, 209, 0.5) 1px, transparent 1px),
+      linear-gradient(180deg, rgba(227, 221, 209, 0.42) 1px, transparent 1px),
+      var(--color-bg);
+    background-size: 4rem 4rem;
+  }
+
+  .about-container {
+    @apply mx-auto w-full max-w-site px-5 sm:px-8;
+  }
+
+  .about-eyebrow {
+    @apply text-xs font-semibold uppercase tracking-[0.18em] text-text-soft;
+  }
+
+  .about-copy h2 {
+    @apply mt-4 font-serif text-4xl font-bold leading-tight text-text sm:text-5xl;
+  }
+
+  .about-copy h2 span {
+    @apply block;
+    transform-style: preserve-3d;
+    will-change: transform, opacity;
+  }
+
+  .about-copy h2 span:last-child {
+    @apply text-accent-strong;
   }
 
   .about-layout {
-    @apply mx-auto grid w-full max-w-site gap-12 px-5 sm:px-8 lg:grid-cols-[0.85fr_1.15fr];
+    @apply grid gap-12 lg:grid-cols-[0.78fr_1.22fr] lg:items-start;
   }
 
-  .about-detail {
-    @apply space-y-8;
+  .about-copy {
+    @apply max-w-3xl text-base leading-8 text-text-soft sm:text-lg;
   }
 
-  .about-title {
-    @apply mt-4;
+  .about-copy h2 {
+    max-width: 52rem;
   }
 
-  .about-cards {
-    @apply grid gap-4 sm:grid-cols-2;
+  .about-copy > p:not(.about-eyebrow) {
+    @apply mt-6;
   }
 
-  .about-card {
-    @apply rounded-2xl border border-border bg-surface p-5;
+  .about-layers {
+    @apply relative grid gap-4 border border-border bg-surface p-4 shadow-line sm:p-5 lg:pl-28;
+    border-radius: 1.1rem;
+    overflow: hidden;
   }
 
-  .about-card h3 {
-    @apply mt-4 font-semibold;
+  .about-layers::before {
+    content: '';
+    @apply absolute inset-0 -z-10;
+    background:
+      radial-gradient(circle at 20% 20%, rgba(204, 120, 92, 0.13), transparent 0.6rem),
+      radial-gradient(circle at 80% 70%, rgba(156, 170, 139, 0.14), transparent 0.6rem);
   }
 
-  .about-card p {
+  .about-scan {
+    @apply pointer-events-none absolute inset-y-0 left-0 z-0 w-28 opacity-40;
+    background: linear-gradient(90deg, transparent, rgba(204, 120, 92, 0.16), transparent);
+    transform: translateX(-140%);
+  }
+
+  .about-step-line {
+    @apply pointer-events-none absolute left-0 top-0 z-0 h-[37.5rem] w-[21.25rem];
+    overflow: visible;
+  }
+
+  .about-step-line path {
+    fill: none;
+    stroke: var(--color-accent);
+    stroke-width: 1.4;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    vector-effect: non-scaling-stroke;
+  }
+
+  .about-layer {
+    @apply relative grid min-h-32 grid-cols-[3rem_3rem_1fr] items-center gap-4 border border-border bg-bg p-5 shadow-soft;
+    border-radius: 0.95rem;
+    will-change: transform, opacity;
+    z-index: 1;
+  }
+
+  .about-layer-index {
+    @apply text-xs font-bold uppercase tracking-[0.16em] text-accent-strong;
+  }
+
+  .about-layer-icon {
+    @apply flex h-12 w-12 items-center justify-center border border-border bg-surface text-text;
+    border-radius: 999px;
+  }
+
+  .about-layer h3 {
+    @apply font-serif text-2xl font-bold leading-tight text-text;
+  }
+
+  .about-layer p {
     @apply mt-2 text-sm leading-6 text-text-soft;
+  }
+
+  @media (min-width: 1024px) {
+    .about-layer:nth-of-type(1) {
+      margin-left: 0;
+    }
+
+    .about-layer:nth-of-type(2) {
+      margin-left: 4rem;
+    }
+
+    .about-layer:nth-of-type(3) {
+      margin-left: 8rem;
+    }
+
+    .about-layer:nth-of-type(4) {
+      margin-left: 12rem;
+    }
+  }
+
+  @media (max-width: 767px) {
+    .about-section {
+      padding-block: 4rem;
+      background-size: 3.25rem 3.25rem;
+    }
+
+    .about-layout {
+      margin-top: 2.5rem;
+    }
+
+    .about-layer {
+      grid-template-columns: 2.5rem 1fr;
+    }
+
+    .about-layer-icon {
+      display: none;
+    }
+
+    .about-step-line {
+      display: none;
+    }
   }
 </style>
