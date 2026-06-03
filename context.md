@@ -76,9 +76,16 @@ npm run preview
 
 Astro 6 no corre con Node 20. Usar Node `>=22.12.0`; el repo incluye `.nvmrc`, `.node-version` y `package.json#engines`.
 
-En esta máquina hay un Node global `20.20.0`, así que se instaló Node `22.12.0` portable en `.local-node/` y los scripts de npm lo usan directamente. También desactivan `ASTRO_TELEMETRY_DISABLED=1` para evitar escrituras en AppData. `.local-node/` está ignorado por git.
+Los scripts de `package.json` usan comandos estándar (`astro dev`, `astro check && astro build`, `astro preview`) para funcionar en Cloudflare Pages. En esta máquina hay un Node global `20.20.0`; para correr localmente sin instalar Node global, usar el Node portable ignorado por git:
 
-Deploy sugerido: Vercel o Cloudflare Pages con `npm run build` y salida `dist/`.
+```powershell
+$env:ASTRO_TELEMETRY_DISABLED='1'; .\.local-node\node.exe node_modules\astro\bin\astro.mjs dev
+$env:ASTRO_TELEMETRY_DISABLED='1'; .\.local-node\node.exe node_modules\@astrojs\check\bin\astro-check.js; .\.local-node\node.exe node_modules\astro\bin\astro.mjs build
+```
+
+`.local-node/` está ignorado por git y no se usa en deploy.
+
+Deploy sugerido: Cloudflare Pages con `npm run build`, salida `dist/` y variable `NODE_VERSION=22.12.0`.
 
 ## Variables de entorno
 
@@ -112,6 +119,7 @@ Sin Sanity o GitHub configurados, el build no se rompe. Se muestran estados vac�
 `src/scripts/animations.ts` registra ScrollTrigger una sola vez por carga, anima:
 
 - Hero principal sin imágenes: escena técnica con chips de stack, rutas SVG, anillos, núcleo full-stack y movimiento GSAP contenido.
+- Sección `Stats`: bloque "Base operativa" con grilla de fondo, paths SVG dibujados con ScrollTrigger, contador de años, tarjetas técnicas y workflow animado.
 - `.reveal` en cascada inicial.
 - `.batch-reveal` con `ScrollTrigger.batch`.
 - parallax sutil en `.parallax-media`.

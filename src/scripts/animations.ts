@@ -6,10 +6,10 @@ const isSmallViewport = window.matchMedia('(max-width: 767px)').matches;
 
 function setFinalState() {
   gsap.set(
-    '.reveal, .batch-reveal, [data-hero-line-text], [data-hero-kicker], [data-hero-copy], [data-hero-cta], [data-hero-signal], [data-hero-core], [data-hero-chip], [data-hero-capability]',
+    '.reveal, .batch-reveal, [data-hero-line-text], [data-hero-kicker], [data-hero-copy], [data-hero-cta], [data-hero-signal], [data-hero-core], [data-hero-chip], [data-hero-capability], [data-stats-intro], [data-stat-card], [data-workflow-step]',
     { opacity: 1, y: 0, x: 0, scale: 1, clearProps: 'transform' },
   );
-  gsap.set('[data-hero-path], [data-hero-ring]', { strokeDashoffset: 0 });
+  gsap.set('[data-hero-path], [data-hero-ring], [data-stats-path], [data-stats-ring]', { strokeDashoffset: 0 });
 }
 
 function initHero() {
@@ -101,6 +101,73 @@ function initHero() {
   }
 }
 
+function initStats() {
+  const section = document.querySelector('[data-stats-section]');
+  if (!section) return;
+
+  const intro = section.querySelector<HTMLElement>('[data-stats-intro]');
+  if (!intro) return;
+
+  const cards = gsap.utils.toArray<HTMLElement>('[data-stat-card]');
+  const workflowSteps = gsap.utils.toArray<HTMLElement>('[data-workflow-step]');
+  const lines = gsap.utils.toArray<SVGGeometryElement>('[data-stats-path], [data-stats-ring]');
+  const number = section.querySelector<HTMLElement>('[data-stat-number]');
+  const scan = section.querySelector<HTMLElement>('[data-stats-scan]');
+
+  gsap.set(intro, { opacity: 0, y: 32 });
+  gsap.set(cards, { opacity: 0, y: 34, scale: 0.94 });
+  gsap.set(workflowSteps, { opacity: 0, y: 28 });
+
+  lines.forEach((line) => {
+    const length = line.getTotalLength();
+    gsap.set(line, { strokeDasharray: length, strokeDashoffset: length });
+  });
+
+  const timeline = gsap.timeline({
+    defaults: { ease: 'power3.out' },
+    scrollTrigger: {
+      trigger: section,
+      start: 'top 72%',
+      once: true,
+    },
+  });
+
+  timeline
+    .to(intro, { opacity: 1, y: 0, duration: 0.68 })
+    .to(lines, { strokeDashoffset: 0, duration: 1.05, stagger: 0.08, ease: 'power2.inOut' }, '-=0.42')
+    .to(cards, { opacity: 1, y: 0, scale: 1, duration: 0.62, stagger: 0.08 }, '-=0.58')
+    .to(workflowSteps, { opacity: 1, y: 0, duration: 0.46, stagger: 0.055 }, '-=0.28');
+
+  if (number) {
+    const target = Number(number.dataset.statTarget || 0);
+    const counter = { value: 0 };
+
+    timeline.to(counter, {
+      value: target,
+      duration: 0.75,
+      ease: 'power2.out',
+      onUpdate: () => {
+        number.textContent = String(Math.round(counter.value));
+      },
+    }, '-=0.72');
+  }
+
+  if (scan) {
+    gsap.to(scan, {
+      xPercent: 900,
+      duration: 4.8,
+      repeat: -1,
+      ease: 'none',
+      scrollTrigger: {
+        trigger: section,
+        start: 'top bottom',
+        end: 'bottom top',
+        toggleActions: 'play pause resume pause',
+      },
+    });
+  }
+}
+
 function initAnimations() {
   gsap.registerPlugin(ScrollTrigger);
 
@@ -112,6 +179,7 @@ function initAnimations() {
   document.documentElement.classList.add('motion-ready');
 
   initHero();
+  initStats();
 
   const heroWords = gsap.utils.toArray<HTMLElement>('[data-hero-title] span');
   heroWords.forEach((word) => word.classList.add('hero-word'));
