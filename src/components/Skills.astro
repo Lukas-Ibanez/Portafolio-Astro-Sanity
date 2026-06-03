@@ -1,70 +1,367 @@
 ---
-const groups = [
-  ['Desarrollo Web', ['Astro', 'React', 'Node.js', 'APIs REST', 'HTML semántico']],
-  ['Lenguajes', ['TypeScript', 'JavaScript', 'PHP', 'SQL', 'Bash']],
-  ['Frontend', ['Tailwind CSS', 'Accesibilidad', 'SEO técnico', 'Performance', 'GSAP']],
-  ['Bases de datos', ['PostgreSQL', 'MySQL', 'SQLite', 'modelado relacional']],
-  ['DevOps', ['Linux', 'Nginx', 'SSL', 'GitHub Actions', 'variables de entorno']],
+import BrandLogo from './icons/BrandLogo.astro';
+
+const technologies = [
+  {
+    name: 'Astro',
+    brand: 'astro',
+    group: 'Sitios estáticos',
+    text: 'estructura rápida, SEO y contenido horneado en build.',
+    tone: 'text',
+  },
+  {
+    name: 'React',
+    brand: 'react',
+    group: 'Frontend',
+    text: 'componentes, estados y flujos interactivos mantenibles.',
+    tone: 'cyan',
+  },
+  {
+    name: 'TypeScript',
+    brand: 'typescript',
+    group: 'Lenguaje',
+    text: 'tipos claros para reducir errores antes de producción.',
+    tone: 'blue',
+  },
+  {
+    name: 'JavaScript',
+    brand: 'javascript',
+    group: 'Lenguaje',
+    text: 'interactividad, lógica de cliente y automatizaciones.',
+    tone: 'yellow',
+  },
+  {
+    name: 'Python',
+    brand: 'python',
+    group: 'Lenguaje',
+    text: 'scripts, automatización y lógica backend cuando el proyecto lo pide.',
+    tone: 'blue',
+  },
+  {
+    name: 'Java',
+    brand: 'java',
+    group: 'Lenguaje',
+    text: 'programación orientada a objetos y bases sólidas de arquitectura.',
+    tone: 'accent',
+  },
+  {
+    name: 'CSS nativo',
+    brand: 'css',
+    group: 'UI',
+    text: 'layouts, responsive y detalles visuales sin depender siempre de frameworks.',
+    tone: 'blue',
+  },
+  {
+    name: 'Tailwind CSS',
+    brand: 'tailwind',
+    group: 'UI',
+    text: 'interfaces consistentes sin perder control del CSS.',
+    tone: 'cyan',
+  },
+  {
+    name: 'GSAP',
+    brand: 'gsap',
+    group: 'Animación',
+    text: 'movimiento con intención, ScrollTrigger y estados accesibles.',
+    tone: 'green',
+  },
+  {
+    name: 'Node.js',
+    brand: 'node',
+    group: 'Backend',
+    text: 'APIs, procesos y servicios conectados al producto.',
+    tone: 'green',
+  },
+  {
+    name: 'PHP',
+    brand: 'php',
+    group: 'Backend',
+    text: 'lógica de servidor y proyectos web tradicionales.',
+    tone: 'violet',
+  },
+  {
+    name: 'WordPress',
+    brand: 'wordpress',
+    group: 'CMS',
+    text: 'sitios administrables, performance y mantención.',
+    tone: 'blue',
+  },
+  {
+    name: 'MySQL',
+    brand: 'mysql',
+    group: 'Datos',
+    text: 'modelado relacional y consultas para operación real.',
+    tone: 'blue',
+  },
+  {
+    name: 'PostgreSQL',
+    brand: 'postgresql',
+    group: 'Datos',
+    text: 'bases relacionales robustas para sistemas con crecimiento.',
+    tone: 'blue',
+  },
+  {
+    name: 'Linux',
+    brand: 'linux',
+    group: 'Servidor',
+    text: 'deploy, permisos, procesos, seguridad y operación diaria.',
+    tone: 'text',
+  },
+  {
+    name: 'Nginx',
+    brand: 'nginx',
+    group: 'Infraestructura',
+    text: 'reverse proxy, dominios, SSL y publicación controlada.',
+    tone: 'green',
+  },
 ];
+
+const categories = ['Frontend', 'Backend', 'Datos', 'Servidor Linux', 'SEO técnico'];
 ---
 
-<section id="skills" class="skills-section">
+<section id="skills" class="skills-section" data-skills-section>
   <div class="skills-container">
-    <div id="skills-intro" class="skills-intro reveal">
-      <p class="eyebrow">Skills</p>
-      <h2 class="skills-title section-title">Herramientas para construir, publicar y mantener.</h2>
-    </div>
-    <div id="skills-grid" class="skills-grid">
-      {
-        groups.map(([title, skills]) => (
-          <section class="skill-group batch-reveal">
-            <h3>{title}</h3>
-            <div class="skill-list">
-              {(skills as string[]).map((skill) => (
-                <span>{skill}</span>
-              ))}
-            </div>
-          </section>
-        ))
-      }
+    <div class="skills-layout">
+      <div id="skills-copy" class="skills-copy" data-skills-copy>
+        <p class="skills-eyebrow">Stack técnico</p>
+        <h2>
+          <span data-skills-title-line>Tecnologías que uso</span>
+          <span data-skills-title-line>para construir y operar</span>
+          <span data-skills-title-line>productos web.</span>
+        </h2>
+        <p>
+          Trabajo con herramientas que conectan la interfaz, el backend, los datos y el servidor. La idea no es acumular logos: es usar cada pieza donde realmente aporta al producto.
+        </p>
+
+        <div class="skills-categories" aria-label="Áreas técnicas">
+          {
+            categories.map((category) => (
+              <span data-skill-category>{category}</span>
+            ))
+          }
+        </div>
+      </div>
+
+      <div id="skills-stage" class="skills-stage" data-skills-stage>
+        <div class="skills-scan" data-skills-scan aria-hidden="true"></div>
+
+        <svg class="skills-network" viewBox="0 0 900 520" aria-hidden="true">
+          <path data-skill-path d="M112 118 C250 62 338 98 450 142 C570 190 662 174 792 112" />
+          <path data-skill-path d="M94 310 C218 238 326 270 450 306 C590 346 676 316 814 242" />
+          <path data-skill-path d="M210 432 C300 372 380 386 450 418 C540 460 626 430 716 360" />
+          <circle data-skill-node cx="112" cy="118" r="7" />
+          <circle data-skill-node cx="450" cy="142" r="7" />
+          <circle data-skill-node cx="792" cy="112" r="7" />
+          <circle data-skill-node cx="94" cy="310" r="7" />
+          <circle data-skill-node cx="450" cy="306" r="7" />
+          <circle data-skill-node cx="814" cy="242" r="7" />
+          <circle data-skill-node cx="210" cy="432" r="7" />
+          <circle data-skill-node cx="450" cy="418" r="7" />
+          <circle data-skill-node cx="716" cy="360" r="7" />
+        </svg>
+
+        <div class="skills-grid" aria-label="Tecnologías principales">
+          {
+            technologies.map((tech, index) => (
+              <article class:list={['skill-card', `skill-card-${tech.tone}`]} style={`--skill-index:${index};`} data-skill-card>
+                <div class="skill-logo" data-skill-logo>
+                  <BrandLogo brand={tech.brand} />
+                </div>
+                <div>
+                  <p>{tech.group}</p>
+                  <h3>{tech.name}</h3>
+                  <span>{tech.text}</span>
+                </div>
+              </article>
+            ))
+          }
+        </div>
+      </div>
     </div>
   </div>
 </section>
 
 <style>
   .skills-section {
-    @apply bg-bg-alt py-24;
+    @apply relative isolate overflow-hidden border-y border-border bg-bg py-28;
+    background:
+      linear-gradient(90deg, rgba(227, 221, 209, 0.5) 1px, transparent 1px),
+      linear-gradient(180deg, rgba(227, 221, 209, 0.42) 1px, transparent 1px),
+      var(--color-bg);
+    background-size: 4rem 4rem;
   }
 
   .skills-container {
     @apply mx-auto w-full max-w-site px-5 sm:px-8;
   }
 
-  .skills-intro {
-    @apply max-w-3xl;
+  .skills-layout {
+    @apply grid gap-12;
   }
 
-  .skills-title {
-    @apply mt-4;
+  .skills-copy {
+    @apply max-w-4xl text-base leading-8 text-text-soft sm:text-lg;
+  }
+
+  .skills-eyebrow {
+    @apply text-xs font-semibold uppercase tracking-[0.18em] text-text-soft;
+  }
+
+  .skills-copy h2 {
+    @apply mt-4 font-serif text-4xl font-bold leading-tight text-text sm:text-5xl;
+    max-width: 58rem;
+  }
+
+  .skills-copy h2 span {
+    @apply block;
+    transform-style: preserve-3d;
+    will-change: transform, opacity;
+  }
+
+  .skills-copy h2 span:last-child {
+    @apply text-accent-strong;
+  }
+
+  .skills-copy > p:not(.skills-eyebrow) {
+    @apply mt-6;
+    max-width: 48rem;
+  }
+
+  .skills-categories {
+    @apply mt-8 flex flex-wrap gap-2;
+  }
+
+  .skills-categories span {
+    @apply border border-border bg-surface px-3 py-2 text-xs font-bold uppercase tracking-[0.14em] text-text-soft shadow-line;
+    border-radius: 999px;
+    will-change: transform, opacity;
+  }
+
+  .skills-stage {
+    @apply relative min-h-[42rem] overflow-hidden border border-border p-4 shadow-line sm:p-5 lg:p-6;
+    background: rgba(251, 250, 247, 0.8);
+    border-radius: 1.1rem;
+    isolation: isolate;
+  }
+
+  .skills-stage::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: -2;
+    background:
+      radial-gradient(circle at 34% 44%, rgba(204, 120, 92, 0.13), transparent 0.55rem),
+      linear-gradient(90deg, rgba(227, 221, 209, 0.64) 1px, transparent 1px),
+      linear-gradient(180deg, rgba(227, 221, 209, 0.58) 1px, transparent 1px);
+    background-size: 1rem 1rem, 3rem 3rem, 3rem 3rem;
+  }
+
+  .skills-scan {
+    @apply pointer-events-none absolute inset-y-0 left-0 z-0 w-28 opacity-40;
+    background: linear-gradient(90deg, transparent, rgba(204, 120, 92, 0.16), transparent);
+    transform: translateX(-140%);
+  }
+
+  .skills-network {
+    @apply pointer-events-none absolute inset-0 z-0 h-full w-full;
+    overflow: visible;
+  }
+
+  .skills-network path {
+    fill: none;
+    stroke: var(--color-accent);
+    stroke-width: 1.25;
+    stroke-linecap: round;
+    vector-effect: non-scaling-stroke;
+  }
+
+  .skills-network circle {
+    fill: var(--color-surface);
+    stroke: var(--color-accent);
+    stroke-width: 1.25;
+    vector-effect: non-scaling-stroke;
   }
 
   .skills-grid {
-    @apply mt-12 grid gap-5 md:grid-cols-2 lg:grid-cols-3;
+    @apply relative z-20 grid gap-3 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4;
   }
 
-  .skill-group {
-    @apply rounded-2xl border border-border bg-surface p-6;
+  .skill-card {
+    @apply grid min-h-40 grid-cols-[3.25rem_1fr] gap-4 border border-border bg-bg p-4 shadow-soft;
+    border-radius: 0.95rem;
+    transform-origin: center;
+    will-change: transform, opacity, clip-path;
   }
 
-  .skill-group h3 {
-    @apply font-serif text-2xl;
+  .skill-logo {
+    @apply flex h-14 w-14 items-center justify-center border border-border bg-surface shadow-line;
+    border-radius: 1rem;
+    will-change: transform;
   }
 
-  .skill-list {
-    @apply mt-5 flex flex-wrap gap-2;
+  .skill-card p {
+    @apply text-[0.68rem] font-bold uppercase tracking-[0.16em] text-accent-strong;
   }
 
-  .skill-list span {
-    @apply rounded-full border border-border bg-bg px-3 py-1.5 text-sm text-text-soft;
+  .skill-card h3 {
+    @apply mt-2 font-serif text-2xl font-bold leading-tight text-text;
+  }
+
+  .skill-card span {
+    @apply mt-2 block text-sm leading-6 text-text-soft;
+  }
+
+  .skill-card-cyan .skill-logo {
+    border-color: rgba(56, 189, 248, 0.32);
+  }
+
+  .skill-card-blue .skill-logo {
+    border-color: rgba(49, 120, 198, 0.28);
+  }
+
+  .skill-card-green .skill-logo {
+    border-color: rgba(104, 160, 99, 0.32);
+  }
+
+  .skill-card-yellow .skill-logo {
+    border-color: rgba(247, 223, 30, 0.45);
+  }
+
+  .skill-card-violet .skill-logo {
+    border-color: rgba(119, 123, 180, 0.35);
+  }
+
+  .skill-card-accent .skill-logo {
+    border-color: rgba(204, 120, 92, 0.38);
+  }
+
+  @media (min-width: 1024px) {
+    .skill-card:nth-child(4n + 2),
+    .skill-card:nth-child(4n + 4) {
+      margin-top: 1.5rem;
+    }
+
+    .skill-card:nth-child(4n + 3) {
+      margin-top: 0.75rem;
+    }
+  }
+
+  @media (max-width: 767px) {
+    .skills-section {
+      padding-block: 4rem;
+      background-size: 3.25rem 3.25rem;
+    }
+
+    .skills-stage {
+      min-height: auto;
+    }
+
+    .skills-network {
+      opacity: 0.5;
+    }
+
+    .skill-card {
+      min-height: auto;
+    }
   }
 </style>

@@ -40,7 +40,7 @@ Tipografías: Plus Jakarta Sans Variable para títulos/display, Inter Variable p
 | `src/layouts/BaseLayout.astro` | HTML base, SEO, OG/Twitter, fuentes locales, JSON-LD y script GSAP |
 | `src/styles/global.css` | tokens CSS, Tailwind, componentes utilitarios y estilos de artículo |
 | `src/components/` | Nav, Hero, About, Skills, Projects, BlogTeaser, Contact, Footer |
-| `src/components/icons/` | SVG locales como componentes Astro |
+| `src/components/icons/` | SVG locales como componentes Astro, incluido `BrandLogo.astro` para logos de tecnologías sin requests externos |
 | `src/content.config.ts` | configuración Astro 6 de colecciones con loader `glob` |
 | `src/content/projects/` | colección local de proyectos |
 | `src/lib/sanity.ts` | cliente y queries Sanity en build-time |
@@ -121,6 +121,7 @@ Sin Sanity o GitHub configurados, el build no se rompe. Se muestran estados vac�
 - Hero principal sin imágenes: escena técnica con chips de stack, rutas SVG, anillos, núcleo full-stack y movimiento GSAP contenido.
 - Sección `Stats`: bloque "Base operativa" con grilla de fondo, paths SVG dibujados con ScrollTrigger, contador de años, tarjetas técnicas y workflow animado.
 - Sección `About`: nueva sección con título grande propio y fondo de grilla idéntico a Hero/Stats; cajas entran desde la izquierda en secuencia, luego se dibuja una línea SVG con trazado de escalera; mantiene movimiento ambiente sutil en tarjetas y scan interno, sin scrub.
+- Sección `Skills`: escena de tecnologías con logos SVG locales (`BrandLogo.astro`), fondo interno de grilla, paths/nodos SVG, tarjetas que entran como panel técnico y movimiento ambiente controlado.
 - `.reveal` en cascada inicial.
 - `.batch-reveal` con `ScrollTrigger.batch`.
 - parallax sutil en `.parallax-media`.
