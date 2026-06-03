@@ -224,7 +224,7 @@ function initAbout() {
       })
         .to(stepPath, { strokeDashoffset: 0, duration: 0.9 })
         .to(stepPath, { strokeDashoffset: 0, duration: 1.5, ease: 'none' })
-        .to(stepPath, { strokeDashoffset: -stepPathLength, duration: 0.75 })
+        .to(stepPath, { strokeDashoffset: -stepPathLength, duration: 1.45 })
         .set(stepPath, { strokeDashoffset: stepPathLength });
     }, '-=0.05');
   }
