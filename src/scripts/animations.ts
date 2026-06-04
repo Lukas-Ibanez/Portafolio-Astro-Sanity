@@ -6,7 +6,7 @@ const isSmallViewport = window.matchMedia('(max-width: 767px)').matches;
 
 function setFinalState() {
   gsap.set(
-    '.reveal, .batch-reveal, [data-hero-line-text], [data-hero-kicker], [data-hero-copy], [data-hero-cta], [data-hero-signal], [data-hero-core], [data-hero-chip], [data-hero-capability], [data-stats-intro], [data-stat-card], [data-workflow-step], [data-about-title-line], [data-about-copy], [data-about-layer], [data-skills-title-line], [data-skills-copy], [data-skill-category], [data-skill-card], [data-skill-logo], [data-skill-node]',
+    '.reveal, .batch-reveal, [data-hero-line-text], [data-hero-kicker], [data-hero-copy], [data-hero-cta], [data-hero-signal], [data-hero-core], [data-hero-chip], [data-hero-capability], [data-stats-intro], [data-stat-card], [data-workflow-step], [data-about-title-line], [data-about-copy], [data-about-layer], [data-skills-title-line], [data-skills-copy], [data-skill-category], [data-skill-card], [data-skill-logo], [data-skill-node], [data-projects-title-line], [data-projects-copy], [data-projects-action], [data-projects-frame], [data-project-slide]',
     { opacity: 1, y: 0, x: 0, scale: 1, clipPath: 'inset(0% 0% 0% 0%)', clearProps: 'transform' },
   );
   gsap.set('[data-hero-path], [data-hero-ring], [data-stats-path], [data-stats-ring], [data-about-step-path], [data-skill-path]', { strokeDashoffset: 0 });
@@ -379,6 +379,126 @@ function initSkills() {
   }
 }
 
+function initProjects() {
+  const sections = gsap.utils.toArray<HTMLElement>('[data-projects-section]');
+  if (sections.length === 0) return;
+
+  sections.forEach((section) => {
+    const titleLines = gsap.utils.toArray<HTMLElement>(section.querySelectorAll('[data-projects-title-line]'));
+    const copy = section.querySelector<HTMLElement>('[data-projects-copy]');
+    const actions = gsap.utils.toArray<HTMLElement>(section.querySelectorAll('[data-projects-action]'));
+    const frame = section.querySelector<HTMLElement>('[data-projects-frame]');
+    const slides = gsap.utils.toArray<HTMLElement>(section.querySelectorAll('[data-project-slide]'));
+    const dots = gsap.utils.toArray<HTMLButtonElement>(section.querySelectorAll('[data-project-dot]'));
+    const dotBars = dots.map((dot) => dot.querySelector<HTMLElement>('span')).filter(Boolean);
+
+    if (!copy || !frame || slides.length === 0) return;
+
+    gsap.set(titleLines, { opacity: 0, yPercent: 88, rotateX: -14, transformOrigin: 'left bottom' });
+    gsap.set(copy, { opacity: 0, y: 24 });
+    gsap.set(actions, { opacity: 0, y: 18 });
+    gsap.set(frame, { opacity: 0, x: -56, rotateY: -8, scale: 0.96, transformPerspective: 1000 });
+    gsap.set(slides, { opacity: 0, xPercent: 10, scale: 1.04, clipPath: 'inset(0% 0% 0% 100%)' });
+    gsap.set(slides[0], { opacity: 1, xPercent: 0, scale: 1, clipPath: 'inset(0% 0% 0% 0%)' });
+    gsap.set(dotBars, { scaleX: 0 });
+
+    const timeline = gsap.timeline({
+      defaults: { ease: 'power4.out' },
+      scrollTrigger: {
+        trigger: section,
+        start: 'top 72%',
+        once: true,
+      },
+    });
+
+    timeline
+      .to(titleLines, { opacity: 1, yPercent: 0, rotateX: 0, duration: 0.72, stagger: 0.08 })
+      .to(copy, { opacity: 1, y: 0, duration: 0.54 }, '-=0.34')
+      .to(actions, { opacity: 1, y: 0, duration: 0.42, stagger: 0.06 }, '-=0.24')
+      .to(frame, { opacity: 1, x: 0, rotateY: 0, scale: 1, duration: 0.82, ease: 'power3.out' }, '-=0.7')
+      .fromTo(slides[0], { clipPath: 'inset(0% 100% 0% 0%)', scale: 1.08 }, { clipPath: 'inset(0% 0% 0% 0%)', scale: 1, duration: 0.82, ease: 'power3.out' }, '-=0.46');
+
+    let activeIndex = 0;
+    const duration = 4.8;
+    let progressTween: gsap.core.Tween | undefined;
+
+    const setActiveDot = (index: number) => {
+      dots.forEach((dot, dotIndex) => {
+        dot.setAttribute('aria-pressed', dotIndex === index ? 'true' : 'false');
+      });
+      gsap.set(dotBars, { scaleX: 0 });
+      if (dotBars[index]) {
+        progressTween = gsap.to(dotBars[index], { scaleX: 1, duration, ease: 'none' });
+      }
+    };
+
+    const showSlide = (nextIndex: number) => {
+      if (nextIndex === activeIndex || slides.length <= 1) return;
+
+      const current = slides[activeIndex];
+      const next = slides[nextIndex];
+      const direction = nextIndex > activeIndex ? 1 : -1;
+
+      progressTween?.kill();
+      slides.forEach((slide, index) => {
+        slide.setAttribute('aria-hidden', index === nextIndex ? 'false' : 'true');
+      });
+
+      gsap.timeline({ defaults: { ease: 'power3.inOut' } })
+        .set(next, {
+          opacity: 1,
+          xPercent: direction * 16,
+          scale: 1.04,
+          clipPath: direction === 1 ? 'inset(0% 0% 0% 100%)' : 'inset(0% 100% 0% 0%)',
+        })
+        .to(current, {
+          opacity: 0,
+          xPercent: -direction * 12,
+          scale: 0.98,
+          clipPath: direction === 1 ? 'inset(0% 100% 0% 0%)' : 'inset(0% 0% 0% 100%)',
+          duration: 0.72,
+        })
+        .to(next, {
+          xPercent: 0,
+          scale: 1,
+          clipPath: 'inset(0% 0% 0% 0%)',
+          duration: 0.78,
+        }, '-=0.68');
+
+      activeIndex = nextIndex;
+      setActiveDot(activeIndex);
+    };
+
+    const autoTimeline = gsap.timeline({
+      repeat: -1,
+      scrollTrigger: {
+        trigger: section,
+        start: 'top 78%',
+        end: 'bottom top',
+        toggleActions: 'play pause resume pause',
+      },
+    });
+
+    if (slides.length > 1) {
+      setActiveDot(0);
+      autoTimeline.to({}, {
+        duration,
+        repeat: -1,
+        onRepeat: () => {
+          showSlide((activeIndex + 1) % slides.length);
+        },
+      });
+
+      dots.forEach((dot, index) => {
+        dot.addEventListener('click', () => {
+          autoTimeline.restart();
+          showSlide(index);
+        });
+      });
+    }
+  });
+}
+
 function initAnimations() {
   gsap.registerPlugin(ScrollTrigger);
 
@@ -393,6 +513,7 @@ function initAnimations() {
   initStats();
   initAbout();
   initSkills();
+  initProjects();
 
   const heroWords = gsap.utils.toArray<HTMLElement>('[data-hero-title] span');
   heroWords.forEach((word) => word.classList.add('hero-word'));

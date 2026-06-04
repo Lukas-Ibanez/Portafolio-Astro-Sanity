@@ -1,7 +1,8 @@
 ---
+import { Image } from 'astro:assets';
 import type { CollectionEntry } from 'astro:content';
-import ProjectCard from './ProjectCard.astro';
 import ArrowRight from './icons/ArrowRight.astro';
+import ExternalLink from './icons/ExternalLink.astro';
 import linuxImage from '../assets/project-linux.png';
 import adminImage from '../assets/project-admin.png';
 import seoImage from '../assets/project-seo.png';
@@ -24,59 +25,289 @@ const sectionId = featuredOnly ? 'featured-projects' : 'projects';
 const visibleProjects = projects
   .filter((project) => (featuredOnly ? project.data.featured : true))
   .sort((a, b) => a.data.order - b.data.order);
+
+const totalProjects = visibleProjects.length;
 ---
 
-<section id={sectionId} class="projects-section">
-  <div class="projects-container">
-    <div id={`${sectionId}-intro`} class="projects-intro reveal">
-      <div>
-        <p class="eyebrow">Proyectos</p>
-        <h2 class="projects-title section-title">{featuredOnly ? 'Trabajo destacado' : 'Proyectos seleccionados'}</h2>
+<section id={sectionId} class="projects-section" data-projects-section>
+  <div class="projects-shell">
+    <div id={`${sectionId}-showcase`} class="projects-showcase">
+      <div class="projects-slider" data-projects-slider>
+        <div class="projects-frame" data-projects-frame>
+          <div class="browser-bar" aria-hidden="true">
+            <span></span>
+            <span></span>
+            <span></span>
+          </div>
+
+          <div class="project-slides">
+            {
+              visibleProjects.map((project, index) => (
+                <article class="project-slide" data-project-slide data-project-index={index} aria-hidden={index === 0 ? 'false' : 'true'}>
+                  <Image
+                    src={imageMap[project.data.image as keyof typeof imageMap] || linuxImage}
+                    alt={`Pantallazo del proyecto ${project.data.title}.`}
+                    width={1100}
+                    height={720}
+                    format="webp"
+                    loading={index === 0 ? 'eager' : 'lazy'}
+                    decoding="async"
+                    class="project-slide-image"
+                  />
+                  <div class="project-slide-overlay">
+                    <div>
+                      <p>Proyecto {index + 1} de {totalProjects}</p>
+                      <h3>{project.data.title}</h3>
+                    </div>
+                    <div class="project-slide-stack">
+                      {project.data.stack.slice(0, 4).map((item) => <span>{item}</span>)}
+                    </div>
+                  </div>
+                </article>
+              ))
+            }
+          </div>
+        </div>
+
+        <div class="projects-progress" aria-label="Progreso del slider">
+          {
+            visibleProjects.map((project, index) => (
+              <button
+                type="button"
+                class="project-dot"
+                data-project-dot
+                data-project-index={index}
+                aria-label={`Ver proyecto ${project.data.title}`}
+                aria-pressed={index === 0 ? 'true' : 'false'}
+              >
+                <span></span>
+              </button>
+            ))
+          }
+        </div>
       </div>
-      {
-        featuredOnly && (
-          <a href="/proyectos/" class="button-secondary">
-            Ver todos <ArrowRight />
+
+      <div id={`${sectionId}-copy`} class="projects-copy" data-projects-copy>
+        <p class="projects-eyebrow">Showcase</p>
+        <h2>
+          <span data-projects-title-line>{featuredOnly ? 'Proyectos que muestran' : 'Proyectos seleccionados'}</span>
+          <span data-projects-title-line>cómo trabajo de punta a punta.</span>
+        </h2>
+        <p>
+          Cada proyecto tiene que demostrar algo concreto: una interfaz clara, un backend ordenado, una publicación cuidada o una mejora real de rendimiento. Esta vitrina está pensada para reemplazar los placeholders por pantallazos y casos reales de Lukas.
+        </p>
+
+        <div class="projects-actions">
+          {
+            featuredOnly && (
+              <a href="/proyectos/" class="button-primary" data-projects-action>
+                Ver todos los proyectos <ArrowRight />
+              </a>
+            )
+          }
+          <a href="/contacto/" class="button-secondary" data-projects-action>
+            Hablemos <ExternalLink />
           </a>
-        )
-      }
-    </div>
-    <div id={`${sectionId}-grid`} class="projects-grid">
-      {
-        visibleProjects.map((project) => (
-          <ProjectCard
-            title={project.data.title}
-            excerpt={project.data.excerpt}
-            stack={project.data.stack}
-            role={project.data.role}
-            liveUrl={project.data.liveUrl}
-            repoUrl={project.data.repoUrl}
-            image={imageMap[project.data.image as keyof typeof imageMap] || linuxImage}
-          />
-        ))
-      }
+        </div>
+
+        <div class="projects-summary" aria-label="Resumen del showcase">
+          <div>
+            <strong>{totalProjects}</strong>
+            <span>{featuredOnly ? 'proyectos destacados' : 'proyectos cargados'}</span>
+          </div>
+          <div>
+            <strong>Full-stack</strong>
+            <span>producto, backend y operación</span>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </section>
 
 <style>
   .projects-section {
-    @apply bg-bg py-24;
+    @apply relative isolate overflow-hidden bg-bg py-28;
+    background:
+      radial-gradient(circle at 27% 42%, rgba(204, 120, 92, 0.18), transparent 18rem),
+      radial-gradient(circle at 72% 35%, rgba(156, 170, 139, 0.14), transparent 16rem),
+      linear-gradient(90deg, rgba(227, 221, 209, 0.5) 1px, transparent 1px),
+      linear-gradient(180deg, rgba(227, 221, 209, 0.42) 1px, transparent 1px),
+      var(--color-bg);
+    background-size: auto, auto, 4rem 4rem, 4rem 4rem, auto;
   }
 
-  .projects-container {
+  .projects-shell {
     @apply mx-auto w-full max-w-site px-5 sm:px-8;
   }
 
-  .projects-intro {
-    @apply flex flex-col gap-6 sm:flex-row sm:items-end sm:justify-between;
+  .projects-showcase {
+    @apply grid gap-12 lg:grid-cols-[1.15fr_0.85fr] lg:items-center;
   }
 
-  .projects-title {
-    @apply mt-4;
+  .projects-slider {
+    @apply relative;
   }
 
-  .projects-grid {
-    @apply mt-12 grid gap-6 md:grid-cols-2;
+  .projects-slider::before {
+    content: '';
+    @apply absolute -inset-4 -z-10 border border-border bg-surface shadow-soft;
+    border-radius: 1.35rem;
+  }
+
+  .projects-frame {
+    @apply relative overflow-hidden border border-border bg-surface shadow-soft;
+    border-radius: 1rem;
+    min-height: 35rem;
+    will-change: transform, opacity;
+  }
+
+  .browser-bar {
+    @apply absolute left-0 right-0 top-0 z-30 flex h-11 items-center gap-2 border-b border-border px-4;
+    background: rgba(251, 250, 247, 0.92);
+  }
+
+  .browser-bar span {
+    @apply h-2.5 w-2.5 rounded-full border border-border bg-bg;
+  }
+
+  .project-slides {
+    @apply absolute inset-0 pt-11;
+  }
+
+  .project-slide {
+    @apply absolute inset-x-0 bottom-0 top-11 opacity-0;
+    pointer-events: none;
+    will-change: transform, opacity, clip-path;
+  }
+
+  .project-slide:first-child {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  .project-slide-image {
+    @apply h-full w-full object-cover;
+    will-change: transform;
+  }
+
+  .project-slide-overlay {
+    @apply absolute bottom-5 left-5 right-5 z-20 flex flex-col gap-4 border border-border p-5 shadow-soft sm:flex-row sm:items-end sm:justify-between;
+    background: rgba(43, 42, 39, 0.82);
+    border-radius: 0.9rem;
+    backdrop-filter: blur(14px);
+  }
+
+  .project-slide-overlay p {
+    @apply text-xs font-bold uppercase tracking-[0.16em] text-accent-soft;
+  }
+
+  .project-slide-overlay h3 {
+    @apply mt-2 font-serif text-2xl font-bold leading-tight text-bg sm:text-3xl;
+  }
+
+  .project-slide-stack {
+    @apply flex flex-wrap gap-2 sm:justify-end;
+  }
+
+  .project-slide-stack span {
+    @apply border border-border px-3 py-1.5 text-xs font-bold text-bg;
+    border-radius: 999px;
+    background: rgba(247, 244, 238, 0.12);
+  }
+
+  .projects-progress {
+    @apply mt-5 flex items-center justify-center gap-3;
+  }
+
+  .project-dot {
+    @apply h-2.5 w-10 overflow-hidden border border-border bg-surface p-0;
+    border-radius: 999px;
+  }
+
+  .project-dot span {
+    @apply block h-full w-full origin-left scale-x-0 bg-accent;
+    border-radius: inherit;
+  }
+
+  .project-dot[aria-pressed='true'] {
+    @apply border-accent-soft;
+  }
+
+  .projects-copy {
+    @apply max-w-2xl;
+  }
+
+  .projects-eyebrow {
+    @apply text-xs font-semibold uppercase tracking-[0.24em] text-accent-strong;
+  }
+
+  .projects-copy h2 {
+    @apply mt-4 font-serif text-4xl font-bold leading-tight text-text sm:text-5xl;
+  }
+
+  .projects-copy h2 span {
+    @apply block;
+    transform-style: preserve-3d;
+    will-change: transform, opacity;
+  }
+
+  .projects-copy h2 span:last-child {
+    @apply text-accent-strong;
+  }
+
+  .projects-copy > p {
+    @apply mt-6 text-base leading-8 text-text-soft sm:text-lg;
+  }
+
+  .projects-actions {
+    @apply mt-10 flex flex-col gap-3 sm:flex-row;
+  }
+
+  .projects-summary {
+    @apply mt-8 grid gap-3 sm:grid-cols-2;
+  }
+
+  .projects-summary div {
+    @apply border border-border bg-surface p-4 shadow-line;
+    border-radius: 0.9rem;
+  }
+
+  .projects-summary strong {
+    @apply block font-serif text-2xl font-bold text-text;
+  }
+
+  .projects-summary span {
+    @apply mt-1 block text-xs font-bold uppercase tracking-[0.14em] text-text-soft;
+  }
+
+  @media (max-width: 767px) {
+    .projects-section {
+      padding-block: 4rem;
+      background-size: auto, auto, 3.25rem 3.25rem, 3.25rem 3.25rem, auto;
+    }
+
+    .projects-copy {
+      order: -1;
+    }
+
+    .projects-summary {
+      display: none;
+    }
+
+    .projects-frame {
+      min-height: 29rem;
+    }
+
+    .project-slide-overlay {
+      left: 0.85rem;
+      right: 0.85rem;
+      bottom: 0.85rem;
+      padding: 1rem;
+    }
+
+    .project-slide-overlay h3 {
+      font-size: 1.45rem;
+    }
   }
 </style>

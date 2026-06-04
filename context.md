@@ -122,6 +122,7 @@ Sin Sanity o GitHub configurados, el build no se rompe. Se muestran estados vac�
 - Sección `Stats`: bloque "Base operativa" con grilla de fondo, paths SVG dibujados con ScrollTrigger, contador de años, tarjetas técnicas y workflow animado.
 - Sección `About`: nueva sección con título grande propio y fondo de grilla idéntico a Hero/Stats; cajas entran desde la izquierda en secuencia, luego se dibuja una línea SVG con trazado de escalera; mantiene movimiento ambiente sutil en tarjetas y scan interno, sin scrub.
 - Sección `Skills`: escena de tecnologías con logos SVG locales (`BrandLogo.astro`), fondo interno de grilla, paths/nodos SVG, tarjetas que entran como panel técnico y movimiento ambiente controlado.
+- Sección `Projects`: showcase distinto al resto, sin fondo cuadriculado ni tarjetas flotantes; usa slider con pantallazo grande, overlay de proyecto, progreso/dots, texto lateral y transiciones GSAP horizontales.
 - `.reveal` en cascada inicial.
 - `.batch-reveal` con `ScrollTrigger.batch`.
 - parallax sutil en `.parallax-media`.

@@ -10,24 +10,32 @@ type Props = {
   liveUrl?: string;
   repoUrl?: string;
   image: ImageMetadata;
+  index?: number;
 };
 
-const { title, excerpt, stack, role, liveUrl, repoUrl, image } = Astro.props;
+const { title, excerpt, stack, role, liveUrl, repoUrl, image, index = 0 } = Astro.props;
+const projectNumber = String(index + 1).padStart(2, '0');
 ---
 
-<article class="project-card batch-reveal group">
-  <Image
-    src={image}
-    alt={`Imagen editorial del proyecto ${title}.`}
-    width={640}
-    height={426}
-    format="webp"
-    loading="lazy"
-    decoding="async"
-    class="project-image parallax-media"
-  />
+<article class="project-card group" data-project-card>
+  <div class="project-media" data-project-media>
+    <Image
+      src={image}
+      alt={`Imagen editorial del proyecto ${title}.`}
+      width={720}
+      height={540}
+      format="webp"
+      loading="lazy"
+      decoding="async"
+      class="project-image parallax-media"
+    />
+  </div>
+
   <div class="project-content">
-    <p class="project-role">{role}</p>
+    <div class="project-meta" data-project-meta>
+      <span>{projectNumber}</span>
+      <p>{role}</p>
+    </div>
     <h3 class="project-title">{title}</h3>
     <p class="project-excerpt">{excerpt}</p>
     <div class="project-stack">
@@ -43,42 +51,75 @@ const { title, excerpt, stack, role, liveUrl, repoUrl, image } = Astro.props;
 
 <style>
   .project-card {
-    @apply flex h-full flex-col overflow-hidden rounded-2xl border border-border bg-surface shadow-line;
+    @apply grid h-full overflow-hidden border border-border bg-bg shadow-soft lg:grid-cols-[0.92fr_1.08fr];
+    border-radius: 1.05rem;
+    transform-origin: center;
+    will-change: transform, opacity, clip-path;
+  }
+
+  .project-media {
+    @apply relative min-h-72 overflow-hidden border-b border-border lg:border-b-0 lg:border-r;
+    clip-path: inset(0% 0% 0% 0%);
+    will-change: clip-path, transform;
+  }
+
+  .project-media::after {
+    content: '';
+    @apply pointer-events-none absolute inset-0;
+    background:
+      linear-gradient(90deg, rgba(247, 244, 238, 0.18), transparent 34%),
+      linear-gradient(180deg, transparent, rgba(43, 42, 39, 0.12));
   }
 
   .project-image {
-    @apply aspect-[3/2] w-full object-cover transition duration-500 group-hover:scale-[1.03];
+    @apply h-full w-full object-cover transition duration-500 group-hover:scale-[1.035];
   }
 
   .project-content {
-    @apply flex flex-1 flex-col p-6;
+    @apply flex flex-1 flex-col p-6 sm:p-7;
   }
 
-  .project-role {
-    @apply text-sm font-semibold text-accent-strong;
+  .project-meta {
+    @apply flex items-center justify-between gap-4;
+    will-change: transform, opacity;
+  }
+
+  .project-meta span {
+    @apply text-xs font-bold uppercase tracking-[0.18em] text-accent-strong;
+  }
+
+  .project-meta p {
+    @apply max-w-56 text-right text-xs font-bold uppercase tracking-[0.14em] text-text-soft;
   }
 
   .project-title {
-    @apply mt-3 font-serif text-3xl leading-tight text-text;
+    @apply mt-6 font-serif text-3xl font-bold leading-tight text-text sm:text-4xl;
   }
 
   .project-excerpt {
-    @apply mt-4 text-sm leading-7 text-text-soft;
+    @apply mt-4 text-base leading-7 text-text-soft;
   }
 
   .project-stack {
-    @apply mt-5 flex flex-wrap gap-2;
+    @apply mt-6 flex flex-wrap gap-2;
   }
 
   .project-stack span {
-    @apply rounded-full bg-bg px-3 py-1 text-xs font-medium text-text-soft;
+    @apply border border-border bg-surface px-3 py-1.5 text-xs font-bold text-text-soft;
+    border-radius: 999px;
   }
 
   .project-actions {
-    @apply mt-6 flex flex-wrap gap-3 pt-2;
+    @apply mt-auto flex flex-wrap gap-3 pt-8;
   }
 
   .project-todo {
     @apply text-sm text-text-soft;
+  }
+
+  @media (max-width: 767px) {
+    .project-media {
+      min-height: 15rem;
+    }
   }
 </style>
