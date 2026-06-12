@@ -1,0 +1,198 @@
+<canvas id="ico-canvas" aria-hidden="true"></canvas>
+
+<style>
+  #ico-canvas {
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    #ico-canvas { display: none; }
+  }
+</style>
+
+<script>
+  import * as THREE from 'three';
+  import { gsap } from 'gsap';
+  import { ScrollTrigger } from 'gsap/ScrollTrigger';
+
+  gsap.registerPlugin(ScrollTrigger);
+
+  const canvas = document.getElementById('ico-canvas') as HTMLCanvasElement;
+  if (!canvas) throw new Error('ico-canvas not found');
+
+  // ── Renderer ───────────────────────────────────────────────────────────────
+  const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+  renderer.setSize(window.innerWidth, window.innerHeight);
+  renderer.setClearColor(0x000000, 0);
+
+  // ── Scene & Camera ─────────────────────────────────────────────────────────
+  const scene = new THREE.Scene();
+  const camera = new THREE.PerspectiveCamera(52, window.innerWidth / window.innerHeight, 0.1, 50);
+  camera.position.z = 6;
+
+  // ── Theme ──────────────────────────────────────────────────────────────────
+  const isDark = () => document.documentElement.dataset.theme === 'dark';
+
+  // ── Geometry: geodesic wireframe sphere ────────────────────────────────────
+  const icoGeo = new THREE.IcosahedronGeometry(0.75, 2);
+  const edgesGeo = new THREE.EdgesGeometry(icoGeo);
+
+  const wireMat = new THREE.LineBasicMaterial({ transparent: true });
+  const wireframe = new THREE.LineSegments(edgesGeo, wireMat);
+  scene.add(wireframe);
+
+  const fillMat = new THREE.MeshBasicMaterial({
+    transparent: true,
+    side: THREE.BackSide,
+  });
+  const fillMesh = new THREE.Mesh(new THREE.IcosahedronGeometry(0.73, 2), fillMat);
+  scene.add(fillMesh);
+
+  function syncTheme() {
+    const dark = isDark();
+    wireMat.color.setHex(dark ? 0xd4856a : 0xcc785c);
+    wireMat.opacity = dark ? 0.50 : 0.58;
+    fillMat.color.setHex(dark ? 0xb04830 : 0xcc785c);
+    fillMat.opacity = dark ? 0.08 : 0.06;
+  }
+  syncTheme();
+
+  // ── Dynamic X: stays in viewport at any aspect ratio ──────────────────────
+  // Content column max width matches tailwind max-w-site (90rem = 1440px)
+  const CONTENT_MAX_PX = 1440;
+
+  function sideXPct(side: 'L' | 'R'): number {
+    const vw = window.innerWidth;
+    const vh = window.innerHeight;
+    // Sphere radius in px ≈ 0.095 * vh (depends on camera fov and scale).
+    // Keep sphere center at least (radius + 30px) from the viewport edge
+    // so it never clips regardless of viewport aspect ratio.
+    const pxFromEdge = Math.max(0.10 * vh + 30, 90); // min 90px
+    const pct = Math.min(0.16, pxFromEdge / vw);      // max 16% from edge
+    return side === 'L' ? pct : 1 - pct;
+  }
+
+  // ── Viewport % → world position ────────────────────────────────────────────
+  function vpToWorld(xPct: number, yPct: number) {
+    const fovR = (camera.fov * Math.PI) / 180;
+    const h = 2 * Math.tan(fovR / 2) * camera.position.z;
+    return { x: (xPct - 0.5) * h * camera.aspect, y: -(yPct - 0.5) * h };
+  }
+
+  // ── Scroll waypoints ───────────────────────────────────────────────────────
+  // p  = scroll progress when viewport is centered on that section
+  //       (estimated from full-page screenshot proportions)
+  // side: place sphere on side WITHOUT an opaque panel so it's clearly visible
+  //  Hero:       user wants RIGHT; opaque panel is right, but gutter is further right
+  //  Stats:      opaque stats-system on LEFT  → sphere RIGHT (continues from hero)
+  //  About:      opaque about-layers on RIGHT → sphere LEFT (sweeps across)
+  //  Skills:     full-width cards             → sphere LEFT (stays left)
+  //  Projects:   full-width slider            → sphere RIGHT (sweeps across)
+  //  BlogTeaser: opaque blog-stage on RIGHT   → sphere LEFT (sweeps across)
+  //  Contact:    opaque contact-system on LEFT→ sphere RIGHT (ends right)
+  interface WP { p: number; side: 'L' | 'R'; yPct: number; s: number }
+  const WPS: WP[] = [
+    { p: 0.00, side: 'R', yPct: 0.44, s: 0.66 }, // Hero      — right
+    { p: 0.18, side: 'R', yPct: 0.46, s: 0.62 }, // Stats     — right
+    { p: 0.28, side: 'L', yPct: 0.50, s: 0.60 }, // About     — left
+    { p: 0.44, side: 'L', yPct: 0.44, s: 0.58 }, // Skills    — left
+    { p: 0.63, side: 'R', yPct: 0.48, s: 0.62 }, // Projects  — right
+    { p: 0.80, side: 'L', yPct: 0.46, s: 0.60 }, // BlogTeaser— left
+    { p: 1.00, side: 'R', yPct: 0.44, s: 0.62 }, // Contact   — right
+  ];
+
+  function easeInOut(t: number) {
+    return t < 0.5 ? 2 * t * t : -1 + (4 - 2 * t) * t;
+  }
+
+  // Track current segment for resize recomputation
+  let currentA = WPS[0];
+  let currentB = WPS[1];
+  let currentE = 0;
+
+  const initW = vpToWorld(sideXPct(WPS[0].side), WPS[0].yPct);
+  const target = { x: initW.x, y: initW.y, s: WPS[0].s };
+  const cur = { x: initW.x, y: initW.y, s: WPS[0].s };
+
+  wireframe.position.set(initW.x, initW.y, 0);
+  fillMesh.position.set(initW.x, initW.y, 0);
+  wireframe.scale.setScalar(WPS[0].s);
+  fillMesh.scale.setScalar(WPS[0].s);
+
+  ScrollTrigger.create({
+    trigger: document.body,
+    start: 'top top',
+    end: 'bottom bottom',
+    scrub: 1.5,
+    onUpdate(self) {
+      const p = self.progress;
+      let a = WPS[0], b = WPS[WPS.length - 1];
+      for (let i = 0; i < WPS.length - 1; i++) {
+        if (p >= WPS[i].p && p <= WPS[i + 1].p) {
+          a = WPS[i]; b = WPS[i + 1]; break;
+        }
+      }
+      const span = b.p - a.p;
+      const e = span > 0 ? easeInOut((p - a.p) / span) : 0;
+      currentA = a; currentB = b; currentE = e;
+
+      const wa = vpToWorld(sideXPct(a.side), a.yPct);
+      const wb = vpToWorld(sideXPct(b.side), b.yPct);
+      target.x = wa.x + (wb.x - wa.x) * e;
+      target.y = wa.y + (wb.y - wa.y) * e;
+      target.s = a.s + (b.s - a.s) * e;
+    },
+  });
+
+  // ── Render loop ────────────────────────────────────────────────────────────
+  const startTime = performance.now();
+
+  function tick() {
+    requestAnimationFrame(tick);
+    const t = (performance.now() - startTime) / 1000;
+    const L = 0.042;
+
+    cur.x += (target.x - cur.x) * L;
+    cur.y += (target.y - cur.y) * L;
+    cur.s += (target.s - cur.s) * L;
+
+    const floatY = Math.sin(t * 0.68) * 0.042;
+
+    wireframe.position.set(cur.x, cur.y + floatY, 0);
+    fillMesh.position.set(cur.x, cur.y + floatY, 0);
+    wireframe.scale.setScalar(cur.s);
+    fillMesh.scale.setScalar(cur.s);
+
+    wireframe.rotation.y = t * 0.30;
+    wireframe.rotation.x = t * 0.10 + Math.sin(t * 0.17) * 0.18;
+    wireframe.rotation.z = Math.sin(t * 0.09) * 0.10;
+    fillMesh.rotation.copy(wireframe.rotation);
+
+    renderer.render(scene, camera);
+  }
+  tick();
+
+  // ── Resize ─────────────────────────────────────────────────────────────────
+  window.addEventListener('resize', () => {
+    camera.aspect = window.innerWidth / window.innerHeight;
+    camera.updateProjectionMatrix();
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    // Snap to correct world position for new viewport
+    const wa = vpToWorld(sideXPct(currentA.side), currentA.yPct);
+    const wb = vpToWorld(sideXPct(currentB.side), currentB.yPct);
+    cur.x = target.x = wa.x + (wb.x - wa.x) * currentE;
+    cur.y = target.y = wa.y + (wb.y - wa.y) * currentE;
+  });
+
+  // ── Theme change ───────────────────────────────────────────────────────────
+  new MutationObserver(syncTheme).observe(document.documentElement, {
+    attributes: true,
+    attributeFilter: ['data-theme'],
+  });
+</script>
