@@ -20,6 +20,7 @@
 @tailwind components;
 @tailwind utilities;
 
+/* ─── Light mode (default) ─────────────────────────────────── */
 :root {
   --color-bg: #F7F4EE;
   --color-bg-alt: #EFEBE2;
@@ -31,6 +32,49 @@
   --color-text: #2B2A27;
   --color-text-soft: #6B6862;
   --color-border: #E3DDD1;
+
+  /* Semantic tokens for semi-transparent & composite values */
+  --grid-color-h: rgba(227, 221, 209, 0.50);
+  --grid-color-v: rgba(227, 221, 209, 0.42);
+  --panel-grid-h: rgba(227, 221, 209, 0.64);
+  --panel-grid-v: rgba(227, 221, 209, 0.58);
+  --panel-bg: rgba(251, 250, 247, 0.80);
+  --accent-spot: rgba(204, 120, 92, 0.13);
+  --accent-scan: rgba(204, 120, 92, 0.16);
+  --nav-bg: rgba(247, 244, 238, 0.90);
+  --nav-border: rgba(227, 221, 209, 0.80);
+  --hero-stack-bg: rgba(247, 244, 238, 0.92);
+  --stat-card-bg: rgba(247, 244, 238, 0.95);
+  --mobile-menu-bg: rgba(247, 244, 238, 0.95);
+  --theme-color: #F7F4EE;
+}
+
+/* ─── Dark mode ─────────────────────────────────────────────── */
+[data-theme="dark"] {
+  --color-bg: #1A1815;
+  --color-bg-alt: #201E1A;
+  --color-surface: #242219;
+  --color-accent: #D4856A;
+  --color-accent-soft: #4A2E22;
+  --color-accent-strong: #E08A6A;
+  --color-sage: #7A8C6A;
+  --color-text: #F0EDE6;
+  --color-text-soft: #9B9590;
+  --color-border: #3A3730;
+
+  --grid-color-h: rgba(255, 255, 255, 0.055);
+  --grid-color-v: rgba(255, 255, 255, 0.045);
+  --panel-grid-h: rgba(255, 255, 255, 0.075);
+  --panel-grid-v: rgba(255, 255, 255, 0.065);
+  --panel-bg: rgba(32, 30, 25, 0.96);
+  --accent-spot: rgba(212, 133, 106, 0.14);
+  --accent-scan: rgba(212, 133, 106, 0.18);
+  --nav-bg: rgba(22, 20, 17, 0.92);
+  --nav-border: rgba(58, 55, 48, 0.80);
+  --hero-stack-bg: rgba(22, 20, 17, 0.94);
+  --stat-card-bg: rgba(28, 26, 21, 0.95);
+  --mobile-menu-bg: rgba(22, 20, 17, 0.97);
+  --theme-color: #1A1815;
 }
 
 @layer base {
@@ -62,6 +106,7 @@
     @apply mx-auto w-full max-w-site px-5 sm:px-8;
   }
 
+  /* Shared eyebrow label used across all sections */
   .eyebrow {
     @apply text-xs font-semibold uppercase tracking-[0.18em] text-text-soft;
   }
@@ -74,12 +119,40 @@
     @apply max-w-2xl text-base leading-8 text-text-soft sm:text-lg;
   }
 
+  /* ─── Buttons with ripple-from-center hover ──────────────── */
   .button-primary {
-    @apply inline-flex items-center justify-center gap-2 rounded-full bg-text px-5 py-3 text-sm font-semibold text-surface transition hover:bg-accent-strong focus-visible:bg-accent-strong;
+    @apply inline-flex items-center justify-center gap-2 rounded-full px-5 py-3 text-sm font-semibold text-surface overflow-hidden;
+    position: relative;
+    background-color: var(--color-text);
+    background-image: radial-gradient(circle at center, var(--color-accent-strong) 0%, var(--color-accent-strong) 46%, transparent 50%);
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: 0% 0%;
+    transition: background-size 0.55s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .button-primary:hover,
+  .button-primary:focus-visible {
+    background-size: 250% 250%;
   }
 
   .button-secondary {
-    @apply inline-flex items-center justify-center gap-2 rounded-full border border-border bg-surface px-5 py-3 text-sm font-semibold text-text transition hover:border-accent hover:text-accent-strong;
+    @apply inline-flex items-center justify-center gap-2 rounded-full border border-border px-5 py-3 text-sm font-semibold overflow-hidden;
+    position: relative;
+    background-color: var(--color-surface);
+    color: var(--color-text);
+    background-image: radial-gradient(circle at center, var(--color-accent-strong) 0%, var(--color-accent-strong) 46%, transparent 50%);
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: 0% 0%;
+    transition: background-size 0.55s cubic-bezier(0.4, 0, 0.2, 1), border-color 0.35s, color 0.35s;
+  }
+
+  .button-secondary:hover,
+  .button-secondary:focus-visible {
+    background-size: 250% 250%;
+    border-color: var(--color-accent-strong);
+    color: var(--color-surface);
   }
 
   .reveal,

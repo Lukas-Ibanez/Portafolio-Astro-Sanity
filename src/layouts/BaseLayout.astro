@@ -33,7 +33,18 @@ const jsonLd = Astro.props.jsonLd;
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="theme-color" content="#F7F4EE" />
+    <meta id="theme-color-meta" name="theme-color" content="#F7F4EE" />
+    <!-- Prevent flash of wrong theme -->
+    <script is:inline>
+      (function () {
+        var saved = localStorage.getItem('theme');
+        var prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        var theme = saved || (prefersDark ? 'dark' : 'light');
+        document.documentElement.setAttribute('data-theme', theme);
+        var meta = document.getElementById('theme-color-meta');
+        if (meta) meta.setAttribute('content', theme === 'dark' ? '#1A1815' : '#F7F4EE');
+      })();
+    </script>
     <title>{seo.title}</title>
     <meta name="description" content={seo.description} />
     <link rel="canonical" href={seo.canonical} />

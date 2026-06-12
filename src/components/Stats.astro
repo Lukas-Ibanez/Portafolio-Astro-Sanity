@@ -26,7 +26,7 @@ const workflow = ['Código', 'Backend', 'Servidor', 'Seguridad', 'SEO'];
 <section id="stats" class="stats-section" data-stats-section>
   <div class="stats-layout">
     <div id="stats-intro" class="stats-intro" data-stats-intro>
-      <p class="stats-eyebrow">Base operativa</p>
+      <p class="eyebrow">Base operativa</p>
       <h2>Un perfil full-stack pensado para equipos que necesitan avanzar sin perder control técnico.</h2>
       <p>
         La propuesta no es solo escribir código: es entender cómo cada decisión llega al servidor, al rendimiento y al usuario final.
@@ -86,8 +86,8 @@ const workflow = ['Código', 'Backend', 'Servidor', 'Seguridad', 'SEO'];
   .stats-section {
     @apply relative isolate overflow-hidden border-y border-border bg-bg py-20;
     background:
-      linear-gradient(90deg, rgba(227, 221, 209, 0.54) 1px, transparent 1px),
-      linear-gradient(180deg, rgba(227, 221, 209, 0.48) 1px, transparent 1px),
+      linear-gradient(90deg, var(--grid-color-h) 1px, transparent 1px),
+      linear-gradient(180deg, var(--grid-color-v) 1px, transparent 1px),
       var(--color-bg);
     background-size: 4rem 4rem;
   }
@@ -112,21 +112,17 @@ const workflow = ['Código', 'Backend', 'Servidor', 'Seguridad', 'SEO'];
     }
   }
 
-  .stats-eyebrow {
-    @apply text-xs font-semibold uppercase tracking-[0.18em] text-text-soft;
-  }
-
   .stats-intro h2 {
     @apply mt-4 font-serif text-4xl font-bold leading-tight text-text sm:text-5xl;
   }
 
-  .stats-intro p:not(.stats-eyebrow) {
+  .stats-intro p:not(.eyebrow) {
     @apply mt-6 text-base leading-8 text-text-soft sm:text-lg;
   }
 
   .stats-system {
     @apply relative min-h-[32rem] overflow-hidden border border-border p-4 shadow-line sm:p-6;
-    background: rgba(251, 250, 247, 0.8);
+    background: var(--panel-bg);
     border-radius: 1.1rem;
     isolation: isolate;
   }
@@ -137,15 +133,15 @@ const workflow = ['Código', 'Backend', 'Servidor', 'Seguridad', 'SEO'];
     inset: 0;
     z-index: -2;
     background:
-      radial-gradient(circle at 34% 44%, rgba(204, 120, 92, 0.13), transparent 0.55rem),
-      linear-gradient(90deg, rgba(227, 221, 209, 0.64) 1px, transparent 1px),
-      linear-gradient(180deg, rgba(227, 221, 209, 0.58) 1px, transparent 1px);
+      radial-gradient(circle at 34% 44%, var(--accent-spot), transparent 0.55rem),
+      linear-gradient(90deg, var(--panel-grid-h) 1px, transparent 1px),
+      linear-gradient(180deg, var(--panel-grid-v) 1px, transparent 1px);
     background-size: 1rem 1rem, 3rem 3rem, 3rem 3rem;
   }
 
   .stats-scan {
     @apply pointer-events-none absolute inset-y-0 left-0 z-0 w-24 opacity-40;
-    background: linear-gradient(90deg, transparent, rgba(204, 120, 92, 0.18), transparent);
+    background: linear-gradient(90deg, transparent, var(--accent-scan), transparent);
     transform: translateX(-120%);
   }
 
@@ -173,7 +169,7 @@ const workflow = ['Código', 'Backend', 'Servidor', 'Seguridad', 'SEO'];
 
   .stat-card {
     @apply min-h-52 border border-border p-5 shadow-soft;
-    background: rgba(247, 244, 238, 0.95);
+    background: var(--stat-card-bg);
     border-radius: 0.95rem;
   }
 

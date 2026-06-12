@@ -123,7 +123,7 @@ const categories = ['Frontend', 'Backend', 'Datos', 'Servidor Linux', 'SEO técn
   <div class="skills-container">
     <div class="skills-layout">
       <div id="skills-copy" class="skills-copy" data-skills-copy>
-        <p class="skills-eyebrow">Stack técnico</p>
+        <p class="eyebrow">Stack técnico</p>
         <h2>
           <span data-skills-title-line>Tecnologías que uso</span>
           <span data-skills-title-line>para construir y operar</span>
@@ -185,8 +185,8 @@ const categories = ['Frontend', 'Backend', 'Datos', 'Servidor Linux', 'SEO técn
   .skills-section {
     @apply relative isolate overflow-hidden border-y border-border bg-bg py-28;
     background:
-      linear-gradient(90deg, rgba(227, 221, 209, 0.5) 1px, transparent 1px),
-      linear-gradient(180deg, rgba(227, 221, 209, 0.42) 1px, transparent 1px),
+      linear-gradient(90deg, var(--grid-color-h) 1px, transparent 1px),
+      linear-gradient(180deg, var(--grid-color-v) 1px, transparent 1px),
       var(--color-bg);
     background-size: 4rem 4rem;
   }
@@ -201,10 +201,6 @@ const categories = ['Frontend', 'Backend', 'Datos', 'Servidor Linux', 'SEO técn
 
   .skills-copy {
     @apply max-w-4xl text-base leading-8 text-text-soft sm:text-lg;
-  }
-
-  .skills-eyebrow {
-    @apply text-xs font-semibold uppercase tracking-[0.18em] text-text-soft;
   }
 
   .skills-copy h2 {
@@ -222,7 +218,7 @@ const categories = ['Frontend', 'Backend', 'Datos', 'Servidor Linux', 'SEO técn
     @apply text-accent-strong;
   }
 
-  .skills-copy > p:not(.skills-eyebrow) {
+  .skills-copy > p:not(.eyebrow) {
     @apply mt-6;
     max-width: 48rem;
   }
@@ -239,7 +235,7 @@ const categories = ['Frontend', 'Backend', 'Datos', 'Servidor Linux', 'SEO técn
 
   .skills-stage {
     @apply relative min-h-[42rem] overflow-hidden border border-border p-4 shadow-line sm:p-5 lg:p-6;
-    background: rgba(251, 250, 247, 0.8);
+    background: var(--panel-bg);
     border-radius: 1.1rem;
     isolation: isolate;
   }
@@ -250,15 +246,15 @@ const categories = ['Frontend', 'Backend', 'Datos', 'Servidor Linux', 'SEO técn
     inset: 0;
     z-index: -2;
     background:
-      radial-gradient(circle at 34% 44%, rgba(204, 120, 92, 0.13), transparent 0.55rem),
-      linear-gradient(90deg, rgba(227, 221, 209, 0.64) 1px, transparent 1px),
-      linear-gradient(180deg, rgba(227, 221, 209, 0.58) 1px, transparent 1px);
+      radial-gradient(circle at 34% 44%, var(--accent-spot), transparent 0.55rem),
+      linear-gradient(90deg, var(--panel-grid-h) 1px, transparent 1px),
+      linear-gradient(180deg, var(--panel-grid-v) 1px, transparent 1px);
     background-size: 1rem 1rem, 3rem 3rem, 3rem 3rem;
   }
 
   .skills-scan {
     @apply pointer-events-none absolute inset-y-0 left-0 z-0 w-28 opacity-40;
-    background: linear-gradient(90deg, transparent, rgba(204, 120, 92, 0.16), transparent);
+    background: linear-gradient(90deg, transparent, var(--accent-scan), transparent);
     transform: translateX(-140%);
   }
 

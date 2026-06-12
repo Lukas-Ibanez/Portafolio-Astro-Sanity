@@ -129,10 +129,10 @@ const totalProjects = visibleProjects.length;
   .projects-section {
     @apply relative isolate overflow-hidden bg-bg py-28;
     background:
-      radial-gradient(circle at 27% 42%, rgba(204, 120, 92, 0.18), transparent 18rem),
+      radial-gradient(circle at 27% 42%, var(--accent-spot), transparent 18rem),
       radial-gradient(circle at 72% 35%, rgba(156, 170, 139, 0.14), transparent 16rem),
-      linear-gradient(90deg, rgba(227, 221, 209, 0.5) 1px, transparent 1px),
-      linear-gradient(180deg, rgba(227, 221, 209, 0.42) 1px, transparent 1px),
+      linear-gradient(90deg, var(--grid-color-h) 1px, transparent 1px),
+      linear-gradient(180deg, var(--grid-color-v) 1px, transparent 1px),
       var(--color-bg);
     background-size: auto, auto, 4rem 4rem, 4rem 4rem, auto;
   }
@@ -164,7 +164,7 @@ const totalProjects = visibleProjects.length;
 
   .browser-bar {
     @apply absolute left-0 right-0 top-0 z-30 flex h-11 items-center gap-2 border-b border-border px-4;
-    background: rgba(251, 250, 247, 0.92);
+    background: var(--panel-bg);
   }
 
   .browser-bar span {
@@ -203,7 +203,8 @@ const totalProjects = visibleProjects.length;
   }
 
   .project-slide-overlay h3 {
-    @apply mt-2 font-serif text-2xl font-bold leading-tight text-bg sm:text-3xl;
+    @apply mt-2 font-serif text-2xl font-bold leading-tight sm:text-3xl;
+    color: #F7F4EE;
   }
 
   .project-slide-stack {
@@ -211,8 +212,9 @@ const totalProjects = visibleProjects.length;
   }
 
   .project-slide-stack span {
-    @apply border border-border px-3 py-1.5 text-xs font-bold text-bg;
+    @apply border border-border px-3 py-1.5 text-xs font-bold;
     border-radius: 999px;
+    color: #F7F4EE;
     background: rgba(247, 244, 238, 0.12);
   }
 

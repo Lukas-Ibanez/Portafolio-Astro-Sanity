@@ -41,14 +41,17 @@ const workSignals = ['Agrosuper', 'SEDUC', 'Fundación Luksic'];
         Soy Lukas Ibáñez, desarrollador Full-Stack. Trabajo desde la lógica y la interfaz hasta el servidor Linux, seguridad, SEO y optimización. Un solo responsable técnico desde el deploy hasta el usuario final.
       </p>
 
-      <div class="hero-signals" aria-label="Experiencia destacada">
-        {
-          workSignals.map((signal) => (
-            <span class="hero-signal" data-hero-signal>
-              {signal}
-            </span>
-          ))
-        }
+      <div class="hero-signals-wrap" aria-label="Experiencia destacada">
+        <p class="hero-signals-label">Experiencia en:</p>
+        <div class="hero-signals">
+          {
+            workSignals.map((signal) => (
+              <span class="hero-signal" data-hero-signal>
+                {signal}
+              </span>
+            ))
+          }
+        </div>
       </div>
 
       <div class="hero-actions">
@@ -105,8 +108,8 @@ const workSignals = ['Agrosuper', 'SEDUC', 'Fundación Luksic'];
   .hero-section {
     @apply relative isolate overflow-hidden bg-bg;
     background:
-      linear-gradient(90deg, rgba(227, 221, 209, 0.5) 1px, transparent 1px),
-      linear-gradient(180deg, rgba(227, 221, 209, 0.42) 1px, transparent 1px),
+      linear-gradient(90deg, var(--grid-color-h) 1px, transparent 1px),
+      linear-gradient(180deg, var(--grid-color-v) 1px, transparent 1px),
       var(--color-bg);
     background-size: 4rem 4rem;
   }
@@ -157,8 +160,16 @@ const workSignals = ['Agrosuper', 'SEDUC', 'Fundación Luksic'];
     @apply mt-8 max-w-2xl text-lg leading-8 text-text-soft sm:text-xl;
   }
 
+  .hero-signals-wrap {
+    @apply mt-8;
+  }
+
+  .hero-signals-label {
+    @apply text-xs font-semibold uppercase tracking-[0.18em] text-text-soft mb-3;
+  }
+
   .hero-signals {
-    @apply mt-8 flex flex-wrap gap-2;
+    @apply flex flex-wrap gap-2;
   }
 
   .hero-signal {
@@ -177,9 +188,9 @@ const workSignals = ['Agrosuper', 'SEDUC', 'Fundación Luksic'];
   .hero-system-bg {
     @apply absolute inset-0 border border-border;
     background:
-      radial-gradient(circle at 50% 50%, rgba(204, 120, 92, 0.16), transparent 0.5rem),
-      linear-gradient(90deg, rgba(227, 221, 209, 0.55) 1px, transparent 1px),
-      linear-gradient(180deg, rgba(227, 221, 209, 0.55) 1px, transparent 1px),
+      radial-gradient(circle at 50% 50%, var(--accent-spot), transparent 0.5rem),
+      linear-gradient(90deg, var(--panel-grid-h) 1px, transparent 1px),
+      linear-gradient(180deg, var(--panel-grid-v) 1px, transparent 1px),
       var(--color-surface);
     background-size: 1rem 1rem, 3rem 3rem, 3rem 3rem;
   }
@@ -245,7 +256,7 @@ const workSignals = ['Agrosuper', 'SEDUC', 'Fundación Luksic'];
 
   .hero-stack {
     @apply absolute bottom-0 left-0 right-0 z-20 hidden border-t border-border backdrop-blur sm:grid sm:grid-cols-5;
-    background: rgba(247, 244, 238, 0.92);
+    background: var(--hero-stack-bg);
   }
 
   .hero-capability {
