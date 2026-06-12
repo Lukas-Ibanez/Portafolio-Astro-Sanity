@@ -42,12 +42,29 @@ const jsonLd = {
         </div>
         <h1>{post.title}</h1>
         <p class="blog-post-meta">
-          {new Date(post.publishedAt).toLocaleDateString('es-CL')} · {post.readingTime} min de lectura
+          {post.category && <span>{post.category}</span>}
+          {post.category && ' · '}
+          {new Date(post.publishedAt).toLocaleDateString('es-CL')} · {post.readingTimeLabel} de lectura
         </p>
         <p class="blog-post-excerpt">{post.excerpt}</p>
       </div>
 
       <div id="blog-post-body" class="article-body blog-post-body" set:html={post.bodyHtml} />
+
+      {
+        post.sources.length > 0 && (
+          <aside class="blog-post-sources" aria-label="Fuentes del artículo">
+            <h2>Fuentes</h2>
+            <ul>
+              {post.sources.map((source) => (
+                <li>
+                  <a href={source.url} target="_blank" rel="noreferrer noopener">{source.title}</a>
+                </li>
+              ))}
+            </ul>
+          </aside>
+        )
+      }
     </div>
   </article>
 </BaseLayout>
@@ -83,5 +100,21 @@ const jsonLd = {
 
   .blog-post-body {
     @apply mt-12;
+  }
+
+  .blog-post-sources {
+    @apply mt-14 border-t border-border pt-8;
+  }
+
+  .blog-post-sources h2 {
+    @apply font-serif text-2xl font-bold text-text;
+  }
+
+  .blog-post-sources ul {
+    @apply mt-4 grid gap-2;
+  }
+
+  .blog-post-sources a {
+    @apply font-semibold text-accent-strong;
   }
 </style>

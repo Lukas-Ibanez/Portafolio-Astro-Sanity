@@ -3,7 +3,7 @@ export default {
   title: 'Post',
   type: 'document',
   fields: [
-    { name: 'title', title: 'Título', type: 'string', validation: (Rule: any) => Rule.required() },
+    { name: 'title', title: 'Titulo', type: 'string', validation: (Rule: any) => Rule.required() },
     {
       name: 'slug',
       title: 'Slug',
@@ -12,22 +12,63 @@ export default {
       validation: (Rule: any) => Rule.required(),
     },
     { name: 'excerpt', title: 'Extracto', type: 'text', rows: 3 },
+    { name: 'category', title: 'Categoria', type: 'string' },
     { name: 'coverImage', title: 'Imagen de portada', type: 'image', options: { hotspot: true } },
     {
-      name: 'body',
+      name: 'content',
       title: 'Contenido',
       type: 'array',
-      of: [{ type: 'block' }, { type: 'image', options: { hotspot: true } }],
+      of: [
+        { type: 'block' },
+        {
+          name: 'code',
+          title: 'Codigo',
+          type: 'object',
+          fields: [
+            {
+              name: 'language',
+              title: 'Lenguaje',
+              type: 'string',
+              options: {
+                list: [
+                  { title: 'JavaScript', value: 'javascript' },
+                  { title: 'TypeScript', value: 'typescript' },
+                  { title: 'Bash', value: 'bash' },
+                  { title: 'CSS', value: 'css' },
+                  { title: 'HTML', value: 'html' },
+                ],
+              },
+            },
+            { name: 'code', title: 'Codigo', type: 'text', rows: 8 },
+          ],
+        },
+        { type: 'image', options: { hotspot: true } },
+      ],
     },
     { name: 'tags', title: 'Tags', type: 'array', of: [{ type: 'string' }] },
-    { name: 'publishedAt', title: 'Fecha de publicación', type: 'datetime' },
+    { name: 'publishedAt', title: 'Fecha de publicacion', type: 'datetime' },
+    { name: 'readTime', title: 'Tiempo de lectura', type: 'string' },
+    {
+      name: 'sources',
+      title: 'Fuentes',
+      type: 'array',
+      of: [
+        {
+          type: 'object',
+          fields: [
+            { name: 'title', title: 'Titulo', type: 'string' },
+            { name: 'url', title: 'URL', type: 'url' },
+          ],
+        },
+      ],
+    },
     {
       name: 'seo',
       title: 'SEO',
       type: 'object',
       fields: [
-        { name: 'title', title: 'Título SEO', type: 'string' },
-        { name: 'description', title: 'Descripción SEO', type: 'text', rows: 3 },
+        { name: 'title', title: 'Titulo SEO', type: 'string' },
+        { name: 'description', title: 'Descripcion SEO', type: 'text', rows: 3 },
       ],
     },
   ],

@@ -30,7 +30,9 @@ const posts = await getAllPosts();
                 </div>
                 <h2>{post.title}</h2>
                 <p class="blog-meta">
-                  {new Date(post.publishedAt).toLocaleDateString('es-CL')} · {post.readingTime} min
+                  {post.category && <span>{post.category}</span>}
+                  {post.category && ' · '}
+                  {new Date(post.publishedAt).toLocaleDateString('es-CL')} · {post.readingTimeLabel}
                 </p>
                 <p class="blog-excerpt">{post.excerpt}</p>
                 <a href={`/blog/${post.slug}/`} class="blog-card-action button-primary">Leer artículo</a>

@@ -1,21 +1,30 @@
 import { createClient } from '@sanity/client';
-import { toHTML } from '@portabletext/to-html';
+import { escapeHTML, toHTML, uriLooksSafe } from '@portabletext/to-html';
 
 export type SanityPost = {
   title: string;
   slug: string;
   excerpt: string;
   tags: string[];
+  category?: string;
   publishedAt: string;
   bodyHtml: string;
   readingTime: number;
+  readingTimeLabel: string;
+  sources: Array<{
+    title: string;
+    url: string;
+  }>;
+  coverImage?: {
+    ref: string;
+  };
   seo?: {
     title?: string;
     description?: string;
   };
 };
 
-const projectId = import.meta.env.SANITY_PROJECT_ID;
+const projectId = import.meta.env.SANITY_PROJECT_ID || '9286uqeo';
 const dataset = import.meta.env.SANITY_DATASET || 'production';
 const apiVersion = import.meta.env.SANITY_API_VERSION || '2025-01-01';
 
@@ -35,11 +44,45 @@ const postFields = `{
   title,
   "slug": slug.current,
   excerpt,
+  category,
   tags,
   publishedAt,
+  readTime,
   body,
+  content,
+  sources,
+  "coverImage": coverImage.asset->_ref,
   seo
 }`;
+
+function renderCodeBlock(value: any) {
+  const language = value.language ? ` data-language="${escapeHTML(value.language)}"` : '';
+  const code = escapeHTML(value.code || '');
+  return `<figure class="code-block"${language}><pre><code>${code}</code></pre></figure>`;
+}
+
+function renderPortableImage(value: any) {
+  const ref = value?.asset?._ref;
+  if (!ref) return '';
+
+  return `<figure class="portable-image"><p class="portable-image-placeholder">Imagen del artículo disponible en Sanity.</p></figure>`;
+}
+
+const portableTextComponents = {
+  types: {
+    code: ({ value }: any) => renderCodeBlock(value),
+    image: ({ value }: any) => renderPortableImage(value),
+  },
+  marks: {
+    link: ({ children, value }: any) => {
+      const href = value?.href || '';
+      if (!uriLooksSafe(href)) return children;
+
+      const rel = href.startsWith('/') ? '' : ' rel="noreferrer noopener" target="_blank"';
+      return `<a href="${escapeHTML(href)}"${rel}>${children}</a>`;
+    },
+  },
+};
 
 function estimateReadingTime(html: string) {
   const words = html.replace(/<[^>]*>/g, ' ').trim().split(/\s+/).filter(Boolean).length;
@@ -47,16 +90,23 @@ function estimateReadingTime(html: string) {
 }
 
 function normalizePost(post: any): SanityPost {
-  const bodyHtml = toHTML(post.body || []);
+  const portableContent = post.content || post.body || [];
+  const bodyHtml = toHTML(portableContent, { components: portableTextComponents });
+  const readingTime = estimateReadingTime(bodyHtml);
+  const coverImageRef = typeof post.coverImage === 'string' ? post.coverImage : undefined;
 
   return {
     title: post.title,
     slug: post.slug,
     excerpt: post.excerpt || '',
+    category: post.category,
     tags: post.tags || [],
     publishedAt: post.publishedAt,
     bodyHtml,
-    readingTime: estimateReadingTime(bodyHtml),
+    readingTime,
+    readingTimeLabel: post.readTime || `${readingTime} min`,
+    sources: post.sources || [],
+    coverImage: coverImageRef ? { ref: coverImageRef } : undefined,
     seo: post.seo,
   };
 }

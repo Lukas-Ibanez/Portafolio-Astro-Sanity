@@ -91,19 +91,19 @@ Deploy sugerido: Cloudflare Pages con `npm run build`, salida `dist/` y variable
 
 ```bash
 SITE_URL=https://lukasibanez.cl
-SANITY_PROJECT_ID=...
+SANITY_PROJECT_ID=9286uqeo
 SANITY_DATASET=production
 SANITY_API_VERSION=2025-01-01
 GITHUB_TOKEN=...
 GITHUB_USERNAME=...
 ```
 
-Sin Sanity o GitHub configurados, el build no se rompe. Se muestran estados vacíos/TODOs.
+El dataset público actual de Sanity usa `_type: post`, `content` como Portable Text, `coverImage`, `category`, `readTime`, `sources`, `tags`, `publishedAt` y `seo`. El cliente mantiene fallback a `body` por compatibilidad. Sin GitHub configurado, el build no se rompe.
 
 ## Cómo agregar un post
 
 1. Crear o abrir el Studio de Sanity usando `sanity/sanity.config.ts`.
-2. Crear un documento `post` con `title`, `slug`, `excerpt`, `body`, `tags`, `publishedAt` y `seo`.
+2. Crear un documento `post` con `title`, `slug`, `excerpt`, `content`, `tags`, `publishedAt`, `readTime`, `category`, `sources` y `seo`.
 3. Publicar el post.
 4. Configurar un webhook de Sanity hacia un deploy hook del host para reconstruir el sitio. Así el blog sigue 100% estático.
 
