@@ -1,68 +1,307 @@
 ---
+import ArrowRight from './icons/ArrowRight.astro';
 import Github from './icons/Github.astro';
-import Linkedin from './icons/Linkedin.astro';
 import Mail from './icons/Mail.astro';
 
-const email = 'TODO@lukasibanez.cl';
+const email = 'lukasibvi@gmail.com';
+const githubUrl = 'https://github.com/Lukas-Ibanez';
 ---
 
-<section id="contact" class="contact-section">
-  <div class="contact-layout">
-    <div id="contact-intro" class="reveal">
-      <p class="eyebrow">Contacto</p>
-      <h1 class="contact-title section-title">Conversemos sobre el próximo desafío.</h1>
-      <p class="contact-copy section-copy">
-        Busco oportunidades donde pueda aportar como desarrollador full-stack, especialmente en equipos que valoren performance, orden técnico y responsabilidad sobre el despliegue.
-      </p>
-    </div>
-    <div id="contact-panel" class="contact-panel batch-reveal">
-      <p class="contact-todo">TODO: reemplazar datos por enlaces reales de Lukas.</p>
-      <div class="contact-links">
-        <a class="contact-link button-primary" href={`mailto:${email}`}><Mail /> {email}</a>
-        <a class="contact-link button-secondary" href="https://www.linkedin.com/in/TODO-lukas-ibanez" rel="noreferrer"><Linkedin /> LinkedIn</a>
-        <a class="contact-link button-secondary" href="https://github.com/TODO-lukas" rel="noreferrer"><Github /> GitHub</a>
+<section id="contact" class="contact-section" data-contact-section>
+  <div class="contact-container">
+    <div class="contact-layout">
+      <div id="contact-copy" class="contact-copy">
+        <p class="contact-eyebrow">Contacto</p>
+        <h2>
+          <span data-contact-title-line>Hablemos si necesitas</span>
+          <span data-contact-title-line>un perfil full-stack</span>
+          <span data-contact-title-line>que llegue a producción.</span>
+        </h2>
+        <p data-contact-copy>
+          Estoy disponible para oportunidades laborales donde pueda aportar en producto web, backend, despliegue, seguridad, SEO y rendimiento. Si el desafío necesita alguien que entienda el ciclo completo, conversemos.
+        </p>
+
+        <div class="contact-actions" aria-label="Canales de contacto">
+          <a class="contact-action contact-action-primary" href={`mailto:${email}`} data-contact-action>
+            <span>
+              <Mail />
+            </span>
+            <strong>{email}</strong>
+            <ArrowRight />
+          </a>
+          <a class="contact-action" href={githubUrl} rel="noreferrer" data-contact-action>
+            <span>
+              <Github />
+            </span>
+            <strong>github.com/Lukas-Ibanez</strong>
+            <ArrowRight />
+          </a>
+        </div>
       </div>
-      <p class="contact-note">
-        No hay formulario por defecto para evitar JavaScript y servicios de terceros en runtime. Si se agrega uno, debe apuntar a un endpoint propio o a un servicio compatible sin scripts embebidos.
-      </p>
+
+      <div id="contact-system" class="contact-system" data-contact-system aria-label="Resumen de disponibilidad profesional">
+        <div class="contact-scan" data-contact-scan aria-hidden="true"></div>
+
+        <svg class="contact-lines" viewBox="0 0 760 520" aria-hidden="true">
+          <path data-contact-path d="M86 122 C190 70 284 92 374 154 C466 218 560 230 678 166" />
+          <path data-contact-path d="M98 378 C196 304 304 322 392 376 C488 438 586 420 684 338" />
+          <path data-contact-path d="M164 260 H304 C338 260 354 244 354 210 V170" />
+          <path data-contact-path d="M596 260 H456 C422 260 406 276 406 310 V350" />
+          <circle data-contact-node cx="86" cy="122" r="7" />
+          <circle data-contact-node cx="374" cy="154" r="7" />
+          <circle data-contact-node cx="678" cy="166" r="7" />
+          <circle data-contact-node cx="98" cy="378" r="7" />
+          <circle data-contact-node cx="392" cy="376" r="7" />
+          <circle data-contact-node cx="684" cy="338" r="7" />
+          <circle data-contact-node cx="354" cy="170" r="7" />
+          <circle data-contact-node cx="406" cy="350" r="7" />
+        </svg>
+
+        <div class="contact-core" data-contact-core>
+          <p>Disponible</p>
+          <h3>Lukas Ibáñez</h3>
+          <span>Full-stack · Chile</span>
+        </div>
+
+        <div class="contact-status contact-status-top" data-contact-badge>
+          <span></span>
+          <p>Correo directo</p>
+        </div>
+        <div class="contact-status contact-status-right" data-contact-badge>
+          <span></span>
+          <p>GitHub activo</p>
+        </div>
+        <div class="contact-status contact-status-bottom" data-contact-badge>
+          <span></span>
+          <p>Remoto / híbrido</p>
+        </div>
+      </div>
     </div>
   </div>
 </section>
 
 <style>
   .contact-section {
-    @apply bg-bg py-24;
+    @apply relative isolate overflow-hidden bg-bg py-28;
+    background:
+      linear-gradient(90deg, rgba(227, 221, 209, 0.5) 1px, transparent 1px),
+      linear-gradient(180deg, rgba(227, 221, 209, 0.42) 1px, transparent 1px),
+      var(--color-bg);
+    background-size: 4rem 4rem;
+  }
+
+  .contact-container {
+    @apply mx-auto w-full max-w-site px-5 sm:px-8;
   }
 
   .contact-layout {
-    @apply mx-auto grid w-full max-w-site gap-12 px-5 sm:px-8 lg:grid-cols-[0.9fr_1.1fr];
+    @apply grid gap-12 lg:grid-cols-[1.12fr_0.88fr] lg:items-center;
   }
 
-  .contact-panel {
-    @apply rounded-2xl border border-border bg-surface p-7 shadow-line;
-  }
+  @media (min-width: 1024px) {
+    .contact-copy {
+      grid-column: 2;
+    }
 
-  .contact-title {
-    @apply mt-4;
+    .contact-system {
+      grid-column: 1;
+      grid-row: 1;
+    }
   }
 
   .contact-copy {
-    @apply mt-6;
+    @apply max-w-3xl;
   }
 
-  .contact-todo {
-    @apply text-sm font-semibold text-accent-strong;
+  .contact-eyebrow {
+    @apply text-xs font-semibold uppercase tracking-[0.18em] text-text-soft;
   }
 
-  .contact-links {
-    @apply mt-6 grid gap-3;
+  .contact-copy h2 {
+    @apply mt-4 font-serif text-4xl font-bold leading-tight text-text sm:text-5xl;
   }
 
-  .contact-link {
-    @apply justify-start;
+  .contact-copy h2 span {
+    @apply block;
+    transform-style: preserve-3d;
+    will-change: transform, opacity;
   }
 
-  .contact-note {
-    @apply mt-6 text-sm leading-6 text-text-soft;
+  .contact-copy h2 span:last-child {
+    @apply text-accent-strong;
+  }
+
+  .contact-copy > p:not(.contact-eyebrow) {
+    @apply mt-6 max-w-2xl text-base leading-8 text-text-soft sm:text-lg;
+  }
+
+  .contact-actions {
+    @apply mt-10 grid gap-3;
+  }
+
+  .contact-action {
+    @apply inline-grid min-h-16 grid-cols-[3rem_1fr_auto] items-center gap-4 border border-border bg-surface px-4 py-3 text-left text-sm font-semibold text-text shadow-line transition hover:border-accent hover:text-accent-strong;
+    border-radius: 1rem;
+    will-change: transform, opacity;
+  }
+
+  .contact-action-primary {
+    @apply bg-text text-surface hover:bg-accent-strong hover:text-surface;
+    border-color: rgba(43, 42, 39, 0.9);
+  }
+
+  .contact-action > span {
+    @apply flex h-12 w-12 items-center justify-center border border-border bg-bg text-text;
+    border-radius: 999px;
+  }
+
+  .contact-action-primary > span {
+    @apply text-surface;
+    background: rgba(251, 250, 247, 0.1);
+    border-color: rgba(251, 250, 247, 0.2);
+  }
+
+  .contact-action strong {
+    @apply min-w-0 break-words;
+  }
+
+  .contact-system {
+    @apply relative min-h-[34rem] overflow-hidden border border-border p-5 shadow-line sm:p-6;
+    background: rgba(251, 250, 247, 0.8);
+    border-radius: 1.1rem;
+    isolation: isolate;
+  }
+
+  .contact-system::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: -2;
+    background:
+      radial-gradient(circle at 35% 44%, rgba(204, 120, 92, 0.13), transparent 0.55rem),
+      linear-gradient(90deg, rgba(227, 221, 209, 0.64) 1px, transparent 1px),
+      linear-gradient(180deg, rgba(227, 221, 209, 0.58) 1px, transparent 1px);
+    background-size: 1rem 1rem, 3rem 3rem, 3rem 3rem;
+  }
+
+  .contact-scan {
+    @apply pointer-events-none absolute inset-y-0 left-0 z-0 w-28 opacity-40;
+    background: linear-gradient(90deg, transparent, rgba(204, 120, 92, 0.16), transparent);
+    transform: translateX(-140%);
+  }
+
+  .contact-lines {
+    @apply pointer-events-none absolute inset-0 z-0 h-full w-full;
+    overflow: visible;
+  }
+
+  .contact-lines path {
+    fill: none;
+    stroke: var(--color-accent);
+    stroke-width: 1.25;
+    stroke-linecap: round;
+    vector-effect: non-scaling-stroke;
+  }
+
+  .contact-lines circle {
+    fill: var(--color-surface);
+    stroke: var(--color-accent);
+    stroke-width: 1.25;
+    vector-effect: non-scaling-stroke;
+  }
+
+  .contact-core {
+    @apply absolute left-1/2 top-1/2 z-20 w-[min(22rem,calc(100%-3rem))] -translate-x-1/2 -translate-y-1/2 border border-text bg-bg p-6 text-center shadow-soft;
+    border-radius: 1.05rem;
+    will-change: transform, opacity;
+  }
+
+  .contact-core p {
+    @apply text-xs font-bold uppercase tracking-[0.18em] text-accent-strong;
+  }
+
+  .contact-core h3 {
+    @apply mt-3 font-serif text-3xl font-bold leading-tight text-text sm:text-4xl;
+  }
+
+  .contact-core span {
+    @apply mt-3 block text-sm font-semibold text-text-soft;
+  }
+
+  .contact-status {
+    @apply absolute z-20 flex items-center gap-2 border border-border bg-surface px-4 py-3 text-sm font-bold text-text shadow-soft;
+    border-radius: 999px;
+    will-change: transform, opacity;
+  }
+
+  .contact-status span {
+    @apply h-2.5 w-2.5 bg-sage;
+    border-radius: 999px;
+    box-shadow: 0 0 0 0 rgba(156, 170, 139, 0.42);
+  }
+
+  .contact-status-top {
+    @apply left-[12%] top-[17%];
+  }
+
+  .contact-status-right {
+    @apply right-[9%] top-[43%];
+  }
+
+  .contact-status-bottom {
+    @apply bottom-[16%] left-[18%];
+  }
+
+  @media (max-width: 767px) {
+    .contact-section {
+      padding-block: 4rem;
+      background-size: 3.25rem 3.25rem;
+    }
+
+    .contact-layout {
+      gap: 2.5rem;
+    }
+
+    .contact-action {
+      grid-template-columns: 2.75rem 1fr;
+    }
+
+    .contact-action > svg {
+      display: none;
+    }
+
+    .contact-system {
+      min-height: 27rem;
+      padding: 1rem;
+    }
+
+    .contact-core {
+      width: min(18rem, calc(100% - 2rem));
+      padding: 1.25rem;
+    }
+
+    .contact-core h3 {
+      font-size: 1.75rem;
+    }
+
+    .contact-status {
+      padding: 0.7rem 0.9rem;
+      font-size: 0.78rem;
+    }
+
+    .contact-status-top {
+      left: 6%;
+      top: 10%;
+    }
+
+    .contact-status-right {
+      right: 4%;
+      top: 38%;
+    }
+
+    .contact-status-bottom {
+      bottom: 10%;
+      left: 7%;
+    }
   }
 </style>

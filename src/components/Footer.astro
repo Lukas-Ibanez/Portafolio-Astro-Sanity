@@ -1,9 +1,9 @@
 ---
 import Github from './icons/Github.astro';
-import Linkedin from './icons/Linkedin.astro';
 import Mail from './icons/Mail.astro';
 
-const email = 'TODO@lukasibanez.cl';
+const email = 'lukasibvi@gmail.com';
+const githubUrl = 'https://github.com/Lukas-Ibanez';
 ---
 
 <footer id="site-footer" class="site-footer">
@@ -16,8 +16,7 @@ const email = 'TODO@lukasibanez.cl';
     </div>
     <div id="footer-links" class="footer-links">
       <a class="button-secondary" href={`mailto:${email}`}><Mail /> Email</a>
-      <a class="button-secondary" href="https://www.linkedin.com/in/TODO-lukas-ibanez" rel="noreferrer"><Linkedin /> LinkedIn</a>
-      <a class="button-secondary" href="https://github.com/TODO-lukas" rel="noreferrer"><Github /> GitHub</a>
+      <a class="button-secondary" href={githubUrl} rel="noreferrer"><Github /> GitHub</a>
     </div>
   </div>
 </footer>

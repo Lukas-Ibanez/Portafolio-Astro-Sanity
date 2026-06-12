@@ -8,10 +8,10 @@ export type GithubRepo = {
 };
 
 const token = import.meta.env.GITHUB_TOKEN;
-const username = import.meta.env.GITHUB_USERNAME || 'TODO-lukas-github';
+const username = import.meta.env.GITHUB_USERNAME || 'Lukas-Ibanez';
 
 export async function getFeaturedRepos(): Promise<GithubRepo[]> {
-  if (!token || username.startsWith('TODO')) return [];
+  if (!token) return [];
 
   try {
     const response = await fetch(`https://api.github.com/users/${username}/repos?sort=pushed&per_page=6`, {

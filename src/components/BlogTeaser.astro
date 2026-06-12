@@ -7,86 +7,242 @@ type Props = {
 };
 
 const { post } = Astro.props;
+const postDate = post ? new Date(post.publishedAt).toLocaleDateString('es-CL') : null;
+const displayTags = post?.tags?.slice(0, 4) || [];
 ---
 
-<section id="blog-teaser" class="blog-teaser-section">
+<section id="blog-teaser" class="blog-teaser-section" data-blog-section>
   <div class="blog-teaser-layout">
-    <div id="blog-teaser-intro" class="reveal">
-      <p class="eyebrow">Blog</p>
-      <h2 class="blog-teaser-title section-title">Notas técnicas, sin humo.</h2>
-      <p class="blog-teaser-copy section-copy">
-        Espacio para documentar decisiones, aprendizajes y casos prácticos de desarrollo web.
+    <div id="blog-teaser-copy" class="blog-teaser-copy" data-blog-copy>
+      <p class="blog-eyebrow">Blog</p>
+      <h2>
+        <span data-blog-title-line>Notas técnicas</span>
+        <span data-blog-title-line>para documentar</span>
+        <span data-blog-title-line>lo que funciona.</span>
+      </h2>
+      <p>
+        Escribo sobre decisiones reales de desarrollo web: rendimiento, SEO, automatización, servidores y herramientas que ayudan a construir con más criterio.
       </p>
+      <a href="/blog/" class="blog-main-action button-primary" data-blog-action>
+        Ver blog <ArrowRight />
+      </a>
     </div>
-    <article id="latest-post-preview" class="blog-teaser-card batch-reveal">
-      {
-        post ? (
-          <>
-            <div class="blog-tags">
-              {post.tags.map((tag) => <span>{tag}</span>)}
-            </div>
-            <h3>{post.title}</h3>
-            <p class="blog-excerpt">{post.excerpt}</p>
-            <p class="blog-reading-time">{post.readingTimeLabel} de lectura</p>
-            <a href={`/blog/${post.slug}/`} class="blog-teaser-action button-primary">Leer nota <ArrowRight /></a>
-          </>
-        ) : (
-          <>
-            <p class="eyebrow">Pendiente Sanity</p>
-            <h3>TODO: publicar el primer post técnico.</h3>
-            <p class="blog-excerpt">
-              Cuando Sanity tenga `SANITY_PROJECT_ID` y posts publicados, este bloque mostrará automáticamente el último artículo durante el build.
-            </p>
-            <a href="/blog/" class="blog-teaser-action button-secondary">Ver blog</a>
-          </>
-        )
-      }
-    </article>
+
+    <div id="blog-teaser-stage" class="blog-teaser-stage" data-blog-stage>
+      <div class="blog-scan" data-blog-scan aria-hidden="true"></div>
+
+      <svg class="blog-lines" viewBox="0 0 760 440" aria-hidden="true">
+        <path data-blog-path d="M72 92 C180 42 272 78 378 132 C500 194 594 164 690 96" />
+        <path data-blog-path d="M78 330 C210 252 318 292 430 336 C548 382 626 344 694 288" />
+        <circle data-blog-node cx="72" cy="92" r="7" />
+        <circle data-blog-node cx="378" cy="132" r="7" />
+        <circle data-blog-node cx="690" cy="96" r="7" />
+        <circle data-blog-node cx="78" cy="330" r="7" />
+        <circle data-blog-node cx="430" cy="336" r="7" />
+        <circle data-blog-node cx="694" cy="288" r="7" />
+      </svg>
+
+      <article id="latest-post-preview" class="blog-feature" data-blog-card>
+        <div class="blog-read-rule" data-blog-rule aria-hidden="true"></div>
+        {
+          post ? (
+            <>
+              <div class="blog-feature-header">
+                <span>{post.category || 'Artículo técnico'}</span>
+                <span>{post.readingTimeLabel}</span>
+              </div>
+
+              <div class="blog-feature-tags">
+                {displayTags.map((tag) => <span data-blog-tag>{tag}</span>)}
+              </div>
+
+              <h3>{post.title}</h3>
+              <p>{post.excerpt}</p>
+
+              <div class="blog-feature-footer">
+                <span>{postDate}</span>
+                <a href={`/blog/${post.slug}/`} class="blog-card-action">
+                  Leer nota <ArrowRight />
+                </a>
+              </div>
+            </>
+          ) : (
+            <>
+              <div class="blog-feature-header">
+                <span>Pendiente Sanity</span>
+                <span>Build-time</span>
+              </div>
+              <h3>Publicar el primer post técnico.</h3>
+              <p>
+                Cuando Sanity tenga posts publicados, este bloque mostrará automáticamente el último artículo durante el build.
+              </p>
+              <div class="blog-feature-footer">
+                <span>TODO</span>
+                <a href="/blog/" class="blog-card-action">Ver blog <ArrowRight /></a>
+              </div>
+            </>
+          )
+        }
+      </article>
+    </div>
   </div>
 </section>
 
 <style>
   .blog-teaser-section {
-    @apply bg-bg-alt py-24;
+    @apply relative isolate overflow-hidden border-y border-border bg-bg py-28;
+    background:
+      linear-gradient(90deg, rgba(227, 221, 209, 0.5) 1px, transparent 1px),
+      linear-gradient(180deg, rgba(227, 221, 209, 0.42) 1px, transparent 1px),
+      var(--color-bg);
+    background-size: 4rem 4rem;
   }
 
   .blog-teaser-layout {
-    @apply mx-auto grid w-full max-w-site gap-8 px-5 sm:px-8 lg:grid-cols-[0.8fr_1.2fr] lg:items-center;
-  }
-
-  .blog-teaser-card {
-    @apply rounded-2xl border border-border bg-surface p-7 shadow-line;
-  }
-
-  .blog-teaser-title {
-    @apply mt-4;
+    @apply mx-auto grid w-full max-w-site gap-12 px-5 sm:px-8 lg:grid-cols-[0.82fr_1.18fr] lg:items-center;
   }
 
   .blog-teaser-copy {
-    @apply mt-5;
+    @apply max-w-2xl;
   }
 
-  .blog-teaser-card h3 {
-    @apply mt-5 font-serif text-3xl;
+  .blog-eyebrow {
+    @apply text-xs font-semibold uppercase tracking-[0.18em] text-text-soft;
   }
 
-  .blog-tags {
-    @apply flex flex-wrap gap-2;
+  .blog-teaser-copy h2 {
+    @apply mt-4 font-serif text-4xl font-bold leading-tight text-text sm:text-5xl;
   }
 
-  .blog-tags span {
-    @apply rounded-full bg-accent-soft px-3 py-1 text-xs font-semibold text-text;
+  .blog-teaser-copy h2 span {
+    @apply block;
+    transform-style: preserve-3d;
+    will-change: transform, opacity;
   }
 
-  .blog-excerpt {
-    @apply mt-4 leading-7 text-text-soft;
+  .blog-teaser-copy h2 span:last-child {
+    @apply text-accent-strong;
   }
 
-  .blog-reading-time {
-    @apply mt-4 text-sm text-text-soft;
+  .blog-teaser-copy p {
+    @apply mt-6 text-base leading-8 text-text-soft sm:text-lg;
   }
 
-  .blog-teaser-action {
-    @apply mt-6;
+  .blog-main-action {
+    @apply mt-10;
+  }
+
+  .blog-teaser-stage {
+    @apply relative flex min-h-[36rem] items-center overflow-hidden border border-border p-4 shadow-line sm:p-6;
+    background: rgba(251, 250, 247, 0.8);
+    border-radius: 1.1rem;
+    isolation: isolate;
+  }
+
+  .blog-teaser-stage::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: -2;
+    background:
+      radial-gradient(circle at 34% 44%, rgba(204, 120, 92, 0.13), transparent 0.55rem),
+      linear-gradient(90deg, rgba(227, 221, 209, 0.64) 1px, transparent 1px),
+      linear-gradient(180deg, rgba(227, 221, 209, 0.58) 1px, transparent 1px);
+    background-size: 1rem 1rem, 3rem 3rem, 3rem 3rem;
+  }
+
+  .blog-scan {
+    @apply pointer-events-none absolute inset-y-0 left-0 z-0 w-28 opacity-40;
+    background: linear-gradient(90deg, transparent, rgba(204, 120, 92, 0.16), transparent);
+    transform: translateX(-140%);
+  }
+
+  .blog-lines {
+    @apply pointer-events-none absolute inset-0 z-0 h-full w-full;
+    overflow: visible;
+  }
+
+  .blog-lines path {
+    fill: none;
+    stroke: var(--color-accent);
+    stroke-width: 1.25;
+    stroke-linecap: round;
+    vector-effect: non-scaling-stroke;
+  }
+
+  .blog-lines circle {
+    fill: var(--color-surface);
+    stroke: var(--color-accent);
+    stroke-width: 1.25;
+    vector-effect: non-scaling-stroke;
+  }
+
+  .blog-feature {
+    @apply relative z-20 mx-auto flex min-h-[28rem] w-full max-w-3xl flex-col border border-border bg-bg p-6 shadow-soft sm:p-8;
+    border-radius: 1rem;
+    will-change: opacity, clip-path;
+  }
+
+  .blog-read-rule {
+    @apply absolute left-6 right-6 top-0 h-1 origin-left bg-accent;
+    transform: scaleX(0);
+  }
+
+  .blog-feature-header {
+    @apply flex flex-wrap items-center justify-between gap-3 text-xs font-bold uppercase tracking-[0.16em] text-text-soft;
+  }
+
+  .blog-feature-header span:first-child {
+    @apply text-accent-strong;
+  }
+
+  .blog-feature-tags {
+    @apply mt-7 flex flex-wrap gap-2;
+  }
+
+  .blog-feature-tags span {
+    @apply border border-border bg-surface px-3 py-1.5 text-xs font-bold text-text-soft shadow-line;
+    border-radius: 999px;
+    will-change: transform, opacity;
+  }
+
+  .blog-feature h3 {
+    @apply mt-7 font-serif text-3xl font-bold leading-tight text-text sm:text-4xl;
+  }
+
+  .blog-feature p {
+    @apply mt-5 line-clamp-6 text-base leading-8 text-text-soft;
+  }
+
+  .blog-feature-footer {
+    @apply mt-auto flex flex-col gap-4 pt-8 sm:flex-row sm:items-center sm:justify-between;
+  }
+
+  .blog-feature-footer > span {
+    @apply text-sm font-semibold text-text-soft;
+  }
+
+  .blog-card-action {
+    @apply inline-flex items-center gap-2 text-sm font-bold text-accent-strong;
+  }
+
+  @media (max-width: 767px) {
+    .blog-teaser-section {
+      padding-block: 4rem;
+      background-size: 3.25rem 3.25rem;
+    }
+
+    .blog-teaser-stage {
+      min-height: auto;
+    }
+
+    .blog-feature {
+      min-height: auto;
+      padding: 1.25rem;
+    }
+
+    .blog-feature p {
+      display: block;
+    }
   }
 </style>

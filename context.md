@@ -95,7 +95,7 @@ SANITY_PROJECT_ID=9286uqeo
 SANITY_DATASET=production
 SANITY_API_VERSION=2025-01-01
 GITHUB_TOKEN=...
-GITHUB_USERNAME=...
+GITHUB_USERNAME=Lukas-Ibanez
 ```
 
 El dataset público actual de Sanity usa `_type: post`, `content` como Portable Text, `coverImage`, `category`, `readTime`, `sources`, `tags`, `publishedAt` y `seo`. El cliente mantiene fallback a `body` por compatibilidad. Sin GitHub configurado, el build no se rompe.
@@ -123,6 +123,8 @@ El dataset público actual de Sanity usa `_type: post`, `content` como Portable 
 - Sección `About`: nueva sección con título grande propio y fondo de grilla idéntico a Hero/Stats; cajas entran desde la izquierda en secuencia, luego se dibuja una línea SVG con trazado de escalera; mantiene movimiento ambiente sutil en tarjetas y scan interno, sin scrub.
 - Sección `Skills`: escena de tecnologías con logos SVG locales (`BrandLogo.astro`), fondo interno de grilla, paths/nodos SVG, tarjetas que entran como panel técnico y movimiento ambiente controlado.
 - Sección `Projects`: showcase distinto al resto, sin fondo cuadriculado ni tarjetas flotantes; usa slider con pantallazo grande, overlay de proyecto, progreso/dots, texto lateral y transiciones GSAP horizontales.
+- Sección `BlogTeaser`: vuelve al patrón de secciones técnicas del Home, con fondo cuadriculado, escena de lectura, paths/nodos SVG, tarjeta centrada del último post de Sanity y una regla interna animada con GSAP.
+- Sección `Contact`: cierre con fondo cuadriculado, correo real `lukasibvi@gmail.com`, GitHub real `https://github.com/Lukas-Ibanez`, escena SVG de disponibilidad y badges animados. No muestra LinkedIn hasta tener un enlace real.
 - `.reveal` en cascada inicial.
 - `.batch-reveal` con `ScrollTrigger.batch`.
 - parallax sutil en `.parallax-media`.
@@ -154,8 +156,7 @@ Presupuesto objetivo: Lighthouse 100/100/100/100 y JS home bajo ~50KB gzip. Revi
 
 ## TODOs pendientes
 
-- Reemplazar `TODO@lukasibanez.cl` por email real.
-- Reemplazar LinkedIn y GitHub placeholder en `Footer.astro` y `Contact.astro`.
+- Agregar LinkedIn real cuando Lukas lo entregue; por ahora no se muestra en `Footer.astro` ni `Contact.astro`.
 - Reemplazar proyectos de ejemplo por casos reales, con links, métricas e imágenes propias.
 - Definir dominio final en `SITE_URL` y `public/robots.txt`.
 - Configurar proyecto Sanity real y deploy hook.

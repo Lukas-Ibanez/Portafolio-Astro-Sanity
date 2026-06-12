@@ -6,10 +6,10 @@ const isSmallViewport = window.matchMedia('(max-width: 767px)').matches;
 
 function setFinalState() {
   gsap.set(
-    '.reveal, .batch-reveal, [data-hero-line-text], [data-hero-kicker], [data-hero-copy], [data-hero-cta], [data-hero-signal], [data-hero-core], [data-hero-chip], [data-hero-capability], [data-stats-intro], [data-stat-card], [data-workflow-step], [data-about-title-line], [data-about-copy], [data-about-layer], [data-skills-title-line], [data-skills-copy], [data-skill-category], [data-skill-card], [data-skill-logo], [data-skill-node], [data-projects-title-line], [data-projects-copy], [data-projects-action], [data-projects-frame], [data-project-slide]',
+    '.reveal, .batch-reveal, [data-hero-line-text], [data-hero-kicker], [data-hero-copy], [data-hero-cta], [data-hero-signal], [data-hero-core], [data-hero-chip], [data-hero-capability], [data-stats-intro], [data-stat-card], [data-workflow-step], [data-about-title-line], [data-about-copy], [data-about-layer], [data-skills-title-line], [data-skills-copy], [data-skill-category], [data-skill-card], [data-skill-logo], [data-skill-node], [data-projects-title-line], [data-projects-copy], [data-projects-action], [data-projects-frame], [data-project-slide], [data-blog-title-line], [data-blog-copy], [data-blog-action], [data-blog-card], [data-blog-tag], [data-blog-node], [data-blog-rule], [data-contact-title-line], [data-contact-copy], [data-contact-action], [data-contact-core], [data-contact-badge], [data-contact-node]',
     { opacity: 1, y: 0, x: 0, scale: 1, clipPath: 'inset(0% 0% 0% 0%)', clearProps: 'transform' },
   );
-  gsap.set('[data-hero-path], [data-hero-ring], [data-stats-path], [data-stats-ring], [data-about-step-path], [data-skill-path]', { strokeDashoffset: 0 });
+  gsap.set('[data-hero-path], [data-hero-ring], [data-stats-path], [data-stats-ring], [data-about-step-path], [data-skill-path], [data-blog-path], [data-contact-path]', { strokeDashoffset: 0 });
 }
 
 function initHero() {
@@ -499,6 +499,229 @@ function initProjects() {
   });
 }
 
+function initBlogTeaser() {
+  const section = document.querySelector('[data-blog-section]');
+  if (!section) return;
+
+  const titleLines = gsap.utils.toArray<HTMLElement>('[data-blog-title-line]');
+  const copy = section.querySelector<HTMLElement>('[data-blog-copy]');
+  const action = section.querySelector<HTMLElement>('[data-blog-action]');
+  const card = section.querySelector<HTMLElement>('[data-blog-card]');
+  const rule = section.querySelector<HTMLElement>('[data-blog-rule]');
+  const tags = gsap.utils.toArray<HTMLElement>('[data-blog-tag]');
+  const paths = gsap.utils.toArray<SVGGeometryElement>('[data-blog-path]');
+  const nodes = gsap.utils.toArray<SVGCircleElement>('[data-blog-node]');
+  const scan = section.querySelector<HTMLElement>('[data-blog-scan]');
+
+  if (!copy || !card) return;
+
+  gsap.set(titleLines, { opacity: 0, yPercent: 88, rotateX: -14, transformOrigin: 'left bottom' });
+  gsap.set(copy, { opacity: 0, y: 24 });
+  gsap.set(action, { opacity: 0, y: 18 });
+  gsap.set(card, {
+    opacity: 0,
+    y: 18,
+    clipPath: 'inset(0% 0% 100% 0%)',
+  });
+  gsap.set(rule, { scaleX: 0, transformOrigin: 'left center' });
+  gsap.set(tags, { opacity: 0, y: 12, scale: 0.92 });
+  gsap.set(nodes, { opacity: 0, scale: 0, transformOrigin: 'center' });
+
+  paths.forEach((path) => {
+    const length = path.getTotalLength();
+    gsap.set(path, { strokeDasharray: length, strokeDashoffset: length });
+  });
+
+  const timeline = gsap.timeline({
+    defaults: { ease: 'power4.out' },
+    scrollTrigger: {
+      trigger: section,
+      start: 'top 72%',
+      once: true,
+    },
+  });
+
+  timeline
+    .to(titleLines, { opacity: 1, yPercent: 0, rotateX: 0, duration: 0.72, stagger: 0.08 })
+    .to(copy, { opacity: 1, y: 0, duration: 0.54 }, '-=0.34')
+    .to(action, { opacity: 1, y: 0, duration: 0.42 }, '-=0.24')
+    .to(paths, { strokeDashoffset: 0, duration: 1.05, stagger: 0.08, ease: 'power2.inOut' }, '-=0.42')
+    .to(nodes, { opacity: 1, scale: 1, duration: 0.34, stagger: 0.04, ease: 'back.out(1.8)' }, '-=0.68')
+    .to(card, {
+      opacity: 1,
+      y: 0,
+      clipPath: 'inset(0% 0% 0% 0%)',
+      duration: 0.72,
+      ease: 'power3.out',
+    }, '-=0.38')
+    .to(rule, { scaleX: 1, duration: 0.7, ease: 'power2.inOut' }, '-=0.5')
+    .to(tags, { opacity: 1, y: 0, scale: 1, duration: 0.36, stagger: 0.05 }, '-=0.34');
+
+  if (rule) {
+    gsap.to(rule, {
+      scaleX: 0.18,
+      xPercent: 455,
+      duration: 2.4,
+      repeat: -1,
+      repeatDelay: 0.4,
+      ease: 'power2.inOut',
+      scrollTrigger: {
+        trigger: section,
+        start: 'top 78%',
+        end: 'bottom top',
+        toggleActions: 'play pause resume pause',
+      },
+    });
+  }
+
+  tags.forEach((tag, index) => {
+    gsap.to(tag, {
+      borderColor: 'rgba(204, 120, 92, 0.55)',
+      duration: 1.1,
+      repeat: -1,
+      yoyo: true,
+      ease: 'sine.inOut',
+      delay: index * 0.22,
+      scrollTrigger: {
+        trigger: section,
+        start: 'top 78%',
+        end: 'bottom top',
+        toggleActions: 'play pause resume pause',
+      },
+    });
+  });
+
+  nodes.forEach((node, index) => {
+    gsap.to(node, {
+      scale: 1.65,
+      opacity: 0.2,
+      duration: 1.45,
+      repeat: -1,
+      yoyo: true,
+      ease: 'sine.inOut',
+      delay: index * 0.16,
+      scrollTrigger: {
+        trigger: section,
+        start: 'top 78%',
+        end: 'bottom top',
+        toggleActions: 'play pause resume pause',
+      },
+    });
+  });
+
+  if (scan) {
+    gsap.to(scan, {
+      xPercent: 900,
+      duration: 5.2,
+      repeat: -1,
+      ease: 'none',
+      scrollTrigger: {
+        trigger: section,
+        start: 'top 78%',
+        end: 'bottom top',
+        toggleActions: 'play pause resume pause',
+      },
+    });
+  }
+}
+
+function initContact() {
+  const section = document.querySelector('[data-contact-section]');
+  if (!section) return;
+
+  const titleLines = gsap.utils.toArray<HTMLElement>('[data-contact-title-line]');
+  const copy = section.querySelector<HTMLElement>('[data-contact-copy]');
+  const actions = gsap.utils.toArray<HTMLElement>('[data-contact-action]');
+  const core = section.querySelector<HTMLElement>('[data-contact-core]');
+  const badges = gsap.utils.toArray<HTMLElement>('[data-contact-badge]');
+  const paths = gsap.utils.toArray<SVGGeometryElement>('[data-contact-path]');
+  const nodes = gsap.utils.toArray<SVGCircleElement>('[data-contact-node]');
+  const scan = section.querySelector<HTMLElement>('[data-contact-scan]');
+
+  if (!copy || !core || actions.length === 0) return;
+
+  gsap.set(titleLines, { opacity: 0, yPercent: 88, rotateX: -14, transformOrigin: 'left bottom' });
+  gsap.set(copy, { opacity: 0, y: 24 });
+  gsap.set(actions, { opacity: 0, y: 24, scale: 0.97 });
+  gsap.set(core, { opacity: 0, scale: 0.82, rotate: -1.5 });
+  gsap.set(badges, { opacity: 0, scale: 0.84, y: 18 });
+  gsap.set(nodes, { opacity: 0, scale: 0, transformOrigin: 'center' });
+
+  paths.forEach((path) => {
+    const length = path.getTotalLength();
+    gsap.set(path, { strokeDasharray: length, strokeDashoffset: length });
+  });
+
+  const timeline = gsap.timeline({
+    defaults: { ease: 'power4.out' },
+    scrollTrigger: {
+      trigger: section,
+      start: 'top 72%',
+      once: true,
+    },
+  });
+
+  timeline
+    .to(titleLines, { opacity: 1, yPercent: 0, rotateX: 0, duration: 0.72, stagger: 0.08 })
+    .to(copy, { opacity: 1, y: 0, duration: 0.54 }, '-=0.34')
+    .to(actions, { opacity: 1, y: 0, scale: 1, duration: 0.48, stagger: 0.08 }, '-=0.24')
+    .to(paths, { strokeDashoffset: 0, duration: 1.05, stagger: 0.08, ease: 'power2.inOut' }, '-=0.56')
+    .to(nodes, { opacity: 1, scale: 1, duration: 0.34, stagger: 0.035, ease: 'back.out(1.8)' }, '-=0.66')
+    .to(core, { opacity: 1, scale: 1, rotate: 0, duration: 0.62, ease: 'back.out(1.25)' }, '-=0.44')
+    .to(badges, { opacity: 1, scale: 1, y: 0, duration: 0.4, stagger: 0.08, ease: 'back.out(1.65)' }, '-=0.34');
+
+  badges.forEach((badge, index) => {
+    gsap.to(badge, {
+      y: index % 2 === 0 ? -7 : 7,
+      rotate: index % 2 === 0 ? -0.4 : 0.4,
+      duration: 3.1 + index * 0.32,
+      repeat: -1,
+      yoyo: true,
+      ease: 'sine.inOut',
+      delay: 1.1 + index * 0.14,
+      scrollTrigger: {
+        trigger: section,
+        start: 'top 78%',
+        end: 'bottom top',
+        toggleActions: 'play pause resume pause',
+      },
+    });
+  });
+
+  nodes.forEach((node, index) => {
+    gsap.to(node, {
+      scale: 1.8,
+      opacity: 0.18,
+      duration: 1.35,
+      repeat: -1,
+      yoyo: true,
+      ease: 'sine.inOut',
+      delay: index * 0.13,
+      scrollTrigger: {
+        trigger: section,
+        start: 'top 78%',
+        end: 'bottom top',
+        toggleActions: 'play pause resume pause',
+      },
+    });
+  });
+
+  if (scan) {
+    gsap.to(scan, {
+      xPercent: 900,
+      duration: 5.2,
+      repeat: -1,
+      ease: 'none',
+      scrollTrigger: {
+        trigger: section,
+        start: 'top 78%',
+        end: 'bottom top',
+        toggleActions: 'play pause resume pause',
+      },
+    });
+  }
+}
+
 function initAnimations() {
   gsap.registerPlugin(ScrollTrigger);
 
@@ -514,6 +737,8 @@ function initAnimations() {
   initAbout();
   initSkills();
   initProjects();
+  initBlogTeaser();
+  initContact();
 
   const heroWords = gsap.utils.toArray<HTMLElement>('[data-hero-title] span');
   heroWords.forEach((word) => word.classList.add('hero-word'));
