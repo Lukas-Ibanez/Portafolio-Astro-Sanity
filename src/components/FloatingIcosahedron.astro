@@ -17,10 +17,6 @@
 
 <script>
   import * as THREE from 'three';
-  import { gsap } from 'gsap';
-  import { ScrollTrigger } from 'gsap/ScrollTrigger';
-
-  gsap.registerPlugin(ScrollTrigger);
 
   const canvas = document.getElementById('ico-canvas') as HTMLCanvasElement;
   if (!canvas) throw new Error('ico-canvas not found');
@@ -68,9 +64,6 @@
   syncTheme();
 
   // ── Dynamic X: stays in viewport at any aspect ratio ──────────────────────
-  // Content column max width matches tailwind max-w-site (90rem = 1440px)
-  const CONTENT_MAX_PX = 1440;
-
   function sideXPct(side: 'L' | 'R'): number {
     const vw = window.innerWidth;
     const vh = window.innerHeight;
@@ -89,70 +82,98 @@
     return { x: (xPct - 0.5) * h * camera.aspect, y: -(yPct - 0.5) * h };
   }
 
-  // ── Scroll waypoints ───────────────────────────────────────────────────────
-  // p  = scroll progress when viewport is centered on that section
-  //       (estimated from full-page screenshot proportions)
-  // side: place sphere on side WITHOUT an opaque panel so it's clearly visible
-  //  Hero:       user wants RIGHT; opaque panel is right, but gutter is further right
-  //  Stats:      opaque stats-system on LEFT  → sphere RIGHT (continues from hero)
-  //  About:      opaque about-layers on RIGHT → sphere LEFT (sweeps across)
-  //  Skills:     full-width cards             → sphere LEFT (stays left)
-  //  Projects:   full-width slider            → sphere RIGHT (sweeps across)
-  //  BlogTeaser: opaque blog-stage on RIGHT   → sphere LEFT (sweeps across)
-  //  Contact:    opaque contact-system on LEFT→ sphere RIGHT (ends right)
-  interface WP { p: number; side: 'L' | 'R'; yPct: number; s: number }
-  const WPS: WP[] = [
-    { p: 0.00, side: 'R', yPct: 0.44, s: 0.66 }, // Hero      — right
-    { p: 0.18, side: 'R', yPct: 0.46, s: 0.62 }, // Stats     — right
-    { p: 0.28, side: 'L', yPct: 0.50, s: 0.60 }, // About     — left
-    { p: 0.44, side: 'L', yPct: 0.44, s: 0.58 }, // Skills    — left
-    { p: 0.63, side: 'R', yPct: 0.48, s: 0.62 }, // Projects  — right
-    { p: 0.80, side: 'L', yPct: 0.46, s: 0.60 }, // BlogTeaser— left
-    { p: 1.00, side: 'R', yPct: 0.44, s: 0.62 }, // Contact   — right
+  // ── Section anchors ─────────────────────────────────────────────────────────
+  // Instead of guessing scroll-progress percentages, the sphere is anchored to
+  // the REAL position of each Home section in the document. The anchor for a
+  // section is the scroll position at which the section's vertical center lines
+  // up with the viewport center. This stays consistent across viewport sizes and
+  // content changes. `side` places the sphere where there is no opaque panel.
+  interface SectionCfg { id: string; side: 'L' | 'R'; yPct: number; s: number }
+  const SECTION_CFG: SectionCfg[] = [
+    { id: 'hero',              side: 'R', yPct: 0.46, s: 0.66 },
+    { id: 'stats',             side: 'R', yPct: 0.48, s: 0.62 },
+    { id: 'about',             side: 'L', yPct: 0.50, s: 0.60 },
+    { id: 'skills',            side: 'L', yPct: 0.46, s: 0.58 },
+    { id: 'featured-projects', side: 'R', yPct: 0.48, s: 0.62 },
+    { id: 'blog-teaser',       side: 'L', yPct: 0.46, s: 0.60 },
+    { id: 'contact',           side: 'R', yPct: 0.46, s: 0.62 },
   ];
 
-  function easeInOut(t: number) {
-    return t < 0.5 ? 2 * t * t : -1 + (4 - 2 * t) * t;
+  interface Anchor { y: number; side: 'L' | 'R'; yPct: number; s: number }
+  let anchors: Anchor[] = [];
+
+  function maxScroll() {
+    return Math.max(1, document.documentElement.scrollHeight - window.innerHeight);
   }
 
-  // Track current segment for resize recomputation
-  let currentA = WPS[0];
-  let currentB = WPS[1];
-  let currentE = 0;
+  function computeAnchors() {
+    const ms = maxScroll();
+    const present = SECTION_CFG
+      .map((cfg) => ({ cfg, el: document.getElementById(cfg.id) }))
+      .filter((entry): entry is { cfg: SectionCfg; el: HTMLElement } => Boolean(entry.el));
 
-  const initW = vpToWorld(sideXPct(WPS[0].side), WPS[0].yPct);
-  const target = { x: initW.x, y: initW.y, s: WPS[0].s };
-  const cur = { x: initW.x, y: initW.y, s: WPS[0].s };
+    let next: Anchor[];
+    if (present.length >= 2) {
+      next = present.map(({ cfg, el }) => {
+        const rect = el.getBoundingClientRect();
+        const center = rect.top + window.scrollY + rect.height / 2;
+        const y = Math.max(0, Math.min(ms, center - window.innerHeight / 2));
+        return { y, side: cfg.side, yPct: cfg.yPct, s: cfg.s };
+      });
+    } else {
+      // Fallback for internal pages that don't have the Home sections.
+      next = [
+        { y: 0, side: 'R', yPct: 0.42, s: 0.6 },
+        { y: ms, side: 'L', yPct: 0.5, s: 0.58 },
+      ];
+    }
 
-  wireframe.position.set(initW.x, initW.y, 0);
-  fillMesh.position.set(initW.x, initW.y, 0);
-  wireframe.scale.setScalar(WPS[0].s);
-  fillMesh.scale.setScalar(WPS[0].s);
+    // Guarantee strictly increasing anchor positions (avoids divide-by-zero).
+    for (let i = 1; i < next.length; i++) {
+      if (next[i].y <= next[i - 1].y) next[i].y = next[i - 1].y + 1;
+    }
+    anchors = next;
+  }
 
-  ScrollTrigger.create({
-    trigger: document.body,
-    start: 'top top',
-    end: 'bottom bottom',
-    scrub: 1.5,
-    onUpdate(self) {
-      const p = self.progress;
-      let a = WPS[0], b = WPS[WPS.length - 1];
-      for (let i = 0; i < WPS.length - 1; i++) {
-        if (p >= WPS[i].p && p <= WPS[i + 1].p) {
-          a = WPS[i]; b = WPS[i + 1]; break;
-        }
+  function easeInOut(t: number) {
+    const c = t < 0 ? 0 : t > 1 ? 1 : t;
+    return c < 0.5 ? 2 * c * c : -1 + (4 - 2 * c) * c;
+  }
+
+  function sampleAt(a: Anchor, b: Anchor, e: number) {
+    const xa = sideXPct(a.side);
+    const xb = sideXPct(b.side);
+    const xPct = xa + (xb - xa) * e;
+    const yPct = a.yPct + (b.yPct - a.yPct) * e;
+    const s = a.s + (b.s - a.s) * e;
+    const w = vpToWorld(xPct, yPct);
+    return { x: w.x, y: w.y, s };
+  }
+
+  function targetForScroll(scrollY: number) {
+    const first = anchors[0];
+    const last = anchors[anchors.length - 1];
+    if (scrollY <= first.y) return sampleAt(first, first, 0);
+    if (scrollY >= last.y) return sampleAt(last, last, 0);
+    for (let i = 0; i < anchors.length - 1; i++) {
+      const a = anchors[i];
+      const b = anchors[i + 1];
+      if (scrollY >= a.y && scrollY <= b.y) {
+        return sampleAt(a, b, easeInOut((scrollY - a.y) / (b.y - a.y)));
       }
-      const span = b.p - a.p;
-      const e = span > 0 ? easeInOut((p - a.p) / span) : 0;
-      currentA = a; currentB = b; currentE = e;
+    }
+    return sampleAt(last, last, 0);
+  }
 
-      const wa = vpToWorld(sideXPct(a.side), a.yPct);
-      const wb = vpToWorld(sideXPct(b.side), b.yPct);
-      target.x = wa.x + (wb.x - wa.x) * e;
-      target.y = wa.y + (wb.y - wa.y) * e;
-      target.s = a.s + (b.s - a.s) * e;
-    },
-  });
+  computeAnchors();
+  const initState = targetForScroll(window.scrollY);
+  const target = { x: initState.x, y: initState.y, s: initState.s };
+  const cur = { x: initState.x, y: initState.y, s: initState.s };
+
+  wireframe.position.set(cur.x, cur.y, 0);
+  fillMesh.position.set(cur.x, cur.y, 0);
+  wireframe.scale.setScalar(cur.s);
+  fillMesh.scale.setScalar(cur.s);
 
   // ── Render loop ────────────────────────────────────────────────────────────
   const startTime = performance.now();
@@ -160,8 +181,16 @@
   function tick() {
     requestAnimationFrame(tick);
     const t = (performance.now() - startTime) / 1000;
-    const L = 0.042;
 
+    // Sample the real scroll position every frame and ease toward it. A single
+    // smoothing pass (no ScrollTrigger scrub) keeps the sphere in sync with the
+    // page instead of lagging behind during fast scroll or momentum.
+    const desired = targetForScroll(window.scrollY || window.pageYOffset || 0);
+    target.x = desired.x;
+    target.y = desired.y;
+    target.s = desired.s;
+
+    const L = 0.11;
     cur.x += (target.x - cur.x) * L;
     cur.y += (target.y - cur.y) * L;
     cur.s += (target.s - cur.s) * L;
@@ -185,18 +214,32 @@
   tick();
 
   // ── Resize ─────────────────────────────────────────────────────────────────
-  window.addEventListener('resize', () => {
+  function handleResize() {
     isSmall = smallViewport();
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, isSmall ? 1.5 : 2));
     camera.aspect = window.innerWidth / window.innerHeight;
     camera.updateProjectionMatrix();
     renderer.setSize(window.innerWidth, window.innerHeight);
-    // Snap to correct world position for new viewport
-    const wa = vpToWorld(sideXPct(currentA.side), currentA.yPct);
-    const wb = vpToWorld(sideXPct(currentB.side), currentB.yPct);
-    cur.x = target.x = wa.x + (wb.x - wa.x) * currentE;
-    cur.y = target.y = wa.y + (wb.y - wa.y) * currentE;
-  });
+    computeAnchors();
+    // Snap to the correct world position for the new viewport/layout.
+    const snap = targetForScroll(window.scrollY);
+    cur.x = target.x = snap.x;
+    cur.y = target.y = snap.y;
+    cur.s = target.s = snap.s;
+  }
+
+  window.addEventListener('resize', handleResize);
+  // Section offsets shift as fonts/images settle — recompute when they do.
+  window.addEventListener('load', computeAnchors);
+
+  if ('ResizeObserver' in window) {
+    let pending = 0;
+    const observer = new ResizeObserver(() => {
+      cancelAnimationFrame(pending);
+      pending = requestAnimationFrame(computeAnchors);
+    });
+    observer.observe(document.body);
+  }
 
   // ── Theme change ───────────────────────────────────────────────────────────
   new MutationObserver(syncTheme).observe(document.documentElement, {
