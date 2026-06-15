@@ -23,8 +23,8 @@ const showImage = Boolean(data.coverImage) && !data.confidential;
         <img
           src={data.coverImage}
           alt={data.coverAlt || `Imagen del proyecto ${data.title}.`}
-          width={720}
-          height={480}
+          width={1600}
+          height={900}
           loading="lazy"
           decoding="async"
           class="project-card-image"
@@ -78,7 +78,7 @@ const showImage = Boolean(data.coverImage) && !data.confidential;
   }
 
   .project-card-media {
-    @apply relative block aspect-[3/2] overflow-hidden border-b border-border no-underline;
+    @apply relative block aspect-[16/9] overflow-hidden border-b border-border no-underline;
   }
 
   .project-card-image {
