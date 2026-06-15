@@ -1,35 +1,45 @@
 ---
 import { getCollection } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
-import Projects from '../../components/Projects.astro';
+import ProjectCard from '../../components/ProjectCard.astro';
 import GithubRepos from '../../components/GithubRepos.astro';
 import { getFeaturedRepos } from '../../lib/github';
 
-const projects = await getCollection('projects');
+const projects = (await getCollection('projects')).sort((a, b) => a.data.order - b.data.order);
 const repos = await getFeaturedRepos();
 ---
 
 <BaseLayout
   title="Proyectos | Lukas Ibáñez"
-  description="Proyectos de Lukas Ibáñez: desarrollo full-stack, despliegue Linux, SEO técnico, APIs y optimización web."
+  description="Casos reales de Lukas Ibáñez: sitios institucionales desde cero, intranets, migraciones de infraestructura, SEO técnico y backends en producción."
   path="/proyectos/"
 >
   <section id="projects-page-hero" class="projects-page-hero">
-    <div class="projects-page-intro">
+    <div class="projects-page-intro reveal">
       <p class="eyebrow">Proyectos</p>
       <h1>Casos donde importa cerrar bien el ciclo.</h1>
       <p class="projects-page-copy section-copy">
-        Cada proyecto debe reemplazarse con datos reales de Lukas: problema, solución, rol, stack, links y evidencia. La estructura ya está lista para mostrar trabajo concreto sin inflar el relato.
+        Trabajo real para instituciones y empresas: desarrollo desde cero, mantención de sitios en producción,
+        migraciones de infraestructura y backends. Cuando un proyecto está bajo confidencialidad, describo el
+        problema, mi rol y el stack sin exponer material visual.
       </p>
     </div>
   </section>
-  <Projects projects={projects} />
+
+  <section id="projects" class="projects-grid-section">
+    <div class="projects-grid-container">
+      <div class="projects-grid">
+        {projects.map((project, index) => <ProjectCard project={project} index={index} />)}
+      </div>
+    </div>
+  </section>
+
   <GithubRepos repos={repos} />
 </BaseLayout>
 
 <style>
   .projects-page-hero {
-    @apply bg-bg py-20;
+    @apply bg-bg pb-10 pt-20;
   }
 
   .projects-page-intro {
@@ -42,5 +52,17 @@ const repos = await getFeaturedRepos();
 
   .projects-page-copy {
     @apply mt-6;
+  }
+
+  .projects-grid-section {
+    @apply bg-bg pb-24;
+  }
+
+  .projects-grid-container {
+    @apply mx-auto w-full max-w-site px-5 sm:px-8;
+  }
+
+  .projects-grid {
+    @apply grid gap-6 md:grid-cols-2;
   }
 </style>

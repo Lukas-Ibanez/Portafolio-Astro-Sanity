@@ -4,10 +4,18 @@ import { getAllPosts, getPostBySlug } from '../../lib/sanity';
 
 export async function getStaticPaths() {
   const posts = await getAllPosts();
-  return posts.map((post) => ({ params: { slug: post.slug } }));
+  return posts.map((post, index) => ({
+    params: { slug: post.slug },
+    props: {
+      // Posts are ordered newest → oldest.
+      newer: index > 0 ? { slug: posts[index - 1].slug, title: posts[index - 1].title } : null,
+      older: index < posts.length - 1 ? { slug: posts[index + 1].slug, title: posts[index + 1].title } : null,
+    },
+  }));
 }
 
 const { slug } = Astro.params;
+const { newer, older } = Astro.props;
 const post = slug ? await getPostBySlug(slug) : null;
 
 if (!post) {
@@ -65,6 +73,27 @@ const jsonLd = {
           </aside>
         )
       }
+
+      {
+        (newer || older) && (
+          <nav class="blog-post-nav" aria-label="Navegación entre artículos">
+            {older ? (
+              <a class="blog-post-nav-link" href={`/blog/${older.slug}/`}>
+                <span>← Anterior</span>
+                <strong>{older.title}</strong>
+              </a>
+            ) : (
+              <span />
+            )}
+            {newer && (
+              <a class="blog-post-nav-link blog-post-nav-next" href={`/blog/${newer.slug}/`}>
+                <span>Siguiente →</span>
+                <strong>{newer.title}</strong>
+              </a>
+            )}
+          </nav>
+        )
+      }
     </div>
   </article>
 </BaseLayout>
@@ -116,5 +145,25 @@ const jsonLd = {
 
   .blog-post-sources a {
     @apply font-semibold text-accent-strong;
+  }
+
+  .blog-post-nav {
+    @apply mt-14 grid gap-4 border-t border-border pt-8 sm:grid-cols-2;
+  }
+
+  .blog-post-nav-link {
+    @apply grid gap-1 rounded-2xl border border-border bg-surface p-5 no-underline transition-colors hover:border-accent-strong;
+  }
+
+  .blog-post-nav-next {
+    @apply text-right;
+  }
+
+  .blog-post-nav-link span {
+    @apply text-xs font-bold uppercase tracking-[0.14em] text-accent-strong;
+  }
+
+  .blog-post-nav-link strong {
+    @apply font-serif text-lg text-text;
   }
 </style>

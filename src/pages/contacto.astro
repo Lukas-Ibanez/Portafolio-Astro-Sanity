@@ -1,12 +1,129 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
-import Contact from '../components/Contact.astro';
+import ContactForm from '../components/ContactForm.astro';
+import ArrowRight from '../components/icons/ArrowRight.astro';
+import Mail from '../components/icons/Mail.astro';
+import Github from '../components/icons/Github.astro';
+import Linkedin from '../components/icons/Linkedin.astro';
+import { owner, contact, contactChannels } from '../data/site';
+
+const channels = contactChannels();
 ---
 
 <BaseLayout
   title="Contacto | Lukas Ibáñez"
-  description="Contacto profesional de Lukas Ibáñez para oportunidades como desarrollador full-stack."
+  description="Contacto de Lukas Ibáñez, desarrollador full-stack en Santiago de Chile. Disponible para roles remotos o híbridos."
   path="/contacto/"
 >
-  <Contact />
+  <section id="contact-page" class="contact-page">
+    <div class="contact-page-container">
+      <div class="contact-page-grid">
+        <div class="contact-page-intro reveal">
+          <p class="eyebrow">Contacto</p>
+          <h1>Hablemos de tu próximo proyecto.</h1>
+          <p class="section-copy contact-page-copy">
+            Disponible para oportunidades full-stack donde aporte en producto, backend, despliegue, seguridad, SEO y
+            performance. {owner.location}.
+          </p>
+
+          <div class="contact-channels" aria-label="Canales de contacto">
+            {
+              channels.map((channel) => (
+                <a
+                  class="contact-channel"
+                  href={channel.href}
+                  rel={channel.key === 'email' ? undefined : 'noreferrer noopener'}
+                  target={channel.href.startsWith('http') ? '_blank' : undefined}
+                >
+                  <span class="contact-channel-icon">
+                    {channel.key === 'email' && <Mail />}
+                    {channel.key === 'github' && <Github />}
+                    {channel.key === 'linkedin' && <Linkedin />}
+                    {channel.key === 'whatsapp' && (
+                      <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                        <path d="M.057 24l1.687-6.163a11.867 11.867 0 0 1-1.587-5.945C.16 5.335 5.495 0 12.05 0a11.82 11.82 0 0 1 8.413 3.488 11.82 11.82 0 0 1 3.48 8.414c-.003 6.557-5.338 11.892-11.893 11.892a11.9 11.9 0 0 1-5.688-1.448L.057 24zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884a9.86 9.86 0 0 0 1.51 5.26l-.999 3.648 3.978-.607zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z" />
+                      </svg>
+                    )}
+                  </span>
+                  <strong>{channel.label}</strong>
+                  <ArrowRight />
+                </a>
+              ))
+            }
+          </div>
+
+          {
+            contact.cv && (
+              <a class="contact-cv button-primary" href={contact.cv} download>
+                Descargar CV (PDF)
+              </a>
+            )
+          }
+        </div>
+
+        <div class="contact-page-form reveal">
+          <h2 class="contact-form-title">Escríbeme directamente</h2>
+          <p class="contact-form-lead">Te respondo al correo que dejes.</p>
+          <ContactForm />
+        </div>
+      </div>
+    </div>
+  </section>
 </BaseLayout>
+
+<style>
+  .contact-page {
+    @apply bg-bg py-20;
+  }
+
+  .contact-page-container {
+    @apply mx-auto w-full max-w-site px-5 sm:px-8;
+  }
+
+  .contact-page-grid {
+    @apply grid gap-12 lg:grid-cols-[0.9fr_1.1fr] lg:items-start;
+  }
+
+  .contact-page-intro h1 {
+    @apply mt-4 font-serif text-5xl leading-tight sm:text-6xl;
+  }
+
+  .contact-page-copy {
+    @apply mt-6;
+  }
+
+  .contact-channels {
+    @apply mt-10 grid gap-3;
+  }
+
+  .contact-channel {
+    @apply inline-grid min-h-16 grid-cols-[3rem_1fr_auto] items-center gap-4 rounded-2xl border border-border bg-surface px-4 py-3 text-sm font-semibold text-text no-underline shadow-line;
+    transition: border-color 0.25s, transform 0.25s;
+  }
+
+  .contact-channel:hover,
+  .contact-channel:focus-visible {
+    border-color: var(--color-accent-strong);
+    transform: translateY(-1px);
+  }
+
+  .contact-channel-icon {
+    @apply flex h-12 w-12 items-center justify-center rounded-full border border-border bg-bg text-text;
+  }
+
+  .contact-channel strong {
+    @apply min-w-0 break-words;
+  }
+
+  .contact-cv {
+    @apply mt-8;
+  }
+
+  .contact-form-title {
+    @apply font-serif text-3xl font-bold leading-tight text-text;
+  }
+
+  .contact-form-lead {
+    @apply mt-3 text-text-soft;
+  }
+</style>

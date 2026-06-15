@@ -1,23 +1,11 @@
 ---
-import { Image } from 'astro:assets';
 import type { CollectionEntry } from 'astro:content';
 import ArrowRight from './icons/ArrowRight.astro';
 import ExternalLink from './icons/ExternalLink.astro';
-import linuxImage from '../assets/project-linux.png';
-import adminImage from '../assets/project-admin.png';
-import seoImage from '../assets/project-seo.png';
-import apiImage from '../assets/project-api.png';
 
 type Props = {
   projects: CollectionEntry<'projects'>[];
   featuredOnly?: boolean;
-};
-
-const imageMap = {
-  linux: linuxImage,
-  admin: adminImage,
-  seo: seoImage,
-  api: apiImage,
 };
 
 const { projects, featuredOnly = false } = Astro.props;
@@ -44,19 +32,26 @@ const totalProjects = visibleProjects.length;
             {
               visibleProjects.map((project, index) => (
                 <article class="project-slide" data-project-slide data-project-index={index} aria-hidden={index === 0 ? 'false' : 'true'}>
-                  <Image
-                    src={imageMap[project.data.image as keyof typeof imageMap] || linuxImage}
-                    alt={`Pantallazo del proyecto ${project.data.title}.`}
-                    width={1100}
-                    height={720}
-                    format="webp"
-                    loading={index === 0 ? 'eager' : 'lazy'}
-                    decoding="async"
-                    class="project-slide-image"
-                  />
+                  {project.data.coverImage && !project.data.confidential ? (
+                    <img
+                      src={project.data.coverImage}
+                      alt={project.data.coverAlt || `Pantallazo del proyecto ${project.data.title}.`}
+                      width={1100}
+                      height={720}
+                      loading={index === 0 ? 'eager' : 'lazy'}
+                      decoding="async"
+                      class="project-slide-image"
+                    />
+                  ) : (
+                    <div class="project-slide-cover" aria-hidden="true">
+                      <span class="project-slide-cover-client">{project.data.client}</span>
+                      <strong class="project-slide-cover-title">{project.data.title}</strong>
+                      <span class="project-slide-cover-role">{project.data.role}</span>
+                    </div>
+                  )}
                   <div class="project-slide-overlay">
                     <div>
-                      <p>Proyecto {index + 1} de {totalProjects}</p>
+                      <p>Proyecto {index + 1} de {totalProjects} · {project.data.client}</p>
                       <h3>{project.data.title}</h3>
                     </div>
                     <div class="project-slide-stack">
@@ -94,7 +89,7 @@ const totalProjects = visibleProjects.length;
           <span data-projects-title-line>cómo trabajo de punta a punta.</span>
         </h2>
         <p>
-          Cada proyecto tiene que demostrar algo concreto: una interfaz clara, un backend ordenado, una publicación cuidada o una mejora real de rendimiento. Esta vitrina está pensada para reemplazar los placeholders por pantallazos y casos reales de Lukas.
+          Sitios institucionales, intranets, migraciones de infraestructura y backends en producción. Cada caso muestra el rol concreto y el stack, con detalle por proyecto y respeto por el trabajo bajo confidencialidad.
         </p>
 
         <div class="projects-actions">
@@ -188,6 +183,27 @@ const totalProjects = visibleProjects.length;
   .project-slide-image {
     @apply h-full w-full object-cover;
     will-change: transform;
+  }
+
+  /* Branded cover used when a project has no screenshot (e.g. NDA / internal) */
+  .project-slide-cover {
+    @apply flex h-full w-full flex-col justify-center gap-3 p-8 sm:p-10;
+    will-change: transform;
+    background:
+      radial-gradient(circle at 78% 18%, var(--accent-spot), transparent 16rem),
+      linear-gradient(135deg, var(--color-bg-alt), var(--color-surface));
+  }
+
+  .project-slide-cover-client {
+    @apply text-xs font-bold uppercase tracking-[0.2em] text-accent-strong;
+  }
+
+  .project-slide-cover-title {
+    @apply font-serif text-3xl font-bold leading-tight text-text sm:text-5xl;
+  }
+
+  .project-slide-cover-role {
+    @apply text-sm font-semibold text-text-soft;
   }
 
   .project-slide-overlay {

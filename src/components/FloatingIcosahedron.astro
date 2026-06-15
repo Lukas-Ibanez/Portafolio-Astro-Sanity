@@ -25,9 +25,13 @@
   const canvas = document.getElementById('ico-canvas') as HTMLCanvasElement;
   if (!canvas) throw new Error('ico-canvas not found');
 
+  // Reduce intensity on small viewports (lighter GPU load, less motion).
+  const smallViewport = () => window.matchMedia('(max-width: 768px)').matches;
+  let isSmall = smallViewport();
+
   // ── Renderer ───────────────────────────────────────────────────────────────
   const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
-  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio, isSmall ? 1.5 : 2));
   renderer.setSize(window.innerWidth, window.innerHeight);
   renderer.setClearColor(0x000000, 0);
 
@@ -162,16 +166,18 @@
     cur.y += (target.y - cur.y) * L;
     cur.s += (target.s - cur.s) * L;
 
-    const floatY = Math.sin(t * 0.68) * 0.042;
+    // Damp motion on small screens to avoid jank.
+    const intensity = isSmall ? 0.5 : 1;
+    const floatY = Math.sin(t * 0.68) * 0.042 * intensity;
 
     wireframe.position.set(cur.x, cur.y + floatY, 0);
     fillMesh.position.set(cur.x, cur.y + floatY, 0);
     wireframe.scale.setScalar(cur.s);
     fillMesh.scale.setScalar(cur.s);
 
-    wireframe.rotation.y = t * 0.30;
-    wireframe.rotation.x = t * 0.10 + Math.sin(t * 0.17) * 0.18;
-    wireframe.rotation.z = Math.sin(t * 0.09) * 0.10;
+    wireframe.rotation.y = t * 0.30 * intensity;
+    wireframe.rotation.x = (t * 0.10 + Math.sin(t * 0.17) * 0.18) * intensity;
+    wireframe.rotation.z = Math.sin(t * 0.09) * 0.10 * intensity;
     fillMesh.rotation.copy(wireframe.rotation);
 
     renderer.render(scene, camera);
@@ -180,6 +186,8 @@
 
   // ── Resize ─────────────────────────────────────────────────────────────────
   window.addEventListener('resize', () => {
+    isSmall = smallViewport();
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, isSmall ? 1.5 : 2));
     camera.aspect = window.innerWidth / window.innerHeight;
     camera.updateProjectionMatrix();
     renderer.setSize(window.innerWidth, window.innerHeight);

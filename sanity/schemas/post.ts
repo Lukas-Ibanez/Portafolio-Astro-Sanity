@@ -13,7 +13,15 @@ export default {
     },
     { name: 'excerpt', title: 'Extracto', type: 'text', rows: 3 },
     { name: 'category', title: 'Categoria', type: 'string' },
-    { name: 'coverImage', title: 'Imagen de portada', type: 'image', options: { hotspot: true } },
+    {
+      name: 'coverImage',
+      title: 'Imagen de portada',
+      type: 'image',
+      options: { hotspot: true },
+      fields: [
+        { name: 'alt', title: 'Texto alternativo', type: 'string', validation: (Rule: any) => Rule.required() },
+      ],
+    },
     {
       name: 'content',
       title: 'Contenido',

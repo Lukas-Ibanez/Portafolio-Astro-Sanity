@@ -51,7 +51,8 @@ const workflow = ['Código', 'Backend', 'Servidor', 'Seguridad', 'SEO'];
                 {
                   index === 0 ? (
                     <>
-                      <span data-stat-number data-stat-target={metric.value}>0</span>
+                      {/* SSR/no-JS fallback shows the real value (3), never 0. JS counts 0→3 in view. */}
+                      <span data-stat-number data-stat-target={metric.value}>{metric.value}</span>
                       <span>{metric.suffix}</span>
                     </>
                   ) : (

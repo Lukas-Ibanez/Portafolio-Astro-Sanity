@@ -14,7 +14,10 @@ type Props = {
   image?: string;
   type?: 'website' | 'article';
   jsonLd?: Record<string, unknown> | Record<string, unknown>[];
+  noindex?: boolean;
 };
+
+const noindex = Astro.props.noindex ?? false;
 
 const seo = buildSeo({
   title: Astro.props.title || 'Lukas Ibáñez | Desarrollador Full-Stack',
@@ -48,6 +51,18 @@ const jsonLd = Astro.props.jsonLd;
     </script>
     <title>{seo.title}</title>
     <meta name="description" content={seo.description} />
+    {noindex && <meta name="robots" content="noindex, nofollow" />}
+    <!-- Keep preview deploys (*.pages.dev) out of search; the real domain stays canonical -->
+    <script is:inline>
+      (function () {
+        if (location.hostname.endsWith('.pages.dev') && !document.querySelector('meta[name="robots"]')) {
+          var m = document.createElement('meta');
+          m.name = 'robots';
+          m.content = 'noindex, nofollow';
+          document.head.appendChild(m);
+        }
+      })();
+    </script>
     <link rel="canonical" href={seo.canonical} />
     <link rel="preload" href={interFont} as="font" type="font/woff2" crossorigin />
     <link rel="preload" href={plusJakartaFont} as="font" type="font/woff2" crossorigin />

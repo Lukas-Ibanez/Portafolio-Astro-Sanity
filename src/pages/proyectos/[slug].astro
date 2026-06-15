@@ -1,0 +1,237 @@
+---
+import { getCollection, render } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import ArrowRight from '../../components/icons/ArrowRight.astro';
+import ExternalLink from '../../components/icons/ExternalLink.astro';
+import { siteUrl } from '../../data/site';
+
+export async function getStaticPaths() {
+  const projects = await getCollection('projects');
+  return projects.map((project) => ({
+    params: { slug: project.id },
+    props: { project },
+  }));
+}
+
+const { project } = Astro.props;
+const data = project.data;
+const { Content } = await render(project);
+const showImage = Boolean(data.coverImage) && !data.confidential;
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'CreativeWork',
+  name: data.title,
+  about: data.summary,
+  author: { '@type': 'Person', name: 'Lukas Ibáñez' },
+  creator: { '@type': 'Person', name: 'Lukas Ibáñez' },
+  dateCreated: String(data.year),
+  keywords: data.stack.join(', '),
+  ...(data.externalUrl ? { url: data.externalUrl } : {}),
+  isPartOf: { '@type': 'WebSite', name: 'Portafolio de Lukas Ibáñez', url: siteUrl },
+};
+
+const sections = [
+  { title: 'El problema', body: data.problem },
+  { title: 'La solución / qué hice', body: data.solution },
+  ...(data.result ? [{ title: 'Resultado', body: data.result }] : []),
+];
+---
+
+<BaseLayout
+  title={`${data.title} — ${data.client} | Lukas Ibáñez`}
+  description={data.summary}
+  path={`/proyectos/${project.id}/`}
+  type="article"
+  jsonLd={jsonLd}
+>
+  <article id="project-detail" class="project-detail">
+    <div class="project-detail-container">
+      <a href="/proyectos/" class="project-back">← Volver a proyectos</a>
+
+      <header class="project-detail-header reveal">
+        <p class="eyebrow">{data.client} · {data.year}</p>
+        <h1>{data.title}</h1>
+        <p class="project-detail-role">{data.role}</p>
+        <p class="project-detail-summary">{data.summary}</p>
+
+        <div class="project-detail-stack">
+          {data.stack.map((item) => <span>{item}</span>)}
+        </div>
+
+        {
+          (data.externalUrl || data.repoUrl) && (
+            <div class="project-detail-links">
+              {data.externalUrl && (
+                <a href={data.externalUrl} class="button-primary" rel="noreferrer noopener" target="_blank">
+                  Ver sitio en vivo <ExternalLink />
+                </a>
+              )}
+              {data.repoUrl && (
+                <a href={data.repoUrl} class="button-secondary" rel="noreferrer noopener" target="_blank">
+                  Ver repositorio <ExternalLink />
+                </a>
+              )}
+            </div>
+          )
+        }
+      </header>
+
+      {
+        showImage && (
+          <figure class="project-detail-cover">
+            <img
+              src={data.coverImage}
+              alt={data.coverAlt || `Imagen del proyecto ${data.title}.`}
+              width={1280}
+              height={800}
+              loading="eager"
+              decoding="async"
+            />
+          </figure>
+        )
+      }
+
+      <div class="project-detail-body">
+        {
+          sections.map((section) => (
+            <section class="project-detail-block">
+              <h2>{section.title}</h2>
+              <p>{section.body}</p>
+            </section>
+          ))
+        }
+
+        <div class="project-detail-extra article-body">
+          <Content />
+        </div>
+
+        <section class="project-detail-block">
+          <h2>Evidencia</h2>
+          {
+            data.confidential ? (
+              <p class="project-detail-nda">
+                Este proyecto se realizó bajo confidencialidad, por lo que no se publican pantallazos ni material
+                interno. El detalle de problema, rol y stack está descrito arriba.
+              </p>
+            ) : data.gallery.length > 0 ? (
+              <div class="project-gallery">
+                {data.gallery.map((shot) => (
+                  <img src={shot.src} alt={shot.alt} loading="lazy" decoding="async" width={1280} height={800} />
+                ))}
+              </div>
+            ) : (
+              <p class="project-detail-nda">
+                {data.externalUrl
+                  ? 'El sitio está disponible en vivo a través del enlace de arriba.'
+                  : 'Material visual disponible a pedido.'}
+              </p>
+            )
+          }
+        </section>
+      </div>
+
+      <aside class="project-cta">
+        <div>
+          <h2>¿Tienes un proyecto que necesita cerrar bien el ciclo?</h2>
+          <p>Del servidor al usuario final, con un solo responsable técnico.</p>
+        </div>
+        <a href="/contacto/" class="button-primary">Hablemos <ArrowRight /></a>
+      </aside>
+    </div>
+  </article>
+</BaseLayout>
+
+<style>
+  .project-detail {
+    @apply bg-bg py-20;
+  }
+
+  .project-detail-container {
+    @apply mx-auto w-full max-w-3xl px-5 sm:px-8;
+  }
+
+  .project-back {
+    @apply inline-block text-sm font-semibold text-text-soft no-underline transition-colors hover:text-accent-strong;
+  }
+
+  .project-detail-header {
+    @apply mt-8;
+  }
+
+  .project-detail-header h1 {
+    @apply mt-4 font-serif text-4xl leading-tight sm:text-6xl;
+  }
+
+  .project-detail-role {
+    @apply mt-4 text-base font-semibold text-accent-strong;
+  }
+
+  .project-detail-summary {
+    @apply mt-5 text-xl leading-8 text-text-soft;
+  }
+
+  .project-detail-stack {
+    @apply mt-7 flex flex-wrap gap-2;
+  }
+
+  .project-detail-stack span {
+    @apply rounded-full border border-border bg-surface px-3 py-1.5 text-xs font-bold text-text-soft;
+  }
+
+  .project-detail-links {
+    @apply mt-8 flex flex-wrap gap-3;
+  }
+
+  .project-detail-cover {
+    @apply mt-12 overflow-hidden rounded-2xl border border-border;
+  }
+
+  .project-detail-cover img {
+    @apply h-auto w-full object-cover;
+  }
+
+  .project-detail-body {
+    @apply mt-12;
+  }
+
+  .project-detail-block {
+    @apply mt-10 border-t border-border pt-8;
+  }
+
+  .project-detail-block h2 {
+    @apply font-serif text-2xl font-bold text-text sm:text-3xl;
+  }
+
+  .project-detail-block p {
+    @apply mt-4 text-lg leading-8 text-text-soft;
+  }
+
+  .project-detail-nda {
+    @apply mt-4 rounded-2xl border border-border bg-surface p-6 text-base leading-7 text-text-soft;
+  }
+
+  .project-detail-extra:empty {
+    display: none;
+  }
+
+  .project-gallery {
+    @apply mt-4 grid gap-4;
+  }
+
+  .project-gallery img {
+    @apply w-full rounded-2xl border border-border;
+  }
+
+  .project-cta {
+    @apply mt-16 flex flex-col gap-6 rounded-2xl border border-border bg-surface p-8 shadow-soft sm:flex-row sm:items-center sm:justify-between;
+  }
+
+  .project-cta h2 {
+    @apply font-serif text-2xl font-bold leading-tight text-text;
+  }
+
+  .project-cta p {
+    @apply mt-2 text-text-soft;
+  }
+</style>

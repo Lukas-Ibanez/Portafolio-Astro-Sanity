@@ -6,6 +6,8 @@ export type SeoInput = {
   type?: 'website' | 'article';
 };
 
+import { contact } from '../data/site';
+
 const siteUrl = import.meta.env.SITE_URL || 'https://lukasibanez.cl';
 const defaultImage = '/og-image.png';
 
@@ -23,6 +25,8 @@ export function buildSeo({ title, description, path = '/', image = defaultImage,
 }
 
 export function personJsonLd() {
+  const sameAs = [contact.github, contact.linkedin].filter(Boolean);
+
   return {
     '@context': 'https://schema.org',
     '@type': 'Person',
@@ -31,9 +35,11 @@ export function personJsonLd() {
     alumniOf: 'Duoc UC',
     address: {
       '@type': 'PostalAddress',
+      addressLocality: 'Santiago',
       addressCountry: 'CL',
     },
     knowsAbout: ['Linux', 'Seguridad web', 'Astro', 'Backend', 'SEO técnico', 'Optimización web'],
     url: siteUrl,
+    ...(sameAs.length ? { sameAs } : {}),
   };
 }
