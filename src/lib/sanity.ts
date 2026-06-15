@@ -89,8 +89,42 @@ function estimateReadingTime(html: string) {
   return Math.max(1, Math.ceil(words / 200));
 }
 
+function plainBlockText(block: any): string {
+  if (!block || block._type !== 'block' || !Array.isArray(block.children)) return '';
+  return block.children.map((child: any) => child?.text || '').join('');
+}
+
+function normalizeText(value: string): string {
+  return value
+    .toLowerCase()
+    .replace(/\s+/g, ' ')
+    .replace(/[…\.\s]+$/u, '')
+    .trim();
+}
+
+// The excerpt is rendered as a styled lead on the post page. Some posts repeat
+// that same text as the first body paragraph, which looks duplicated. If the
+// first block matches the excerpt, drop it so the article doesn't start by
+// repeating the lead.
+function stripDuplicateLead(content: any[], excerpt: string): any[] {
+  if (!Array.isArray(content) || content.length === 0 || !excerpt) return content;
+
+  const first = content[0];
+  const firstText = normalizeText(plainBlockText(first));
+  if (!firstText) return content;
+
+  const lead = normalizeText(excerpt);
+  const isDuplicate =
+    firstText === lead ||
+    (lead.length > 40 && firstText.startsWith(lead)) ||
+    (firstText.length > 40 && lead.startsWith(firstText));
+
+  return isDuplicate ? content.slice(1) : content;
+}
+
 function normalizePost(post: any): SanityPost {
-  const portableContent = post.content || post.body || [];
+  const rawContent = post.content || post.body || [];
+  const portableContent = stripDuplicateLead(rawContent, post.excerpt || '');
   const bodyHtml = toHTML(portableContent, { components: portableTextComponents });
   const readingTime = estimateReadingTime(bodyHtml);
   const coverImageRef = typeof post.coverImage === 'string' ? post.coverImage : undefined;
