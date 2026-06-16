@@ -254,3 +254,41 @@
     }
   }
 }
+
+/* ─── Reveal sweep (intro + per-section light pass) ─────────────────────────── */
+:root {
+  --beam-soft: rgba(204, 120, 92, 0.20);
+  --beam-core: rgba(224, 146, 110, 0.85);
+}
+
+[data-theme='dark'] {
+  --beam-soft: rgba(212, 133, 106, 0.22);
+  --beam-core: rgba(240, 162, 122, 0.78);
+}
+
+/* Full-screen beam that sweeps the hero into view on load */
+#intro-beam {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width: 42vw;
+  z-index: 60;
+  pointer-events: none;
+  opacity: 0;
+  background: linear-gradient(
+    90deg,
+    transparent 30%,
+    var(--beam-soft) 46%,
+    var(--beam-core) 50%,
+    var(--beam-soft) 54%,
+    transparent 70%
+  );
+  will-change: transform, opacity;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  #intro-beam {
+    display: none !important;
+  }
+}

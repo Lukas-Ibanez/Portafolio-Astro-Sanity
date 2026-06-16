@@ -722,6 +722,65 @@ function initContact() {
   }
 }
 
+// ── Intro: light beam sweeps the hero into view on load ─────────────────────
+function initIntro() {
+  const hero = document.getElementById('hero');
+  if (!hero) return;
+  const beam = document.getElementById('intro-beam');
+
+  // Reveal the whole hero with a left→right wipe (negative top/bottom so
+  // overflowing chips/shadows are not clipped).
+  gsap.set(hero, { clipPath: 'inset(-25% 100% -25% 0%)' });
+  gsap.timeline()
+    .to(hero, { clipPath: 'inset(-25% 0% -25% 0%)', duration: 1.05, ease: 'power3.inOut' }, 0.05)
+    .set(hero, { clipPath: 'none' });
+
+  if (beam) {
+    gsap.set(beam, { xPercent: -135, opacity: 0 });
+    gsap.timeline()
+      .to(beam, { opacity: 1, duration: 0.22, ease: 'power1.out' }, 0)
+      .to(beam, { xPercent: 245, duration: 1.05, ease: 'power2.inOut' }, 0)
+      .to(beam, { opacity: 0, duration: 0.34, ease: 'power1.in' }, 0.8);
+  }
+}
+
+// ── Per-section: directional wipe reveal aligned to the sphere's side ────────
+// Each section opens from the side where the sphere sits for that section, so
+// the reveal direction matches the sphere's travel (same wipe language as the
+// hero intro). Sides mirror SECTION_CFG in FloatingIcosahedron.astro.
+function initSectionReveals() {
+  const sides: Record<string, 'L' | 'R'> = {
+    stats: 'R',
+    about: 'L',
+    skills: 'L',
+    'featured-projects': 'R',
+    'blog-teaser': 'L',
+    contact: 'R',
+  };
+
+  Object.entries(sides).forEach(([id, side]) => {
+    const section = document.getElementById(id);
+    if (!section) return;
+
+    // Reveal grows from the sphere's side: side 'R' → from the right (animate
+    // the left inset), side 'L' → from the left (animate the right inset).
+    // Negative top/bottom keeps shadows/overflow from being clipped.
+    const hidden = side === 'R' ? 'inset(-25% 0% -25% 100%)' : 'inset(-25% 100% -25% 0%)';
+    gsap.set(section, { clipPath: hidden });
+
+    ScrollTrigger.create({
+      trigger: section,
+      start: 'top 78%',
+      once: true,
+      onEnter: () => {
+        gsap.timeline()
+          .to(section, { clipPath: 'inset(-25% 0% -25% 0%)', duration: 0.9, ease: 'power3.inOut' })
+          .set(section, { clipPath: 'none' });
+      },
+    });
+  });
+}
+
 function initAnimations() {
   gsap.registerPlugin(ScrollTrigger);
 
@@ -732,6 +791,7 @@ function initAnimations() {
 
   document.documentElement.classList.add('motion-ready');
 
+  initIntro();
   initHero();
   initStats();
   initAbout();
@@ -739,6 +799,7 @@ function initAnimations() {
   initProjects();
   initBlogTeaser();
   initContact();
+  initSectionReveals();
 
   const heroWords = gsap.utils.toArray<HTMLElement>('[data-hero-title] span');
   heroWords.forEach((word) => word.classList.add('hero-word'));

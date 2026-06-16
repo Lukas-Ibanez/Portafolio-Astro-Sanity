@@ -170,6 +170,13 @@
   const target = { x: initState.x, y: initState.y, s: initState.s };
   const cur = { x: initState.x, y: initState.y, s: initState.s };
 
+  // One-time entrance: when loading at the top, start the sphere offscreen-left
+  // and let the render loop glide it to its hero anchor (left → right reveal).
+  if ((window.scrollY || 0) < 8) {
+    const introH = 2 * Math.tan((camera.fov * Math.PI) / 180 / 2) * camera.position.z;
+    cur.x -= introH * camera.aspect * 0.95;
+  }
+
   wireframe.position.set(cur.x, cur.y, 0);
   fillMesh.position.set(cur.x, cur.y, 0);
   wireframe.scale.setScalar(cur.s);
