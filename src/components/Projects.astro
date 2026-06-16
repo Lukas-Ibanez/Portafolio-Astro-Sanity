@@ -37,7 +37,7 @@ const totalProjects = visibleProjects.length;
                       src={project.data.coverImage}
                       alt={project.data.coverAlt || `Pantallazo del proyecto ${project.data.title}.`}
                       width={1600}
-                      height={900}
+                      height={800}
                       loading={index === 0 ? 'eager' : 'lazy'}
                       decoding="async"
                       class="project-slide-image"
@@ -150,14 +150,13 @@ const totalProjects = visibleProjects.length;
   }
 
   .projects-frame {
-    @apply relative overflow-hidden border border-border bg-surface shadow-soft;
+    @apply relative flex flex-col overflow-hidden border border-border bg-surface shadow-soft;
     border-radius: 1rem;
-    min-height: 35rem;
     will-change: transform, opacity;
   }
 
   .browser-bar {
-    @apply absolute left-0 right-0 top-0 z-30 flex h-11 items-center gap-2 border-b border-border px-4;
+    @apply relative z-30 flex h-11 flex-shrink-0 items-center gap-2 border-b border-border px-4;
     background: var(--panel-bg);
   }
 
@@ -165,12 +164,15 @@ const totalProjects = visibleProjects.length;
     @apply h-2.5 w-2.5 rounded-full border border-border bg-bg;
   }
 
+  /* Image area matches the rest of the site (2:1) so a 2:1 cover shows in the
+     same proportion here as in the listing and detail pages. */
   .project-slides {
-    @apply absolute inset-0 pt-11;
+    @apply relative w-full;
+    aspect-ratio: 2 / 1;
   }
 
   .project-slide {
-    @apply absolute inset-x-0 bottom-0 top-11 opacity-0;
+    @apply absolute inset-0 opacity-0;
     pointer-events: none;
     will-change: transform, opacity, clip-path;
   }
@@ -310,10 +312,6 @@ const totalProjects = visibleProjects.length;
 
     .projects-summary {
       display: none;
-    }
-
-    .projects-frame {
-      min-height: 29rem;
     }
 
     .project-slide-overlay {

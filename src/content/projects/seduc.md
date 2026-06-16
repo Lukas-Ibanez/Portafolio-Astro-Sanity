@@ -8,6 +8,8 @@ problem: "El sitio necesitaba evolución constante y soporte: nuevas secciones, 
 solution: "Tomé el desarrollo y la mantención del sitio, implementando mejoras, resolviendo incidencias y manteniendo el sitio estable en producción a lo largo del tiempo."
 result: ""
 stack: ["PHP", "JavaScript", "HTML", "CSS", "MySQL"]
+coverImage: "/projects/seduc.avif"
+coverAlt: "Sitio institucional seduc.cl."
 externalUrl: "https://www.seduc.cl"
 featured: true
 confidential: false

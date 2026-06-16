@@ -2,13 +2,15 @@
 title: "Sitio web personalizado"
 client: "Cyclonemotos"
 year: 2023
-role: "Desarrollo full-stack a medida"
-summary: "Sitio personalizado construido a medida, combinando backend en PHP con frontend en JavaScript, Tailwind y Bootstrap."
-problem: "El cliente necesitaba un sitio propio y personalizado, no una plantilla, que reflejara su marca y fuera fácil de mantener."
-solution: "Desarrollé el sitio a medida: backend en PHP, interactividad con JavaScript y una capa visual con Tailwind y Bootstrap, cuidando consistencia, responsividad y mantenibilidad."
+role: "Desarrollo web a medida"
+summary: "Sitio a medida construido con Astro, GSAP y Tailwind CSS, con foco en velocidad y animaciones cuidadas."
+problem: "Cyclonemotos necesitaba un sitio propio y con identidad —no una plantilla— que fuera rápido, fácil de mantener y con una presentación a la altura de la marca."
+solution: "Desarrollé el sitio a medida con Astro para un frontend estático y veloz, Tailwind CSS para un sistema visual consistente y GSAP para animaciones e interacciones fluidas, cuidando rendimiento y experiencia de usuario."
 result: ""
-stack: ["PHP", "JavaScript", "Tailwind CSS", "Bootstrap", "HTML", "CSS"]
-featured: false
+stack: ["Astro", "GSAP", "Tailwind CSS"]
+coverImage: "/projects/cyclonemotos.avif"
+coverAlt: "Sitio web personalizado de Cyclonemotos."
+featured: true
 confidential: false
-order: 5
+order: 4
 ---

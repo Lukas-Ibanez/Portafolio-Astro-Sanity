@@ -8,7 +8,7 @@ problem: "La institución requería una intranet propia para gestionar informaci
 solution: "Construí la intranet desde cero: modelo de datos, vistas internas, autenticación y panel de gestión, con foco en una base ordenada y mantenible para el equipo."
 result: ""
 stack: ["PHP", "JavaScript", "SQL", "HTML", "CSS"]
-featured: true
+featured: false
 confidential: true
-order: 2
+order: 5
 ---

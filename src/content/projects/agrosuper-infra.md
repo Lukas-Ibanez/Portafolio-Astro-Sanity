@@ -8,9 +8,9 @@ problem: "Había que migrar el sitio WordPress a una nueva infraestructura sin p
 solution: "Planifiqué y ejecuté la migración cuidando la infraestructura: mapa de redirecciones 301, configuración de Cloudflare (DNS, caché, seguridad) y revisión de SEO técnico para preservar el posicionamiento durante y después del cambio."
 result: ""
 stack: ["WordPress", "Cloudflare", "Linux", "Nginx", "SEO técnico", "Redirects 301"]
-featured: true
+featured: false
 confidential: false
-order: 4
+order: 6
 ---
 
 Trabajo centrado en la capa de infraestructura y posicionamiento: que el cambio de plataforma fuera invisible para el usuario y para los buscadores.

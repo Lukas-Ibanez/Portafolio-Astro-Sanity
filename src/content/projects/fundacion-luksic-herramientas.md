@@ -8,8 +8,8 @@ problem: "La fundación necesitaba una plataforma propia para sus herramientas p
 solution: "Desarrollé el sitio desde cero como parte del Taller Digital: estructura de páginas, frontend a medida, integración de contenidos y puesta en producción cuidando rendimiento y accesibilidad."
 result: ""
 stack: ["JavaScript", "PHP", "HTML", "CSS"]
-coverImage: "/projects/fundacionluksic.avif"
-coverAlt: "Sitio de Herramientas Participativas desarrollado para la Fundación Luksic."
+coverImage: "/projects/herramientas_participativas.avif"
+coverAlt: "Plataforma de Herramientas Participativas desarrollada para la Fundación Luksic."
 featured: true
 confidential: false
 order: 1
