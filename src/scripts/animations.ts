@@ -744,43 +744,6 @@ function initIntro() {
   }
 }
 
-// ── Per-section: directional wipe reveal aligned to the sphere's side ────────
-// Each section opens from the side where the sphere sits for that section, so
-// the reveal direction matches the sphere's travel (same wipe language as the
-// hero intro). Sides mirror SECTION_CFG in FloatingIcosahedron.astro.
-function initSectionReveals() {
-  const sides: Record<string, 'L' | 'R'> = {
-    stats: 'R',
-    about: 'L',
-    skills: 'L',
-    'featured-projects': 'R',
-    'blog-teaser': 'L',
-    contact: 'R',
-  };
-
-  Object.entries(sides).forEach(([id, side]) => {
-    const section = document.getElementById(id);
-    if (!section) return;
-
-    // Reveal grows from the sphere's side: side 'R' → from the right (animate
-    // the left inset), side 'L' → from the left (animate the right inset).
-    // Negative top/bottom keeps shadows/overflow from being clipped.
-    const hidden = side === 'R' ? 'inset(-25% 0% -25% 100%)' : 'inset(-25% 100% -25% 0%)';
-    gsap.set(section, { clipPath: hidden });
-
-    ScrollTrigger.create({
-      trigger: section,
-      start: 'top 78%',
-      once: true,
-      onEnter: () => {
-        gsap.timeline()
-          .to(section, { clipPath: 'inset(-25% 0% -25% 0%)', duration: 0.9, ease: 'power3.inOut' })
-          .set(section, { clipPath: 'none' });
-      },
-    });
-  });
-}
-
 function initAnimations() {
   gsap.registerPlugin(ScrollTrigger);
 
@@ -799,7 +762,6 @@ function initAnimations() {
   initProjects();
   initBlogTeaser();
   initContact();
-  initSectionReveals();
 
   const heroWords = gsap.utils.toArray<HTMLElement>('[data-hero-title] span');
   heroWords.forEach((word) => word.classList.add('hero-word'));
