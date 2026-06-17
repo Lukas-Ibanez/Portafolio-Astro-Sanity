@@ -102,16 +102,6 @@
   interface Anchor { y: number; side: 'L' | 'R'; yPct: number; s: number }
   let anchors: Anchor[] = [];
 
-  // ── Section reveal coupling ─────────────────────────────────────────────────
-  // The sphere drives a directional clip-wipe on each section so the wipe edge
-  // tracks the sphere as it sweeps in. Disabled under reduced motion.
-  const prefersReduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  interface Reveal { id: string; el: HTMLElement; prevY: number; y: number; hideLeft: boolean; follow: boolean }
-  let reveals: Reveal[] = [];
-  const latch: Record<string, number> = {}; // id → hide% (100 hidden … 0 shown), only decreases
-  const clamp01 = (v: number) => (v < 0 ? 0 : v > 1 ? 1 : v);
-  const sideNum = (s: 'L' | 'R') => (s === 'R' ? 1 : 0);
-
   function maxScroll() {
     return Math.max(1, document.documentElement.scrollHeight - window.innerHeight);
   }
@@ -143,29 +133,6 @@
       if (next[i].y <= next[i - 1].y) next[i].y = next[i - 1].y + 1;
     }
     anchors = next;
-
-    // Build per-section reveal metadata (skip the hero at index 0).
-    const built: Reveal[] = [];
-    if (present.length >= 2) {
-      for (let i = 1; i < present.length; i++) {
-        const cfg = present[i].cfg;
-        const prev = present[i - 1].cfg;
-        const moveRight = sideNum(cfg.side) > sideNum(prev.side);
-        const moveLeft = sideNum(cfg.side) < sideNum(prev.side);
-        // Hidden side: moving right → hide right; moving left → hide left;
-        // same side → hide opposite its rest side (R rests right → hide left).
-        const hideLeft = moveRight ? false : moveLeft ? true : cfg.side === 'R';
-        built.push({
-          id: cfg.id,
-          el: present[i].el,
-          prevY: next[i - 1].y,
-          y: next[i].y,
-          hideLeft,
-          follow: moveRight || moveLeft,
-        });
-      }
-    }
-    reveals = built;
   }
 
   function easeInOut(t: number) {
@@ -198,38 +165,6 @@
     return sampleAt(last, last, 0);
   }
 
-  // Sphere center as a 0..1 horizontal fraction of the viewport.
-  function ballXPct(worldX: number) {
-    const fovR = (camera.fov * Math.PI) / 180;
-    const h = 2 * Math.tan(fovR / 2) * camera.position.z;
-    return clamp01(worldX / (h * camera.aspect) + 0.5);
-  }
-
-  // Clip each section so the wipe edge sits at the sphere's screen-x as it
-  // sweeps in (cross transitions), or by scroll progress (same-side). Latched
-  // so a revealed section never hides again.
-  function updateReveals(scrollY: number, bx: number) {
-    if (prefersReduce) return;
-    for (const r of reveals) {
-      let hide: number;
-      if (scrollY >= r.y) hide = 0;
-      else if (scrollY <= r.prevY) hide = 100;
-      else if (r.follow) hide = (r.hideLeft ? bx : 1 - bx) * 100;
-      else hide = (1 - (scrollY - r.prevY) / (r.y - r.prevY)) * 100;
-
-      const prev = latch[r.id] ?? 100;
-      if (hide > prev) hide = prev; // reveal only grows
-      latch[r.id] = hide;
-
-      r.el.style.clipPath =
-        hide <= 0.4
-          ? 'none'
-          : r.hideLeft
-            ? `inset(-25% 0% -25% ${hide.toFixed(1)}%)`
-            : `inset(-25% ${hide.toFixed(1)}% -25% 0%)`;
-    }
-  }
-
   computeAnchors();
   const initState = targetForScroll(window.scrollY);
   const target = { x: initState.x, y: initState.y, s: initState.s };
@@ -241,9 +176,6 @@
     const introH = 2 * Math.tan((camera.fov * Math.PI) / 180 / 2) * camera.position.z;
     cur.x -= introH * camera.aspect * 0.95;
   }
-
-  // Apply the initial reveal state so sections aren't visible for a frame.
-  updateReveals(window.scrollY || 0, ballXPct(cur.x));
 
   wireframe.position.set(cur.x, cur.y, 0);
   fillMesh.position.set(cur.x, cur.y, 0);
@@ -260,8 +192,7 @@
     // Sample the real scroll position every frame and ease toward it. A single
     // smoothing pass (no ScrollTrigger scrub) keeps the sphere in sync with the
     // page instead of lagging behind during fast scroll or momentum.
-    const scrollY = window.scrollY || window.pageYOffset || 0;
-    const desired = targetForScroll(scrollY);
+    const desired = targetForScroll(window.scrollY || window.pageYOffset || 0);
     target.x = desired.x;
     target.y = desired.y;
     target.s = desired.s;
@@ -270,8 +201,6 @@
     cur.x += (target.x - cur.x) * L;
     cur.y += (target.y - cur.y) * L;
     cur.s += (target.s - cur.s) * L;
-
-    updateReveals(scrollY, ballXPct(cur.x));
 
     // Damp motion on small screens to avoid jank.
     const intensity = isSmall ? 0.5 : 1;
